@@ -4,6 +4,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
+After you clone the project using git commands, you need to run the command for installing all libraries.
+### `yarn install`
+
 In the project directory, you can run:
 
 ### `yarn start`

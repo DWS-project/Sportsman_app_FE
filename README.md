@@ -1,6 +1,7 @@
 # Getting Started with Create React App
 
-Before you start the project you need to install libraries, you can do that running the command 
+Before you start the project you need to install libraries, you can do that running the command
+
 ### `yarn install` or `yarn`
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

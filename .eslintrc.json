@@ -1,0 +1,13 @@
+{
+  "parser": "@babel/eslint-parser",
+  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+  "plugins": ["prettier", "react"],
+  "rules": {
+    "no-console": 0,
+    "quotes": [1, "single"]
+  },
+  "parserOptions": {
+    "requireConfigFile": false
+  },
+  "ignorePatterns": ["node_modules", "build", "dist", "public"]
+}

@@ -30,7 +30,7 @@ const RegistrationForm = () => {
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [password, setPassword] = useState('')
-  const [repPassword, setRepPassword] = useState('')
+  const [repeatedPassword, setRepeatedPassword] = useState('')
   const [city, setCity] = useState('')
   const [age, setAge] = useState('')
   const [interests, setInterests] = useState([])
@@ -44,7 +44,7 @@ const RegistrationForm = () => {
       phone,
       email,
       password,
-      repPassword,
+      repeatedPassword,
       city,
       age,
       interests,
@@ -373,7 +373,7 @@ const RegistrationForm = () => {
               id="repPassword"
               autoComplete="off"
               onChange={(event) => {
-                setRepPassword(event.target.value)
+                setRepeatedPassword(event.target.value)
               }}
             />
             <Button

@@ -14,6 +14,17 @@ const useStyles = makeStyles(() =>
       backgroundSize: 'cover',
       backgroundPosition: 'center',
     },
+    imageList: {
+      width: '100%',
+      height: '100%',
+      '& img': {
+        objectFit: 'cover',
+        width: '100%',
+        height: '200px',
+        filter: 'brightness(80%)',
+        objectPosition: 'center',
+      }
+    },
   })
 )
 

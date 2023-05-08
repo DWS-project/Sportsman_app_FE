@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField'
 import Link from '@mui/material/Link'
 import Grid from '@mui/material/Grid'
 import axios from 'axios'
-import { REGISTRATION_PLAYER } from '../../constants/endpoints'
+import { REGISTRATION } from '../../constants/endpoints'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Stepper from '@mui/material/Stepper'
@@ -18,6 +18,7 @@ import ToggleButton from '@mui/material/ToggleButton'
 import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useEffect } from 'react'
+import useStyles from '../AuthenticationFrame/styles'
 
 const steps = ['Postavke profila', 'Interesovanja']
 
@@ -33,7 +34,8 @@ const RegistrationForm = () => {
   const [city, setCity] = useState('')
   const [age, setAge] = useState('')
   const [interests, setInterests] = useState([])
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState(0)
+  const classes = useStyles()
 
   async function handleSubmit() {
     const data = {
@@ -50,7 +52,7 @@ const RegistrationForm = () => {
       username: 'still to implement'
     }
 
-    const { status, message } = await axios.post(REGISTRATION_PLAYER, data)
+    const { status, message } = await axios.post(REGISTRATION, data)
     console.log('status', status)
     console.log('message', message)
   }
@@ -125,11 +127,29 @@ const RegistrationForm = () => {
     };
   }, [isMediumScreen]);
 
+  const renderSteps = (label, index) => {
+    const stepProps = {};
+    const labelProps = {};
+    if (isStepOptional(index)) {
+      labelProps.optional = (
+        <Typography variant="caption">Opcionalno</Typography>
+      )
+    }
+    return (
+      <Step key={label} {...stepProps}>
+        <StepLabel {...labelProps}>{label}</StepLabel>
+      </Step>
+    )
+  }
+
   // In "return": first Box element is for stepper, after this Box element I'm checking active step, if active step
   // is last step then "Interesovanja" step is displayed otherwise the registration form is displayed
 
   return (
     <>
+      <Typography component="h1" variant="h5" sx={{mb: 5}}>
+        Registrujte se
+      </Typography>
       <Box sx={{width:'100%'}}>
         <Stepper
           activeStep={activeStep}
@@ -139,20 +159,7 @@ const RegistrationForm = () => {
             '& .MuiStepIcon-root.Mui-active': {color: activeColor},
             '& .MuiStepIcon-root.Mui-completed': {color: completedColor}
         }}>
-          {steps.map((label, index) => {
-            const stepProps = {};
-            const labelProps = {};
-            if (isStepOptional(index)) {
-              labelProps.optional = (
-                <Typography variant="caption">Opcionalno</Typography>
-              )
-            }
-            return (
-              <Step key={label} {...stepProps}>
-                <StepLabel {...labelProps}>{label}</StepLabel>
-              </Step>
-            )
-          })}
+          {steps.map((label, index) => renderSteps(label,index))}
         </Stepper>
       </Box>
 
@@ -192,18 +199,10 @@ const RegistrationForm = () => {
                   <ImageListItem
                     key={item.img}
                     cols={1}
+                    className={classes.imageList}
                     sx={{
                       opacity: isSelected(item.name) ? 0.8 : 1,
                       border: isSelected(item.name) ? '5px solid #43bbbf' : '5px solid transparent',
-                      width: '100%',
-                      height: '100%',
-                      '& img': {
-                        objectFit: 'cover',
-                        width: '100%',
-                        height: '200px',
-                        filter: 'brightness(80%)',
-                        objectPosition: 'center',
-                      }
                     }}>
                       <img
                         src={`${item.img}`}

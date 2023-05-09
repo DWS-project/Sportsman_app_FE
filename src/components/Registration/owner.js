@@ -90,8 +90,8 @@ const RegistrationFormOwner = () => {
     },
     {
       img: '/images/combination.png',
-      title: 'Kombinacija',
-      name: 'kombinacija'
+      title: 'Oba tipa',
+      name: 'obaTipa'
     },
   ]
   // This part of code is used to display images properly when screen is resized # For responsive display
@@ -182,6 +182,9 @@ const RegistrationFormOwner = () => {
               ))}
             </ImageList>
           </Box>
+          <Typography component="h1" variant="h5" sx={{ mb: 1, alignSelf: 'flex-start'}}>
+            Vaša lokacija:
+          </Typography>
           <Box
             sx={{
               display: 'flex',
@@ -194,7 +197,7 @@ const RegistrationFormOwner = () => {
               id="combo-box-demo"
               required
               options={cities}
-              sx={{ width: '47%' }}
+              sx={{ width: '30%' }}
               onChange={(event,newValue)=>{
                 setCity(newValue)
               }}
@@ -209,30 +212,6 @@ const RegistrationFormOwner = () => {
             />
             <TextField
               margin="normal"
-              name="capacity"
-              required
-              label="Broj terena koje posjedujete"
-              type="number"
-              id="capacity"
-              autoComplete="off"
-              onChange={(event) => {
-                setCapacity(event.target.value)
-              }}
-              sx={{width: '47%'}}
-            />
-          </Box>
-          <Typography component="h1" variant="h5" sx={{mt:4, mb: 1, alignSelf: 'flex-start'}}>
-            Vaša adresa:
-          </Typography>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              width: '100%'
-          }}>
-            <TextField
-              margin="normal"
               required
               name="street"
               label="Ulica"
@@ -241,7 +220,7 @@ const RegistrationFormOwner = () => {
               onChange={(event) => {
                 setStreet(event.target.value)
               }}
-              sx={{ width: '47%' }}
+              sx={{ width: '30%' }}
             />
             <TextField
               margin="normal"
@@ -254,8 +233,33 @@ const RegistrationFormOwner = () => {
               onChange={(event) => {
                 setStreetNumber(event.target.value)
               }}
-              sx={{ width: '47%' }}
+              sx={{ width: '30%' }}
             />
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              width: '100%'
+          }}>
+            <Typography component="h1" variant="h5" sx={{mt:4, mb: 1, alignSelf: 'flex-start'}}>
+              Navedite broj terena koje posjedujete:
+            </Typography>
+            <TextField
+            margin="normal"
+            name="capacity"
+            size="small"
+            variant="standard"
+            required
+            label="Broj terena"
+            type="number"
+            id="capacity"
+            autoComplete="off"
+            onChange={(event) => {
+              setCapacity(event.target.value)
+            }}
+          />
           </Box>
 
           <Box

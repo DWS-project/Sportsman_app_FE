@@ -6,14 +6,21 @@ import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
-// import LoginForm from '../Login'
+import LoginForm from '../Login'
 import RegistrationFormUser from '../Registration/user.js'
 import RegistrationFormOwner from "../Registration/owner"
 import RegistrationForm from "../Registration/index"
 
-const AuthenticationFrame = () => {
+const AuthenticationFrame = ({route}) => {
   const classes = useStyles()
 
+  const avatar = (
+    <>
+      <Avatar sx={{ m: 1, bgcolor: '#43bbbf' }}>
+        <LockOutlinedIcon />
+      </Avatar>
+    </>
+  )
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>
       <CssBaseline />
@@ -28,15 +35,15 @@ const AuthenticationFrame = () => {
         square
         className={classes.leftContainer}
       >
-        {/*<Box sx={{ my: 8, mx: 4 }} className={classes.leftContainer}>
-          <Avatar sx={{ m: 1, bgcolor: '#43bbbf' }}>
-               <LockOutlinedIcon />
-             </Avatar>
+        {route === 'login' ? (
+          <Box sx={{ my: 8, mx: 4 }} className={classes.leftContainer}>
+            {avatar}
+            <LoginForm />
+          </Box>
+        ) : (
+          <RegistrationForm avatar={avatar} />
+        )}
 
-         </Box>*/}
-        <Box className={classes.choosingContainer}>
-          <RegistrationForm />
-        </Box>
 
       </Grid>
     </Grid>

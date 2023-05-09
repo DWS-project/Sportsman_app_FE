@@ -94,6 +94,7 @@ const useStyles = makeStyles(() =>
       },
       color: '#43bbbf !important',
       width: '50%',
+      marginTop: '4% !important',
     },
     registerHeadline: {
       fontSize: '2.3rem',
@@ -109,6 +110,7 @@ const useStyles = makeStyles(() =>
       marginTop: 'auto'
     },
     heroText2: {
+      height: '40%',
       position: 'absolute',
       top: '35%',
       left: '40%',

@@ -19,41 +19,66 @@ import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useEffect } from 'react'
 import useStyles from '../AuthenticationFrame/styles'
+import RegistrationFormOwner from "./owner";
+import RegistrationFormUser from "./user";
 
-const steps = ['Postavke profila', 'Interesovanja']
 
-const cities = ['Sarajevo', 'Zenica', 'Tuzla', 'Mostar']
-
-const RegistrationForm = () => {
+const RegistrationForm = ({avatar}) => {
   const [chosen, setChosen] = useState(null)
   const classes = useStyles()
-  return (
-    <Box sx={{width: '100', height: '100%'}} fullWidth>
-      <Box className={classes.wrapper}>
-        <Box className={classes.sportField}>
-          <Box className={classes.heroText}>
-            <h2 className={classes.registerHeadline}>Registrujte se</h2>
-            <p className={classes.registerSub}>kao vlasnik terena</p>
-          </Box>
-          <Button className={classes.registerButton1}>
-          Registruj se
-          </Button>
+  const handleOptionClick = (option) => {
+    setChosen(option)
+  }
 
-        </Box>
+  if (chosen === 'owner') {
+    return (
+      <Box sx={{ my: 8, mx: 4 }} className={classes.leftContainer}>
+        {avatar}
+        <RegistrationFormOwner />
       </Box>
-      <Box className={classes.wrapper} fullWidth>
-        <Box className={classes.soccerPlayer}>
-          <Box className={classes.heroText2}>
-            <h2 className={classes.registerHeadline}>Registrujte se</h2>
-            <p className={classes.registerSub2}>kao igrač</p>
-            <Button className={classes.registerButton2}>
-              Registuj se
+    )
+  } else if (chosen === 'user') {
+    return (
+      <Box sx={{ my: 8, mx: 4 }} className={classes.leftContainer}>
+        {avatar}
+        <RegistrationFormUser />
+      </Box>
+    )
+  }
+
+  return (
+    <Box className={classes.choosingContainer}>
+      <Box sx={{width: '100', height: '100%'}} fullWidth>
+        <Box className={classes.wrapper}>
+          <Box className={classes.sportField}>
+            <Box className={classes.heroText}>
+              <h2 className={classes.registerHeadline}>Registrujte se</h2>
+              <p className={classes.registerSub}>kao vlasnik terena</p>
+            </Box>
+            <Button
+              className={classes.registerButton1}
+              onClick={() => handleOptionClick('owner')}
+            >
+            Registruj se
             </Button>
           </Box>
-
         </Box>
-      </Box>
+        <Box className={classes.wrapper} fullWidth>
+          <Box className={classes.soccerPlayer}>
+            <Box className={classes.heroText2}>
+              <h2 className={classes.registerHeadline}>Registrujte se</h2>
+              <p className={classes.registerSub2}>kao igrač</p>
+              <Button
+                className={classes.registerButton2}
+                onClick={() => handleOptionClick('user')}>
+                Registruj se
+              </Button>
+            </Box>
 
+          </Box>
+        </Box>
+
+      </Box>
     </Box>
   )
 }

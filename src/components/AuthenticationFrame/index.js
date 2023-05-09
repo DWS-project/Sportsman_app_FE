@@ -7,7 +7,9 @@ import Grid from '@mui/material/Grid'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 // import LoginForm from '../Login'
-import RegistrationForm from '../Registration'
+import RegistrationFormUser from '../Registration/user.js'
+import RegistrationFormOwner from "../Registration/owner"
+import RegistrationForm from "../Registration/index"
 
 const AuthenticationFrame = () => {
   const classes = useStyles()
@@ -26,12 +28,16 @@ const AuthenticationFrame = () => {
         square
         className={classes.leftContainer}
       >
-        <Box sx={{ my: 8, mx: 4 }} className={classes.leftContainer}>
+        {/*<Box sx={{ my: 8, mx: 4 }} className={classes.leftContainer}>
           <Avatar sx={{ m: 1, bgcolor: '#43bbbf' }}>
-            <LockOutlinedIcon />
-          </Avatar>
+               <LockOutlinedIcon />
+             </Avatar>
+
+         </Box>*/}
+        <Box className={classes.choosingContainer}>
           <RegistrationForm />
         </Box>
+
       </Grid>
     </Grid>
   )

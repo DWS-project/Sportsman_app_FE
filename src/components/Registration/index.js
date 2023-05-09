@@ -32,23 +32,25 @@ const RegistrationForm = () => {
       <Box className={classes.wrapper}>
         <Box className={classes.sportField}>
           <Box className={classes.heroText}>
-            <h2 className="h2">Registrujte se</h2>
-            <p className="p">kao vlasnik terena</p>
+            <h2 className={classes.registerHeadline}>Registrujte se</h2>
+            <p className={classes.registerSub}>kao vlasnik terena</p>
           </Box>
-          <Button type="button" variant="contained" className={classes.registerButton1}>
-          Registuj se
-        </Button>
+          <Button className={classes.registerButton1}>
+          Registruj se
+          </Button>
+
         </Box>
       </Box>
       <Box className={classes.wrapper} fullWidth>
         <Box className={classes.soccerPlayer}>
-          <Box className={classes.heroText}>
-            <h2 className="h2">Registrujte se</h2>
-            <p className="p">kao igrac</p>
+          <Box className={classes.heroText2}>
+            <h2 className={classes.registerHeadline}>Registrujte se</h2>
+            <p className={classes.registerSub2}>kao igrač</p>
+            <Button className={classes.registerButton2}>
+              Registuj se
+            </Button>
           </Box>
-          <Button type="button" variant="contained" className={classes.registerButton2}>
-          Registuj se
-        </Button>
+
         </Box>
       </Box>
 

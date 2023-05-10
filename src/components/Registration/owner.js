@@ -25,6 +25,8 @@ const steps = ['Postavke profila', 'Tip terena i lokacija']
 const cities = ['Sarajevo', 'Zenica', 'Tuzla', 'Mostar']
 
 const RegistrationFormOwner = () => {
+  const [name, setName] = useState('')
+  const [surname, setSurname] = useState('')
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
@@ -34,35 +36,68 @@ const RegistrationFormOwner = () => {
   const [street, setStreet] = useState('')
   const [streetNumber, setStreetNumber] = useState('')
   const [type, setType] = useState('')
-  const [capacity, setCapacity] = useState(0)
+  const [capacity, setCapacity] = useState('')
   const [activeStep, setActiveStep] = useState(0)
+  const [hooks, setHooks] = useState([]);
   const classes = useStyles()
 
   async function handleSubmit() {
-    const data = {
-      username,
-      phone,
-      email,
-      password,
-      repeatedPassword,
-      city,
-      street,
-      streetNumber,
-      type,
-      capacity
+    const check = checkFields()
+    if(check.length === 0){
+      const data = {
+        name,
+        surname,
+        username,
+        phone,
+        email,
+        password,
+        repeatedPassword,
+        city,
+        street,
+        streetNumber,
+        type,
+        capacity
+      }
+
+      const { status, message } = await axios.post(REGISTRATION_OWNER, data)
+      console.log('status', status)
+      console.log('message', message)
     }
-
-    const { status, message } = await axios.post(REGISTRATION_OWNER, data)
-    console.log('status', status)
-    console.log('message', message)
-  }
-  //These three short functions are used for stepper
-  const isStepOptional = (step) => {
-    return step === 1;
   }
 
+  useEffect(() => {
+      setHooks([
+        { name: 'name', value: name },
+        { name: 'surname', value: surname },
+        { name: 'username', value: username },
+        { name: 'phone', value: phone },
+        { name: 'email', value: email },
+        { name: 'password', value: password },
+        { name: 'repeatedPassword', value: repeatedPassword },
+        { name: 'city', value: city },
+        { name: 'street', value: street },
+        { name: 'streetNumber', value: streetNumber },
+        { name: 'type', value: type },
+        { name: 'capacity', value: capacity },
+      ])
+  }, [name, surname, username, phone, email, password, repeatedPassword,
+    city, street, streetNumber, type, capacity])
+
+  // Are all fields filled?
+  const checkFields = () => {
+    const missingFields = []
+    hooks.forEach((hook) => {
+      if(hook.value === ''){
+        missingFields.push(hook.name)
+      }
+    })
+    return missingFields
+  }
   const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1)
+    const check = checkFields()
+    if (check.length === 5) {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1)
+    }
   }
 
   const handleBack = () => {
@@ -95,7 +130,7 @@ const RegistrationFormOwner = () => {
     },
   ]
   // This part of code is used to display images properly when screen is resized # For responsive display
-  // If screen is medium or higher size then three columns of images are displayed, else two columns
+  // If screen is medium or higher size then three columns of images are displayed, else one column
   const theme = useTheme()
   const isMediumScreen = useMediaQuery(theme.breakpoints.up('md'))
   const [colsValue, setColsValue] = useState(isMediumScreen ? 3 : 1)
@@ -123,7 +158,7 @@ const RegistrationFormOwner = () => {
   }
 
   // In "return": first Box element is for stepper, after this Box element I'm checking active step, if active step
-  // is last step then "Interesovanja" step is displayed otherwise the registration form is displayed
+  // is last step then "Tip terena i lokacija" step is displayed otherwise the registration form is displayed
 
   return (
     <>
@@ -148,7 +183,7 @@ const RegistrationFormOwner = () => {
           <Box sx={{width: '100%', height: '100%'}}>
             <ImageList cols={colsValue}>
               <ImageListItem cols={colsValue}>
-                <Typography component="h1" variant="h5" sx={{mb: 3, mt: 2}}>
+                <Typography component="h1" variant="h5" sx={{mb: 3, mt: 2, alignSelf: 'center'}}>
                   Odaberite tip terena:
                 </Typography>
               </ImageListItem>
@@ -182,9 +217,19 @@ const RegistrationFormOwner = () => {
               ))}
             </ImageList>
           </Box>
-          <Typography component="h1" variant="h5" sx={{ mb: 1, alignSelf: 'flex-start'}}>
-            Vaša lokacija:
-          </Typography>
+            <TextField
+              margin="normal"
+              name="capacity"
+              fullWidth
+              required
+              label="Broj terena koje posjedujete"
+              type="number"
+              id="capacity"
+              autoComplete="off"
+              onChange={(event) => {
+                setCapacity(event.target.value)
+              }}
+            />
           <Box
             sx={{
               display: 'flex',
@@ -208,6 +253,7 @@ const RegistrationFormOwner = () => {
                   name="city"
                   id="city"
                   label="Grad"
+                  required
                 />}
             />
             <TextField
@@ -240,32 +286,6 @@ const RegistrationFormOwner = () => {
             sx={{
               display: 'flex',
               flexDirection: 'row',
-              justifyContent: 'space-between',
-              width: '100%'
-          }}>
-            <Typography component="h1" variant="h5" sx={{mt:4, mb: 1, alignSelf: 'flex-start'}}>
-              Navedite broj terena koje posjedujete:
-            </Typography>
-            <TextField
-            margin="normal"
-            name="capacity"
-            size="small"
-            variant="standard"
-            required
-            label="Broj terena"
-            type="number"
-            id="capacity"
-            autoComplete="off"
-            onChange={(event) => {
-              setCapacity(event.target.value)
-            }}
-          />
-          </Box>
-
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
               pt: '2',
               width: '100%'
             }}>
@@ -273,15 +293,17 @@ const RegistrationFormOwner = () => {
               onClick={handleBack}
               type="button"
               variant="contained"
-              sx={{ mt: 3, mb: 2, mr: 1, bgcolor: '#43bbbf'
-              }}>
+              sx={{ mt: 3, mb: 2, mr: 1 }}
+              className={classes.customButton}
+            >
               Nazad
             </Button>
             <Box sx={{ flex: '1 1 auto' }} />
             <Button
               type="button"
               variant="contained"
-              sx={{ mt: 3, mb: 2, mr: 1, bgcolor: '#43bbbf' }}
+              sx={{ mt: 3, mb: 2, mr: 1 }}
+              className={classes.customButton}
               onClick={handleSubmit}
             >
               Nastavi
@@ -291,18 +313,35 @@ const RegistrationFormOwner = () => {
       ) : (
         <>
           <Box noValidate sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="username"
-              label="Korisničko ime"
-              id="username"
-              autoComplete="off"
-              onChange={(event) => {
-                setUsername(event.target.value)
-              }}
-            />
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between'
+              }}>
+              <TextField
+                margin="normal"
+                required
+                id="name"
+                label="Ime"
+                name="name"
+                onChange={(event) => {
+                  setName(event.target.value)
+                }}
+                sx={{width: '47%'}}
+              />
+              <TextField
+                margin="normal"
+                required
+                id="surname"
+                label="Prezime"
+                name="surname"
+                onChange={(event) => {
+                  setSurname(event.target.value)
+                }}
+                sx={{width:'47%'}}
+              />
+            </Box>
             <Box
               sx={{
                 display: 'flex',
@@ -338,6 +377,18 @@ const RegistrationFormOwner = () => {
               margin="normal"
               required
               fullWidth
+              name="username"
+              label="Korisničko ime"
+              id="username"
+              autoComplete="off"
+              onChange={(event) => {
+                setUsername(event.target.value)
+              }}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
               name="password"
               label="Lozinka"
               type="password"
@@ -351,10 +402,10 @@ const RegistrationFormOwner = () => {
               margin="normal"
               required
               fullWidth
-              name="repPassword"
+              name="repeatedPassword"
               label="Ponovljena lozinka"
               type="password"
-              id="repPassword"
+              id="repeatedPassword"
               autoComplete="off"
               onChange={(event) => {
                 setRepeatedPassword(event.target.value)
@@ -364,7 +415,8 @@ const RegistrationFormOwner = () => {
               type="button"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2, bgcolor: '#43bbbf' }}
+              sx={{ mt: 3, mb: 2 }}
+              className={classes.customButton}
               onClick={handleNext}
             >
               Dalje
@@ -372,7 +424,7 @@ const RegistrationFormOwner = () => {
             <Grid container>
               <Grid item>
                 <Link
-                  href="#"
+                  href="http://localhost:3000/login"
                   sx={{
                     color: '#43bbbf',
                     textDecoration: 'none',

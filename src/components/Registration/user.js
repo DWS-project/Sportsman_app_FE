@@ -36,6 +36,7 @@ const RegistrationFormUser = () => {
   const [age, setAge] = useState(0)
   const [interests, setInterests] = useState([])
   const [activeStep, setActiveStep] = useState(0)
+  const [hooks, setHooks] = useState([]);
   const classes = useStyles()
 
   async function handleSubmit() {
@@ -56,13 +57,53 @@ const RegistrationFormUser = () => {
     console.log('status', status)
     console.log('message', message)
   }
+
+  useEffect(() => {
+    setHooks([
+      { name: 'name', value: name },
+      { name: 'surname', value: surname },
+      { name: 'username', value: username },
+      { name: 'phone', value: phone },
+      { name: 'email', value: email },
+      { name: 'password', value: password },
+      { name: 'repeatedPassword', value: repeatedPassword },
+      { name: 'city', value: city },
+      { name: 'age', value: age },
+      { name: 'interests', value: interests }
+    ])
+  }, [name, surname, username, phone, email, password, repeatedPassword,
+    city, age, interests])
+
+  // Are all fields filled?
+  const checkFields = () => {
+    const missingFields = []
+    hooks.forEach((hook) => {
+      if(hook.value === '' || hook.value === []){
+        missingFields.push(hook.name)
+      }
+    })
+    return missingFields
+  }
   //These three short functions are used for stepper
   const isStepOptional = (step) => {
     return step === 1;
   }
 
   const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1)
+    const check = checkFields()
+
+    if(check.length === 0){
+      setActiveStep((prevActiveStep) => prevActiveStep + 1)
+    }else if(check.length <= 3){
+      const requiredFields = ['name', 'surname', 'username', 'phone', 'email', 'password', 'repeatedPassword',];
+      const hasRequiredFields = requiredFields.some(field => check.includes(field))
+
+      if(!hasRequiredFields){
+
+        setActiveStep((prevActiveStep) => prevActiveStep + 1)
+      }
+    }
+
   }
 
   const handleBack = () => {
@@ -228,15 +269,17 @@ const RegistrationFormUser = () => {
               onClick={handleBack}
               type="button"
               variant="contained"
-              sx={{ mt: 3, mb: 2, mr: 1, bgcolor: '#43bbbf'
-              }}>
+              sx={{ mt: 3, mb: 2, mr: 1 }}
+              className={classes.customButton}
+            >
               Nazad
             </Button>
             <Box sx={{ flex: '1 1 auto' }} />
             <Button
               type="button"
               variant="contained"
-              sx={{ mt: 3, mb: 2, mr: 1, bgcolor: '#43bbbf' }}
+              sx={{ mt: 3, mb: 2, mr: 1 }}
+              className={classes.customButton}
               onClick={handleSubmit}
             >
               Preskoči
@@ -244,7 +287,8 @@ const RegistrationFormUser = () => {
             <Button
               type="button"
               variant="contained"
-              sx={{ mt: 3, mb: 2, mr: 1, bgcolor: '#43bbbf' }}
+              sx={{ mt: 3, mb: 2, mr: 1 }}
+              className={classes.customButton}
               onClick={handleSubmit}
             >
               Nastavi
@@ -392,7 +436,8 @@ const RegistrationFormUser = () => {
               type="button"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2, bgcolor: '#43bbbf' }}
+              sx={{ mt: 3, mb: 2 }}
+              className={classes.customButton}
               onClick={handleNext}
             >
               Dalje
@@ -400,7 +445,7 @@ const RegistrationFormUser = () => {
             <Grid container>
               <Grid item>
                 <Link
-                  href="#"
+                  href="http://localhost:3000/login"
                   sx={{
                     color: '#43bbbf',
                     textDecoration: 'none',

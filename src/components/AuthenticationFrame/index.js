@@ -5,10 +5,7 @@ import Paper from '@mui/material/Paper'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import Typography from '@mui/material/Typography'
 import LoginForm from '../Login'
-import RegistrationFormUser from '../Registration/user.js'
-import RegistrationFormOwner from "../Registration/owner"
 import RegistrationForm from "../Registration/index"
 
 const AuthenticationFrame = ({route}) => {
@@ -43,8 +40,6 @@ const AuthenticationFrame = ({route}) => {
         ) : (
           <RegistrationForm avatar={avatar} />
         )}
-
-
       </Grid>
     </Grid>
   )

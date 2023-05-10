@@ -31,8 +31,7 @@ const useStyles = makeStyles(() =>
       height: '50%',
     },
     sportField: {
-      //
-      backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(http://localhost:3000/images/sportField.png)',
+      backgroundImage: 'url(http://localhost:3000/images/drawing1.png)',
       height: '100%',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
@@ -42,10 +41,10 @@ const useStyles = makeStyles(() =>
       '&:hover': {
         transform: 'scale(1.04)',
       },
-      border: '25px solid #43bbbf',
+      borderBottom: '10px solid #43bbbf',
     },
     soccerPlayer: {
-      backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(http://localhost:3000/images/soccerPlayer.png)',
+      backgroundImage: 'url(http://localhost:3000/images/drawing2.png)',
       height: '100%',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
@@ -55,7 +54,6 @@ const useStyles = makeStyles(() =>
       '&:hover': {
         transform: 'scale(1.04)',
       },
-      //border: '5px solid #09aeb4',
     },
     choosingContainer: {
       width: '100%',
@@ -63,11 +61,10 @@ const useStyles = makeStyles(() =>
     },
     heroText: {
       position: 'absolute',
-      top: '27%',
-      left: '57%',
+      top: '47%',
+      left: '40%',
       transform: 'translate(-50%, -50%)',
       whiteSpace: 'nowrap',
-      color: 'white',
       display: 'flex',
       flexDirection: 'column',
     },
@@ -75,26 +72,20 @@ const useStyles = makeStyles(() =>
       fontSize: 'h6.fontSize'
     },
     registerButton1: {
-      boxShadow: '0.3em 0.3em 0 0 #43bbbf, inset 0.3em 0.3em 0 0 #43bbbf',
+      backgroundColor: '#43bbbf !important',
       '&:hover': {
-        boxShadow:'0 0 0 0 #43bbbf,inset 6em 3.5em 0 0 #43bbbf',
+        boxShadow:'0 0 0 0 #43bbbf,inset 6em 3.5em 0 0 #17a6ab',
         color: 'white !important',
       },
-      position: 'absolute',
-      top: '70%',
-      left: '60%',
-      color: '#43bbbf !important',
-      borderRadius: '0',
-    },
-    registerButton2: {
-      boxShadow: '0.3em 0.3em 0 0 #43bbbf, inset 0.3em 0.3em 0 0 #43bbbf',
-      '&:hover': {
-        boxShadow:'0 0 0 0 #43bbbf,inset 6em 3.5em 0 0 #43bbbf',
-        color: 'white !important',
-      },
-      color: '#43bbbf !important',
       width: '50%',
       marginTop: '4% !important',
+      color: 'white !important',
+    },
+    customButton: { // to use through pages
+      backgroundColor: '#43bbbf !important',
+      '&:hover': {
+        boxShadow:'0 0 0 0 #43bbbf,inset 6em 3.5em 0 0 #17a6ab !important',
+      },
     },
     registerHeadline: {
       fontSize: '2.3rem',
@@ -102,21 +93,19 @@ const useStyles = makeStyles(() =>
       color: '#43bbbf',
     },
     registerSub: {
-      alignSelf: 'flex-end',
       fontSize: '1.3rem',
       marginRight: '0.5rem',
-      marginLeft: '4rem',
       fontWeight: '900',
-      marginTop: 'auto'
+      marginTop: 'auto',
+      color: 'darkslategrey'
     },
     heroText2: {
       height: '40%',
       position: 'absolute',
-      top: '35%',
+      top: '30%',
       left: '40%',
       transform: 'translate(-50%, -50%)',
       whiteSpace: 'nowrap',
-      color: 'white',
       display: 'flex',
       flexDirection: 'column',
     },
@@ -124,7 +113,8 @@ const useStyles = makeStyles(() =>
       fontSize: '1.3rem',
       marginRight: '0.5rem',
       fontWeight: '900',
-      marginTop: 'auto'
+      marginTop: 'auto',
+      color: 'darkslategrey'
     },
   })
 )

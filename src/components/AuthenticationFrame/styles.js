@@ -1,5 +1,6 @@
 import { createStyles, makeStyles } from '@material-ui/core'
 
+
 const useStyles = makeStyles(() =>
   createStyles({
     leftContainer: {
@@ -8,7 +9,7 @@ const useStyles = makeStyles(() =>
       alignItems: 'center',
     },
     rightContainer: {
-      backgroundImage: 'url(http://localhost:3000/images/loginImage.jpg)',
+      backgroundImage: `url(${process.env.REACT_APP_FRONTEND_URL}/images/loginImage.jpg)`,
       backgroundRepeat: 'no-repeat',
       backgroundColor: '#43bbbf',
       backgroundSize: 'cover',
@@ -31,7 +32,8 @@ const useStyles = makeStyles(() =>
       height: '50%',
     },
     sportField: {
-      backgroundImage: 'url(http://localhost:3000/images/drawing1.png)',
+      //url(http://localhost:3000/images/drawing1.png)
+      backgroundImage: `url(${process.env.REACT_APP_FRONTEND_URL}/images/drawing1.png)`,
       height: '100%',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
@@ -44,7 +46,7 @@ const useStyles = makeStyles(() =>
       borderBottom: '10px solid #43bbbf',
     },
     soccerPlayer: {
-      backgroundImage: 'url(http://localhost:3000/images/drawing2.png)',
+      backgroundImage: `url(${process.env.REACT_APP_FRONTEND_URL}/images/drawing2.png)`,
       height: '100%',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
@@ -81,7 +83,7 @@ const useStyles = makeStyles(() =>
       marginTop: '4% !important',
       color: 'white !important',
     },
-    customButton: { // to use through pages
+    customButton: {
       backgroundColor: '#43bbbf !important',
       '&:hover': {
         boxShadow:'0 0 0 0 #43bbbf,inset 6em 3.5em 0 0 #17a6ab !important',

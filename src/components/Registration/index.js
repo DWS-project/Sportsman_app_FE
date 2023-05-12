@@ -2,26 +2,26 @@ import { useState } from 'react'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import useStyles from '../AuthenticationFrame/styles'
-import RegistrationFormOwner from "./owner";
-import RegistrationFormUser from "./user";
+import RegistrationFormOwner from './Owner/index'
+import RegistrationFormUser from './User/index'
 
 
 const RegistrationForm = ({avatar}) => {
-  const [chosen, setChosen] = useState(null)
+  const [chosenRegistration, setChosenRegistration] = useState(null)
   const classes = useStyles()
 
-  const handleOptionClick = (option) => {
-    setChosen(option)
+  function handleOptionClick(option) {
+    setChosenRegistration(option)
   }
 
-  if (chosen === 'owner') {
+  if (chosenRegistration === 'owner') {
     return (
       <Box sx={{ my: 2, mx: 4 }} className={classes.leftContainer}>
         {avatar}
         <RegistrationFormOwner />
       </Box>
     )
-  } else if (chosen === 'user') {
+  } else if (chosenRegistration === 'user') {
     return (
       <Box sx={{ my: 1, mx: 4 }} className={classes.leftContainer}>
         {avatar}
@@ -66,4 +66,5 @@ const RegistrationForm = ({avatar}) => {
   )
 }
 
-export default RegistrationForm
+export default
+RegistrationForm

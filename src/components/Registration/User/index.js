@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField'
 import Link from '@mui/material/Link'
 import Grid from '@mui/material/Grid'
 import axios from 'axios'
-import { REGISTRATION_PLAYER } from '../../constants/endpoints'
+import { REGISTRATION_PLAYER } from '../../../constants/endpoints'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Stepper from '@mui/material/Stepper'
@@ -18,11 +18,9 @@ import ToggleButton from '@mui/material/ToggleButton'
 import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useEffect } from 'react'
-import useStyles from '../AuthenticationFrame/styles'
+import useStyles from '../../AuthenticationFrame/styles'
+import {StepperStepsForUser, cities, imagesDataForUser, StepperActiveColor, StepperCompletedColor} from '../../../constants/appDefaults'
 
-const steps = ['Postavke profila', 'Interesovanja']
-
-const cities = ['Sarajevo', 'Zenica', 'Tuzla', 'Mostar']
 
 const RegistrationFormUser = () => {
   const [name, setName] = useState('')
@@ -36,7 +34,7 @@ const RegistrationFormUser = () => {
   const [age, setAge] = useState(0)
   const [interests, setInterests] = useState([])
   const [activeStep, setActiveStep] = useState(0)
-  const [hooks, setHooks] = useState([]);
+  const [inputFields, setInputFields] = useState([]);
   const classes = useStyles()
 
   async function handleSubmit() {
@@ -59,7 +57,7 @@ const RegistrationFormUser = () => {
   }
 
   useEffect(() => {
-    setHooks([
+    setInputFields([
       { name: 'name', value: name },
       { name: 'surname', value: surname },
       { name: 'username', value: username },
@@ -74,91 +72,55 @@ const RegistrationFormUser = () => {
   }, [name, surname, username, phone, email, password, repeatedPassword,
     city, age, interests])
 
-  // Are all fields filled?
-  const checkFields = () => {
+
+  function getMissingFields() {
     const missingFields = []
-    hooks.forEach((hook) => {
-      if(hook.value === '' || hook.value === []){
-        missingFields.push(hook.name)
+    inputFields.forEach((field) => {
+      if(field.value === '' || field.value === []){
+        missingFields.push(field.name)
       }
     })
     return missingFields
   }
-  //These three short functions are used for stepper
-  const isStepOptional = (step) => {
+
+  function isStepOptional(step) {
     return step === 1;
   }
 
-  const handleNext = () => {
-    const check = checkFields()
+  function goToNextStep() {
+    const missingFields = getMissingFields()
 
-    if(check.length === 0){
-      setActiveStep((prevActiveStep) => prevActiveStep + 1)
-    }else if(check.length <= 3){
+    if(missingFields.length === 0){
+      setActiveStep((previousActiveStep) => previousActiveStep + 1)
+    }else if(missingFields.length <= 3){
       const requiredFields = ['name', 'surname', 'username', 'phone', 'email', 'password', 'repeatedPassword',];
-      const hasRequiredFields = requiredFields.some(field => check.includes(field))
+      const RequiredFieldsMissing = requiredFields.some(field => missingFields.includes(field))
 
-      if(!hasRequiredFields){
+      if(!RequiredFieldsMissing){
 
-        setActiveStep((prevActiveStep) => prevActiveStep + 1)
+        setActiveStep((previousActiveStep) => previousActiveStep + 1)
       }
     }
 
   }
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1)
-  }
-  // Colors of active and completed step in steper
-  const activeColor = '#43bbbf';
-  const completedColor = '#39CCC5';
+  function goToPreviousStep() {
 
-  // Is image representing interest selected?
-  function isSelected(title){
-    return interests.includes(title)
+    setActiveStep((previousActiveStep) => previousActiveStep - 1)
   }
-  // Images and titles for interests
-  const itemData = [
-    {
-      img: '/images/football.jpg',
-      title: 'Fudbal',
-      name: 'fudbal'
-    },
-    {
-      img: '/images/basketball.jpg',
-      title: 'Košarka',
-      name: 'kosarka'
-    },
-    {
-      img: '/images/handball.jpg',
-      title: 'Rukomet',
-      name: 'rukomet'
-    },
-    {
-      img: '/images/volleyball.jpg',
-      title: 'Odbojka',
-      name: 'odbojka'
-    },
-    {
-      img: '/images/tennis.jpg',
-      title: 'Tenis',
-      name: 'tenis'
-    },
-    {
-      img: '/images/paintball.png',
-      title: 'Paintball',
-      name: 'paintball'
-    },
-  ]
-  // This part of code is used to display images properly when screen is resized # For responsive display
-  // If screen is medium or higher size then three columns of images are displayed, else two columns
+
+  function isImageSelected(imageName){
+    return interests.includes(imageName)
+  }
+
+
   const theme = useTheme()
   const isMediumScreen = useMediaQuery(theme.breakpoints.up('md'))
-  const [colsValue, setColsValue] = useState(isMediumScreen ? 3 : 2)
+  const [numberOfColForImages, setNumberOfColForImages] = useState(isMediumScreen ? 3 : 2)
 
-  const handleScreenSizeChange = () => {
-    const updatedColsValue = isMediumScreen ? 3 : 2
-    setColsValue(updatedColsValue)
+  function handleScreenSizeChange() {
+    const updatedNumberOfColForImages = isMediumScreen ? 3 : 2
+    setNumberOfColForImages(updatedNumberOfColForImages)
   }
 
   useEffect(() => {
@@ -168,7 +130,7 @@ const RegistrationFormUser = () => {
     };
   }, [isMediumScreen]);
 
-  const renderSteps = (label, index) => {
+  function renderSteps(label, index) {
     const stepProps = {};
     const labelProps = {};
     if (isStepOptional(index)) {
@@ -183,9 +145,6 @@ const RegistrationFormUser = () => {
     )
   }
 
-  // In "return": first Box element is for stepper, after this Box element I'm checking active step, if active step
-  // is last step then "Interesovanja" step is displayed otherwise the registration form is displayed
-
   return (
     <>
       <Typography component="h1" variant="h5" sx={{mb: 5}}>
@@ -197,23 +156,23 @@ const RegistrationFormUser = () => {
           alternativeLabel
           fullWidth
           sx={{
-            '& .MuiStepIcon-root.Mui-active': {color: activeColor},
-            '& .MuiStepIcon-root.Mui-completed': {color: completedColor}
+            '& .MuiStepIcon-root.Mui-active': {color: StepperActiveColor},
+            '& .MuiStepIcon-root.Mui-completed': {color: StepperCompletedColor}
           }}>
-          {steps.map((label, index) => renderSteps(label,index))}
+          {StepperStepsForUser.map((label, index) => renderSteps(label,index))}
         </Stepper>
       </Box>
 
-      {activeStep === steps.length-1 ? (
+      {activeStep === StepperStepsForUser.length-1 ? (
         <>
           <Typography component="h1" variant="h5">
             Interesovanja
           </Typography>
           <Box sx={{width: '100%', height: '100%'}}>
-            <ImageList cols={colsValue}>
+            <ImageList cols={numberOfColForImages}>
               <ImageListItem
                 key="Subheader"
-                cols={colsValue}
+                cols={numberOfColForImages}
                 sx={{mb:3}}>
                 <p>
                   Ovdje možete odabrati vaša interesovanja.
@@ -222,7 +181,7 @@ const RegistrationFormUser = () => {
                   sadržaj  iz oblasti koje vas najviše zanimaju.
                 </p>
               </ImageListItem>
-              {itemData.map((item) => (
+              {imagesDataForUser.map((item) => (
                 <ToggleButton
                   value="check"
                   selected={interests.includes(item.name)}
@@ -242,8 +201,8 @@ const RegistrationFormUser = () => {
                     cols={1}
                     className={classes.imageList}
                     sx={{
-                      opacity: isSelected(item.name) ? 0.8 : 1,
-                      border: isSelected(item.name) ? '5px solid #43bbbf' : '5px solid transparent',
+                      opacity: isImageSelected(item.name) ? 0.8 : 1,
+                      border: isImageSelected(item.name) ? '5px solid #43bbbf' : '5px solid transparent',
                     }}>
                     <img
                       src={`${item.img}`}
@@ -266,7 +225,7 @@ const RegistrationFormUser = () => {
               width: '100%'
             }}>
             <Button
-              onClick={handleBack}
+              onClick={goToPreviousStep}
               type="button"
               variant="contained"
               sx={{ mt: 3, mb: 2, mr: 1 }}
@@ -438,14 +397,14 @@ const RegistrationFormUser = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
               className={classes.customButton}
-              onClick={handleNext}
+              onClick={goToNextStep}
             >
               Dalje
             </Button>
             <Grid container>
               <Grid item>
                 <Link
-                  href="http://localhost:3000/login"
+                  href={process.env.REACT_APP_FRONTEND_URL + '/login'}
                   sx={{
                     color: '#43bbbf',
                     textDecoration: 'none',
@@ -462,4 +421,5 @@ const RegistrationFormUser = () => {
   )
 }
 
-export default RegistrationFormUser
+export default
+RegistrationFormUser

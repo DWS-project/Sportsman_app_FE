@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField'
 import Link from '@mui/material/Link'
 import Grid from '@mui/material/Grid'
 import axios from 'axios'
-import { REGISTRATION_OWNER } from '../../constants/endpoints'
+import { REGISTRATION_OWNER } from '../../../constants/endpoints'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Stepper from '@mui/material/Stepper'
@@ -18,11 +18,9 @@ import ToggleButton from '@mui/material/ToggleButton'
 import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useEffect } from 'react'
-import useStyles from '../AuthenticationFrame/styles'
+import useStyles from '../../AuthenticationFrame/styles'
+import {StepperStepsForOwner, cities, imagesDataForOwner, StepperActiveColor, StepperCompletedColor} from '../../../constants/appDefaults'
 
-const steps = ['Postavke profila', 'Tip terena i lokacija']
-
-const cities = ['Sarajevo', 'Zenica', 'Tuzla', 'Mostar']
 
 const RegistrationFormOwner = () => {
   const [name, setName] = useState('')
@@ -38,12 +36,12 @@ const RegistrationFormOwner = () => {
   const [type, setType] = useState('')
   const [capacity, setCapacity] = useState('')
   const [activeStep, setActiveStep] = useState(0)
-  const [hooks, setHooks] = useState([]);
+  const [inputFields, setInputFields] = useState([]);
   const classes = useStyles()
 
   async function handleSubmit() {
-    const check = checkFields()
-    if(check.length === 0){
+    const missingFields = getMissingFields()
+    if(missingFields.length === 0){
       const data = {
         name,
         surname,
@@ -66,78 +64,55 @@ const RegistrationFormOwner = () => {
   }
 
   useEffect(() => {
-      setHooks([
-        { name: 'name', value: name },
-        { name: 'surname', value: surname },
-        { name: 'username', value: username },
-        { name: 'phone', value: phone },
-        { name: 'email', value: email },
-        { name: 'password', value: password },
-        { name: 'repeatedPassword', value: repeatedPassword },
-        { name: 'city', value: city },
-        { name: 'street', value: street },
-        { name: 'streetNumber', value: streetNumber },
-        { name: 'type', value: type },
-        { name: 'capacity', value: capacity },
-      ])
+    setInputFields([
+      { name: 'name', value: name },
+      { name: 'surname', value: surname },
+      { name: 'username', value: username },
+      { name: 'phone', value: phone },
+      { name: 'email', value: email },
+      { name: 'password', value: password },
+      { name: 'repeatedPassword', value: repeatedPassword },
+      { name: 'city', value: city },
+      { name: 'street', value: street },
+      { name: 'streetNumber', value: streetNumber },
+      { name: 'type', value: type },
+      { name: 'capacity', value: capacity },
+    ])
   }, [name, surname, username, phone, email, password, repeatedPassword,
     city, street, streetNumber, type, capacity])
 
-  // Are all fields filled?
-  const checkFields = () => {
+  function getMissingFields() {
     const missingFields = []
-    hooks.forEach((hook) => {
-      if(hook.value === ''){
-        missingFields.push(hook.name)
+    inputFields.forEach((field) => {
+      if(field.value === ''){
+        missingFields.push(field.name)
       }
     })
     return missingFields
   }
-  const handleNext = () => {
-    const check = checkFields()
-    if (check.length === 5) {
-      setActiveStep((prevActiveStep) => prevActiveStep + 1)
+  function goToNextStep() {
+    const missingFields = getMissingFields()
+    if (missingFields.length === 5) {
+      setActiveStep((previousActiveStep) => previousActiveStep + 1)
     }
   }
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1)
+  function goToPreviousStep() {
+    setActiveStep((previousActiveStep) => previousActiveStep - 1)
   }
-  // Colors of active and completed step in steper
-  const activeColor = '#43bbbf';
-  const completedColor = '#39CCC5';
 
-  // Is image representing interest selected?
-  function isSelected(title){
-    return type === title
+
+  function isImageSelected(imageName){
+    return type === imageName
   }
-  // Images and titles for interests
-  const itemData = [
-    {
-      img: '/images/smallSoccerField.jpg',
-      title: 'Vanjski',
-      name: 'vanjski'
-    },
-    {
-      img: '/images/sportHall.jpg',
-      title: 'Unutrašnji',
-      name: 'unustrasnji'
-    },
-    {
-      img: '/images/combination.png',
-      title: 'Oba tipa',
-      name: 'obaTipa'
-    },
-  ]
-  // This part of code is used to display images properly when screen is resized # For responsive display
-  // If screen is medium or higher size then three columns of images are displayed, else one column
+
   const theme = useTheme()
   const isMediumScreen = useMediaQuery(theme.breakpoints.up('md'))
-  const [colsValue, setColsValue] = useState(isMediumScreen ? 3 : 1)
+  const [numberOfColForImages, setNumberOfColForImages] = useState(isMediumScreen ? 3 : 1)
 
-  const handleScreenSizeChange = () => {
-    const updatedColsValue = isMediumScreen ? 3 : 1
-    setColsValue(updatedColsValue)
+  function handleScreenSizeChange() {
+    const updatedNumberOfColForImages = isMediumScreen ? 3 : 1
+    setNumberOfColForImages(updatedNumberOfColForImages)
   }
 
   useEffect(() => {
@@ -147,7 +122,7 @@ const RegistrationFormOwner = () => {
     };
   }, [isMediumScreen]);
 
-  const renderSteps = (label) => {
+  function renderSteps(label) {
     const stepProps = {};
     const labelProps = {};
     return (
@@ -156,9 +131,6 @@ const RegistrationFormOwner = () => {
       </Step>
     )
   }
-
-  // In "return": first Box element is for stepper, after this Box element I'm checking active step, if active step
-  // is last step then "Tip terena i lokacija" step is displayed otherwise the registration form is displayed
 
   return (
     <>
@@ -171,23 +143,23 @@ const RegistrationFormOwner = () => {
           alternativeLabel
           fullWidth
           sx={{
-            '& .MuiStepIcon-root.Mui-active': {color: activeColor},
-            '& .MuiStepIcon-root.Mui-completed': {color: completedColor}
+            '& .MuiStepIcon-root.Mui-active': {color: StepperActiveColor},
+            '& .MuiStepIcon-root.Mui-completed': {color: StepperCompletedColor}
           }}>
-          {steps.map((label) => renderSteps(label))}
+          {StepperStepsForOwner.map((label) => renderSteps(label))}
         </Stepper>
       </Box>
 
-      {activeStep === steps.length-1 ? (
+      {activeStep === StepperStepsForOwner.length-1 ? (
         <>
           <Box sx={{width: '100%', height: '100%'}}>
-            <ImageList cols={colsValue}>
-              <ImageListItem cols={colsValue}>
+            <ImageList cols={numberOfColForImages}>
+              <ImageListItem cols={numberOfColForImages}>
                 <Typography component="h1" variant="h5" sx={{mb: 3, mt: 2, alignSelf: 'center'}}>
                   Odaberite tip terena:
                 </Typography>
               </ImageListItem>
-              {itemData.map((item) => (
+              {imagesDataForOwner.map((item) => (
                 <ToggleButton
                   value="check"
                   selected={type === item.name}
@@ -201,8 +173,8 @@ const RegistrationFormOwner = () => {
                     cols={1}
                     className={classes.imageList}
                     sx={{
-                      opacity: isSelected(item.name) ? 0.8 : 1,
-                      border: isSelected(item.name) ? '5px solid #43bbbf' : '5px solid transparent',
+                      opacity: isImageSelected(item.name) ? 0.8 : 1,
+                      border: isImageSelected(item.name) ? '5px solid #43bbbf' : '5px solid transparent',
                     }}>
                     <img
                       src={`${item.img}`}
@@ -217,19 +189,19 @@ const RegistrationFormOwner = () => {
               ))}
             </ImageList>
           </Box>
-            <TextField
-              margin="normal"
-              name="capacity"
-              fullWidth
-              required
-              label="Broj terena koje posjedujete"
-              type="number"
-              id="capacity"
-              autoComplete="off"
-              onChange={(event) => {
-                setCapacity(event.target.value)
-              }}
-            />
+          <TextField
+            margin="normal"
+            name="capacity"
+            fullWidth
+            required
+            label="Broj terena koje posjedujete"
+            type="number"
+            id="capacity"
+            autoComplete="off"
+            onChange={(event) => {
+              setCapacity(event.target.value)
+            }}
+          />
           <Box
             sx={{
               display: 'flex',
@@ -290,7 +262,7 @@ const RegistrationFormOwner = () => {
               width: '100%'
             }}>
             <Button
-              onClick={handleBack}
+              onClick={goToPreviousStep}
               type="button"
               variant="contained"
               sx={{ mt: 3, mb: 2, mr: 1 }}
@@ -417,14 +389,14 @@ const RegistrationFormOwner = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
               className={classes.customButton}
-              onClick={handleNext}
+              onClick={goToNextStep}
             >
               Dalje
             </Button>
             <Grid container>
               <Grid item>
                 <Link
-                  href="http://localhost:3000/login"
+                  href={process.env.REACT_APP_FRONTEND_URL + '/login'}
                   sx={{
                     color: '#43bbbf',
                     textDecoration: 'none',
@@ -441,4 +413,5 @@ const RegistrationFormOwner = () => {
   )
 }
 
-export default RegistrationFormOwner
+export default
+RegistrationFormOwner

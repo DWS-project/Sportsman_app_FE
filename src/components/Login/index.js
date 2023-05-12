@@ -74,7 +74,7 @@ const LoginForm = () => {
             </Link>
           </Grid>
           <Grid item>
-            <Link href={process.env.REACT_APP_FRONTEND_URL + '/registration'} sx={{ color: '#43bbbf', textDecoration: 'none' }}>
+            <Link href={`${process.env.REACT_APP_FRONTEND_URL}/registration`} sx={{ color: '#43bbbf', textDecoration: 'none' }}>
               Nemate korisnički račun? Registrujte se
             </Link>
           </Grid>
@@ -84,5 +84,4 @@ const LoginForm = () => {
   )
 }
 
-export default
-LoginForm
+export default LoginForm

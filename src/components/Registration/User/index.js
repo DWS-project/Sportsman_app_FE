@@ -404,7 +404,7 @@ const RegistrationFormUser = () => {
             <Grid container>
               <Grid item>
                 <Link
-                  href={process.env.REACT_APP_FRONTEND_URL + '/login'}
+                  href={`${process.env.REACT_APP_FRONTEND_URL}/login`}
                   sx={{
                     color: '#43bbbf',
                     textDecoration: 'none',
@@ -421,5 +421,4 @@ const RegistrationFormUser = () => {
   )
 }
 
-export default
-RegistrationFormUser
+export default RegistrationFormUser

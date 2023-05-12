@@ -66,5 +66,4 @@ const RegistrationForm = ({avatar}) => {
   )
 }
 
-export default
-RegistrationForm
+export default RegistrationForm

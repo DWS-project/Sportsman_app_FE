@@ -396,7 +396,7 @@ const RegistrationFormOwner = () => {
             <Grid container>
               <Grid item>
                 <Link
-                  href={process.env.REACT_APP_FRONTEND_URL + '/login'}
+                  href={`${process.env.REACT_APP_FRONTEND_URL}/login`}
                   sx={{
                     color: '#43bbbf',
                     textDecoration: 'none',
@@ -413,5 +413,4 @@ const RegistrationFormOwner = () => {
   )
 }
 
-export default
-RegistrationFormOwner
+export default RegistrationFormOwner

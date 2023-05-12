@@ -32,7 +32,6 @@ const useStyles = makeStyles(() =>
       height: '50%',
     },
     sportField: {
-      //url(http://localhost:3000/images/drawing1.png)
       backgroundImage: `url(${process.env.REACT_APP_FRONTEND_URL}/images/drawing1.png)`,
       height: '100%',
       backgroundPosition: 'center',

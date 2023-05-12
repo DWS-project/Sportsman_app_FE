@@ -19,7 +19,7 @@ import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useEffect } from 'react'
 import useStyles from '../../AuthenticationFrame/styles'
-import {StepperStepsForUser, cities, imagesDataForUser, StepperActiveColor, StepperCompletedColor} from '../../../constants/appDefaults'
+import {StepperStepsForUser, cities, imagesDataForUser, StepperActiveColor, StepperCompletedColor, FRONTEND_URL} from '../../../constants/appDefaults'
 
 
 const RegistrationFormUser = () => {
@@ -404,7 +404,7 @@ const RegistrationFormUser = () => {
             <Grid container>
               <Grid item>
                 <Link
-                  href={`${process.env.REACT_APP_FRONTEND_URL}/login`}
+                  href={`${FRONTEND_URL}/login`}
                   sx={{
                     color: '#43bbbf',
                     textDecoration: 'none',

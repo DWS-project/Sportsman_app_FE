@@ -59,6 +59,8 @@ const imagesDataForUser = [
   },
 ]
 
+const FRONTEND_URL = process.env.REACT_APP_FRONTEND_URL
+
 export {
   StepperStepsForUser,
   StepperStepsForOwner,
@@ -66,5 +68,6 @@ export {
   StepperCompletedColor,
   cities,
   imagesDataForOwner,
-  imagesDataForUser
+  imagesDataForUser,
+  FRONTEND_URL
 }

@@ -7,7 +7,8 @@ import axios from 'axios'
 import { LOGIN } from '../../constants/endpoints'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
-import useStyles from "../AuthenticationFrame/styles";
+import useStyles from "../AuthenticationFrame/styles"
+import {FRONTEND_URL} from '../../constants/appDefaults'
 
 const LoginForm = () => {
   const [email, setEmail] = useState('')
@@ -74,7 +75,7 @@ const LoginForm = () => {
             </Link>
           </Grid>
           <Grid item>
-            <Link href={`${process.env.REACT_APP_FRONTEND_URL}/registration`} sx={{ color: '#43bbbf', textDecoration: 'none' }}>
+            <Link href={`${FRONTEND_URL}/registration`} sx={{ color: '#43bbbf', textDecoration: 'none' }}>
               Nemate korisnički račun? Registrujte se
             </Link>
           </Grid>

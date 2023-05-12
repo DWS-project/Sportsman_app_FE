@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import Link from '@mui/material/Link'
@@ -17,7 +17,6 @@ import ImageListItemBar from '@mui/material/ImageListItemBar'
 import ToggleButton from '@mui/material/ToggleButton'
 import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { useEffect } from 'react'
 import useStyles from '../AuthenticationFrame/styles'
 
 const steps = ['Postavke profila', 'Interesovanja']
@@ -49,16 +48,15 @@ const RegistrationForm = () => {
       age,
       interests,
       typeOfUser: 'user',
-      username: 'still to implement'
+      username: 'still to implement',
     }
 
     const { status, message } = await axios.post(REGISTRATION, data)
     console.log('status', status)
     console.log('message', message)
   }
-  //These three short functions are used for stepper
   const isStepOptional = (step) => {
-    return step === 1;
+    return step === 1
   }
 
   const handleNext = () => {
@@ -69,11 +67,11 @@ const RegistrationForm = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1)
   }
   // Colors of active and completed step in steper
-  const activeColor = '#43bbbf';
-  const completedColor = '#39CCC5';
+  const activeColor = '#43bbbf'
+  const completedColor = '#39CCC5'
 
   // Is image representing interest selected?
-  function isSelected(title){
+  function isSelected(title) {
     return interests.includes(title)
   }
   // Images and titles for interests
@@ -81,32 +79,32 @@ const RegistrationForm = () => {
     {
       img: '/images/football.jpg',
       title: 'Fudbal',
-      name: 'fudbal'
+      name: 'fudbal',
     },
     {
       img: '/images/basketball.jpg',
       title: 'Košarka',
-      name: 'kosarka'
+      name: 'kosarka',
     },
     {
       img: '/images/handball.jpg',
       title: 'Rukomet',
-      name: 'rukomet'
+      name: 'rukomet',
     },
     {
       img: '/images/volleyball.jpg',
       title: 'Odbojka',
-      name: 'odbojka'
+      name: 'odbojka',
     },
     {
       img: '/images/tennis.jpg',
       title: 'Tenis',
-      name: 'tenis'
+      name: 'tenis',
     },
     {
       img: '/images/paintball.png',
       title: 'Paintball',
-      name: 'paintball'
+      name: 'paintball',
     },
   ]
   // This part of code is used to display images properly when screen is resized # For responsive display
@@ -121,15 +119,15 @@ const RegistrationForm = () => {
   }
 
   useEffect(() => {
-    window.addEventListener('resize', handleScreenSizeChange);
+    window.addEventListener('resize', handleScreenSizeChange)
     return () => {
-      window.removeEventListener('resize', handleScreenSizeChange);
-    };
-  }, [isMediumScreen]);
+      window.removeEventListener('resize', handleScreenSizeChange)
+    }
+  }, [isMediumScreen])
 
   const renderSteps = (label, index) => {
-    const stepProps = {};
-    const labelProps = {};
+    const stepProps = {}
+    const labelProps = {}
     if (isStepOptional(index)) {
       labelProps.optional = (
         <Typography variant="caption">Opcionalno</Typography>
@@ -147,54 +145,54 @@ const RegistrationForm = () => {
 
   return (
     <>
-      <Typography component="h1" variant="h5" sx={{mb: 5}}>
+      <Typography component="h1" variant="h5" sx={{ mb: 5 }}>
         Registrujte se
       </Typography>
-      <Box sx={{width:'100%'}}>
+      <Box sx={{ width: '100%' }}>
         <Stepper
           activeStep={activeStep}
           alternativeLabel
           fullWidth
           sx={{
-            '& .MuiStepIcon-root.Mui-active': {color: activeColor},
-            '& .MuiStepIcon-root.Mui-completed': {color: completedColor}
-        }}>
-          {steps.map((label, index) => renderSteps(label,index))}
+            '& .MuiStepIcon-root.Mui-active': { color: activeColor },
+            '& .MuiStepIcon-root.Mui-completed': { color: completedColor },
+          }}
+        >
+          {steps.map((label, index) => renderSteps(label, index))}
         </Stepper>
       </Box>
 
-      {activeStep === steps.length-1 ? (
+      {activeStep === steps.length - 1 ? (
         <>
           <Typography component="h1" variant="h5">
             Interesovanja
           </Typography>
-          <Box sx={{width: '100%', height: '100%'}}>
+          <Box sx={{ width: '100%', height: '100%' }}>
             <ImageList cols={colsValue}>
-              <ImageListItem
-                key="Subheader"
-                cols={colsValue}
-                sx={{mb:3}}>
+              <ImageListItem key="Subheader" cols={colsValue} sx={{ mb: 3 }}>
                 <p>
-                  Ovdje možete odabrati vaša interesovanja.
-                  Napominjemo da ovaj korak nije obavezan, ali će
-                  nam pomoći da vam prikažemo relevantne teme i
-                  sadržaj  iz oblasti koje vas najviše zanimaju.
+                  Ovdje možete odabrati vaša interesovanja. Napominjemo da ovaj
+                  korak nije obavezan, ali će nam pomoći da vam prikažemo
+                  relevantne teme i sadržaj iz oblasti koje vas najviše
+                  zanimaju.
                 </p>
               </ImageListItem>
               {itemData.map((item) => (
                 <ToggleButton
                   value="check"
+                  key={item.name}
                   selected={interests.includes(item.name)}
                   onChange={() => {
-                    let copy = [...interests]
-                    const isItemInList = copy.includes(item.name);
+                    const isItemInList = interests.includes(item.name)
                     if (isItemInList) {
-                      setInterests(copy.filter((element) => element !== item.name))
-                    }else{
-                      setInterests([...copy, item.name]) ;
+                      setInterests(
+                        interests.filter((element) => element !== item.name)
+                      )
+                    } else {
+                      setInterests([...interests, item.name])
                     }
                   }}
-                  sx={{borderRadius: 0, p: 0, border: 0}}
+                  sx={{ borderRadius: 0, p: 0, border: 0 }}
                 >
                   <ImageListItem
                     key={item.img}
@@ -202,16 +200,17 @@ const RegistrationForm = () => {
                     className={classes.imageList}
                     sx={{
                       opacity: isSelected(item.name) ? 0.8 : 1,
-                      border: isSelected(item.name) ? '5px solid #43bbbf' : '5px solid transparent',
-                    }}>
-                      <img
-                        src={`${item.img}`}
-                        alt={item.title}
-                        loading={"lazy"}
-                      />
-                    <ImageListItemBar
-                      title={item.title}
+                      border: isSelected(item.name)
+                        ? '5px solid #43bbbf'
+                        : '5px solid transparent',
+                    }}
+                  >
+                    <img
+                      src={`${item.img}`}
+                      alt={item.title}
+                      loading={'lazy'}
                     />
+                    <ImageListItemBar title={item.title} />
                   </ImageListItem>
                 </ToggleButton>
               ))}
@@ -222,14 +221,15 @@ const RegistrationForm = () => {
               display: 'flex',
               flexDirection: 'row',
               pt: '2',
-              width: '100%'
-          }}>
+              width: '100%',
+            }}
+          >
             <Button
               onClick={handleBack}
               type="button"
               variant="contained"
-              sx={{ mt: 3, mb: 2, mr: 1, bgcolor: '#43bbbf'
-            }}>
+              sx={{ mt: 3, mb: 2, mr: 1, bgcolor: '#43bbbf' }}
+            >
               Nazad
             </Button>
             <Box sx={{ flex: '1 1 auto' }} />
@@ -258,8 +258,9 @@ const RegistrationForm = () => {
               sx={{
                 display: 'flex',
                 flexDirection: 'row',
-                justifyContent: 'space-between'
-            }}>
+                justifyContent: 'space-between',
+              }}
+            >
               <TextField
                 margin="normal"
                 required
@@ -269,7 +270,7 @@ const RegistrationForm = () => {
                 onChange={(event) => {
                   setName(event.target.value)
                 }}
-                sx={{width: '47%'}}
+                sx={{ width: '47%' }}
               />
               <TextField
                 margin="normal"
@@ -280,15 +281,16 @@ const RegistrationForm = () => {
                 onChange={(event) => {
                   setSurname(event.target.value)
                 }}
-                sx={{width:'47%'}}
+                sx={{ width: '47%' }}
               />
             </Box>
             <Box
               sx={{
                 display: 'flex',
                 flexDirection: 'row',
-                justifyContent: 'space-between'
-            }}>
+                justifyContent: 'space-between',
+              }}
+            >
               <TextField
                 margin="normal"
                 required
@@ -299,7 +301,7 @@ const RegistrationForm = () => {
                 onChange={(event) => {
                   setEmail(event.target.value)
                 }}
-                sx={{width: '47%'}}
+                sx={{ width: '47%' }}
               />
               <TextField
                 margin="normal"
@@ -311,31 +313,33 @@ const RegistrationForm = () => {
                 onChange={(event) => {
                   setPhone(event.target.value)
                 }}
-                sx={{width: '47%'}}
+                sx={{ width: '47%' }}
               />
             </Box>
             <Box
               sx={{
                 display: 'flex',
                 flexDirection: 'row',
-                justifyContent: 'space-between'
-            }}>
+                justifyContent: 'space-between',
+              }}
+            >
               <Autocomplete
                 disablePortal
                 id="combo-box-demo"
                 options={cities}
                 sx={{ width: '47%' }}
-                onChange={(event,newValue)=>{
+                onChange={(event, newValue) => {
                   setCity(newValue)
                 }}
-                renderInput={(params) =>
+                renderInput={(params) => (
                   <TextField
                     {...params}
                     margin="normal"
                     name="city"
                     id="city"
                     label="Grad"
-                  />}
+                  />
+                )}
               />
               <TextField
                 margin="normal"
@@ -347,7 +351,7 @@ const RegistrationForm = () => {
                 onChange={(event) => {
                   setAge(event.target.value)
                 }}
-                sx={{width: '47%'}}
+                sx={{ width: '47%' }}
               />
             </Box>
             <TextField

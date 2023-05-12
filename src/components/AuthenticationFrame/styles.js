@@ -24,7 +24,7 @@ const useStyles = makeStyles(() =>
         height: '200px',
         filter: 'brightness(80%)',
         objectPosition: 'center',
-      }
+      },
     },
     wrapper: {
       overflow: "hidden",

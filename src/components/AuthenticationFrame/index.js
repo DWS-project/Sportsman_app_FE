@@ -8,6 +8,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import LoginForm from '../Login'
 import RegistrationForm from "../Registration/index"
 
+
 const AuthenticationFrame = ({route}) => {
   const classes = useStyles()
 

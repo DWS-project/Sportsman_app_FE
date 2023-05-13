@@ -392,7 +392,7 @@ const RegistrationForm = () => {
             <Grid container>
               <Grid item>
                 <Link
-                  href="#"
+                  href={`${FRONTEND_URL}/login`}
                   sx={{
                     color: '#43bbbf',
                     textDecoration: 'none',

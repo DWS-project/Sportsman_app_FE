@@ -19,7 +19,7 @@ import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useEffect } from 'react'
 import useStyles from '../../AuthenticationFrame/styles'
-import {StepperStepsForUser, cities, imagesDataForUser, StepperActiveColor, StepperCompletedColor, FRONTEND_URL} from '../../../constants/appDefaults'
+import {emailRegex, phoneRegex, StepperStepsForUser, cities, imagesDataForUser, StepperActiveColor, StepperCompletedColor, FRONTEND_URL} from '../../../constants/appDefaults'
 
 
 const RegistrationFormUser = () => {
@@ -31,10 +31,11 @@ const RegistrationFormUser = () => {
   const [password, setPassword] = useState('')
   const [repeatedPassword, setRepeatedPassword] = useState('')
   const [city, setCity] = useState('')
-  const [age, setAge] = useState(0)
+  const [age, setAge] = useState('')
   const [interests, setInterests] = useState([])
   const [activeStep, setActiveStep] = useState(0)
   const [inputFields, setInputFields] = useState([]);
+  const [stepButtonClicked, setStepButtonClicked] = useState(false)
   const classes = useStyles()
 
   async function handleSubmit() {
@@ -91,15 +92,20 @@ const RegistrationFormUser = () => {
     const missingFields = getMissingFields()
 
     if(missingFields.length === 0){
+      setStepButtonClicked(false)
       setActiveStep((previousActiveStep) => previousActiveStep + 1)
     }else if(missingFields.length <= 3){
       const requiredFields = ['name', 'surname', 'username', 'phone', 'email', 'password', 'repeatedPassword',];
       const RequiredFieldsMissing = requiredFields.some(field => missingFields.includes(field))
 
       if(!RequiredFieldsMissing){
-
+        setStepButtonClicked(false)
         setActiveStep((previousActiveStep) => previousActiveStep + 1)
+      } else {
+        setStepButtonClicked(true)
       }
+    } else {
+      setStepButtonClicked(true)
     }
 
   }
@@ -269,6 +275,8 @@ const RegistrationFormUser = () => {
                 id="name"
                 label="Ime"
                 name="name"
+                value={name}
+                error={(name === '' || name.length <= 2) && stepButtonClicked}
                 onChange={(event) => {
                   setName(event.target.value)
                 }}
@@ -280,6 +288,8 @@ const RegistrationFormUser = () => {
                 id="surname"
                 label="Prezime"
                 name="surname"
+                value={surname}
+                error={surname === '' && stepButtonClicked}
                 onChange={(event) => {
                   setSurname(event.target.value)
                 }}
@@ -299,6 +309,8 @@ const RegistrationFormUser = () => {
                 label="Email adresa"
                 name="email"
                 autoComplete="off"
+                value={email}
+                error={!emailRegex.test(email) && stepButtonClicked}
                 onChange={(event) => {
                   setEmail(event.target.value)
                 }}
@@ -310,6 +322,8 @@ const RegistrationFormUser = () => {
                 id="phone"
                 label="Kontakt telefon"
                 name="phone"
+                value={phone}
+                error={!phoneRegex.test(phone) && stepButtonClicked}
                 autoComplete="off"
                 onChange={(event) => {
                   setPhone(event.target.value)
@@ -337,6 +351,7 @@ const RegistrationFormUser = () => {
                     margin="normal"
                     name="city"
                     id="city"
+                    value={city}
                     label="Grad"
                   />}
               />
@@ -346,6 +361,7 @@ const RegistrationFormUser = () => {
                 label="Broj godina"
                 type="number"
                 id="age"
+                value={age}
                 autoComplete="off"
                 onChange={(event) => {
                   setAge(event.target.value)
@@ -360,6 +376,8 @@ const RegistrationFormUser = () => {
               name="username"
               label="Korisničko ime"
               id="username"
+              value={username}
+              error={username === '' && stepButtonClicked}
               autoComplete="off"
               onChange={(event) => {
                 setUsername(event.target.value)
@@ -373,6 +391,8 @@ const RegistrationFormUser = () => {
               label="Lozinka"
               type="password"
               id="password"
+              value={password}
+              error={password === '' && !/^\S+$/.test(password) && stepButtonClicked}
               autoComplete="off"
               onChange={(event) => {
                 setPassword(event.target.value)
@@ -386,6 +406,8 @@ const RegistrationFormUser = () => {
               label="Ponovljena lozinka"
               type="password"
               id="repPassword"
+              value={repeatedPassword}
+              error={(repeatedPassword === '' || repeatedPassword !== password) && stepButtonClicked}
               autoComplete="off"
               onChange={(event) => {
                 setRepeatedPassword(event.target.value)

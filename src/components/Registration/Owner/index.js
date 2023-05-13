@@ -19,7 +19,7 @@ import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useEffect } from 'react'
 import useStyles from '../../AuthenticationFrame/styles'
-import {StepperStepsForOwner, cities, imagesDataForOwner, StepperActiveColor, StepperCompletedColor, FRONTEND_URL} from '../../../constants/appDefaults'
+import {emailRegex, phoneRegex, StepperStepsForOwner, cities, imagesDataForOwner, StepperActiveColor, StepperCompletedColor, FRONTEND_URL} from '../../../constants/appDefaults'
 
 
 const RegistrationFormOwner = () => {
@@ -37,6 +37,7 @@ const RegistrationFormOwner = () => {
   const [capacity, setCapacity] = useState('')
   const [activeStep, setActiveStep] = useState(0)
   const [inputFields, setInputFields] = useState([]);
+  const [stepButtonClicked, setStepButtonClicked] = useState(false)
   const classes = useStyles()
 
   async function handleSubmit() {
@@ -60,6 +61,8 @@ const RegistrationFormOwner = () => {
       const { status, message } = await axios.post(REGISTRATION_OWNER, data)
       console.log('status', status)
       console.log('message', message)
+    } else {
+      setStepButtonClicked(true)
     }
   }
 
@@ -93,7 +96,10 @@ const RegistrationFormOwner = () => {
   function goToNextStep() {
     const missingFields = getMissingFields()
     if (missingFields.length === 5) {
+      setStepButtonClicked(false)
       setActiveStep((previousActiveStep) => previousActiveStep + 1)
+    } else {
+      setStepButtonClicked(true)
     }
   }
 
@@ -197,6 +203,8 @@ const RegistrationFormOwner = () => {
             label="Broj terena koje posjedujete"
             type="number"
             id="capacity"
+            value={capacity}
+            error={capacity === '' && stepButtonClicked}
             autoComplete="off"
             onChange={(event) => {
               setCapacity(event.target.value)
@@ -225,6 +233,8 @@ const RegistrationFormOwner = () => {
                   name="city"
                   id="city"
                   label="Grad"
+                  value={city}
+                  error={city === '' && stepButtonClicked}
                   required
                 />}
             />
@@ -234,6 +244,8 @@ const RegistrationFormOwner = () => {
               name="street"
               label="Ulica"
               id="street"
+              value={street}
+              error={street === '' && stepButtonClicked}
               autoComplete="off"
               onChange={(event) => {
                 setStreet(event.target.value)
@@ -247,6 +259,8 @@ const RegistrationFormOwner = () => {
               label="Broj ulice"
               type="number"
               id="streetNumber"
+              value={streetNumber}
+              error={streetNumber === '' && stepButtonClicked}
               autoComplete="off"
               onChange={(event) => {
                 setStreetNumber(event.target.value)
@@ -297,6 +311,8 @@ const RegistrationFormOwner = () => {
                 id="name"
                 label="Ime"
                 name="name"
+                value={name}
+                error={(name === '' || name.length <= 2) && stepButtonClicked}
                 onChange={(event) => {
                   setName(event.target.value)
                 }}
@@ -308,6 +324,8 @@ const RegistrationFormOwner = () => {
                 id="surname"
                 label="Prezime"
                 name="surname"
+                value={surname}
+                error={surname === '' && stepButtonClicked}
                 onChange={(event) => {
                   setSurname(event.target.value)
                 }}
@@ -327,6 +345,8 @@ const RegistrationFormOwner = () => {
                 label="Email adresa"
                 name="email"
                 autoComplete="off"
+                value={email}
+                error={!emailRegex.test(email) && stepButtonClicked}
                 onChange={(event) => {
                   setEmail(event.target.value)
                 }}
@@ -338,6 +358,8 @@ const RegistrationFormOwner = () => {
                 id="phone"
                 label="Kontakt telefon"
                 name="phone"
+                value={phone}
+                error={!phoneRegex.test(phone) && stepButtonClicked}
                 autoComplete="off"
                 onChange={(event) => {
                   setPhone(event.target.value)
@@ -351,6 +373,8 @@ const RegistrationFormOwner = () => {
               fullWidth
               name="username"
               label="Korisničko ime"
+              value={username}
+              error={username === '' && stepButtonClicked}
               id="username"
               autoComplete="off"
               onChange={(event) => {
@@ -365,6 +389,8 @@ const RegistrationFormOwner = () => {
               label="Lozinka"
               type="password"
               id="password"
+              value={password}
+              error={password === '' && !/^\S+$/.test(password) && stepButtonClicked}
               autoComplete="off"
               onChange={(event) => {
                 setPassword(event.target.value)
@@ -378,6 +404,8 @@ const RegistrationFormOwner = () => {
               label="Ponovljena lozinka"
               type="password"
               id="repeatedPassword"
+              value={repeatedPassword}
+              error={(repeatedPassword === '' || repeatedPassword !== password) && stepButtonClicked}
               autoComplete="off"
               onChange={(event) => {
                 setRepeatedPassword(event.target.value)

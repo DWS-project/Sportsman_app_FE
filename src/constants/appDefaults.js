@@ -61,6 +61,10 @@ const imagesDataForUser = [
 
 const FRONTEND_URL = process.env.REACT_APP_FRONTEND_URL
 
+const emailRegex = /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i
+
+const phoneRegex = /^(\d{3}[- ]?){2}\d{3,4}$/
+
 export {
   StepperStepsForUser,
   StepperStepsForOwner,
@@ -69,5 +73,7 @@ export {
   cities,
   imagesDataForOwner,
   imagesDataForUser,
-  FRONTEND_URL
+  FRONTEND_URL,
+  emailRegex,
+  phoneRegex
 }

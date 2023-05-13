@@ -1,19 +1,27 @@
 import './App.css'
+
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+
 import AuthenticationFrame from './components/AuthenticationFrame'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import LandingPage from './components/LandingPage'
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path={'/'} element={<AuthenticationFrame route={'registration'}/>}></Route>
-          <Route path={'/login'} element={<AuthenticationFrame route={'login'}/>}></Route>
-          <Route path={'/registration'} element={<AuthenticationFrame route={'registration'}/>}></Route>
+          <Route path={'/'} element={<LandingPage />} />
+          <Route
+            path={'/login'}
+            element={<AuthenticationFrame route={'login'} />}
+          />
+          <Route
+            path={'/registration'}
+            element={<AuthenticationFrame route={'registration'} />}
+          />
         </Routes>
       </BrowserRouter>
     </>
-
   )
 }
 

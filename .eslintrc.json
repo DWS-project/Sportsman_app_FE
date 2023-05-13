@@ -24,15 +24,15 @@
       {
         "ignoreNonDOM": true
       }
-    ],
-    "overrides": [
-      {
-        "files": ["**/*.js"],
-        "parserOptions": {
-          "ecmaVersion": 6,
-          "sourceType": "script"
-        }
-      }
     ]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.js"],
+      "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "script"
+      }
+    }
+  ]
 }

@@ -19,8 +19,16 @@ import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useEffect } from 'react'
 import useStyles from '../../AuthenticationFrame/styles'
-import {emailRegex, phoneRegex, StepperStepsForOwner, cities, imagesDataForOwner, StepperActiveColor, StepperCompletedColor, FRONTEND_URL} from '../../../constants/appDefaults'
-
+import {
+  emailRegex,
+  phoneRegex,
+  StepperStepsForOwner,
+  cities,
+  imagesDataForOwner,
+  StepperActiveColor,
+  StepperCompletedColor,
+  FRONTEND_URL,
+} from '../../../constants/appDefaults'
 
 const RegistrationFormOwner = () => {
   const [name, setName] = useState('')
@@ -36,13 +44,13 @@ const RegistrationFormOwner = () => {
   const [type, setType] = useState('')
   const [capacity, setCapacity] = useState('')
   const [activeStep, setActiveStep] = useState(0)
-  const [inputFields, setInputFields] = useState([]);
+  const [inputFields, setInputFields] = useState([])
   const [stepButtonClicked, setStepButtonClicked] = useState(false)
   const classes = useStyles()
 
   async function handleSubmit() {
     const missingFields = getMissingFields()
-    if(missingFields.length === 0){
+    if (missingFields.length === 0) {
       const data = {
         name,
         surname,
@@ -55,7 +63,7 @@ const RegistrationFormOwner = () => {
         street,
         streetNumber,
         type,
-        capacity
+        capacity,
       }
 
       const { status, message } = await axios.post(REGISTRATION_OWNER, data)
@@ -81,13 +89,25 @@ const RegistrationFormOwner = () => {
       { name: 'type', value: type },
       { name: 'capacity', value: capacity },
     ])
-  }, [name, surname, username, phone, email, password, repeatedPassword,
-    city, street, streetNumber, type, capacity])
+  }, [
+    name,
+    surname,
+    username,
+    phone,
+    email,
+    password,
+    repeatedPassword,
+    city,
+    street,
+    streetNumber,
+    type,
+    capacity,
+  ])
 
   function getMissingFields() {
     const missingFields = []
     inputFields.forEach((field) => {
-      if(field.value === ''){
+      if (field.value === '') {
         missingFields.push(field.name)
       }
     })
@@ -107,14 +127,15 @@ const RegistrationFormOwner = () => {
     setActiveStep((previousActiveStep) => previousActiveStep - 1)
   }
 
-
-  function isImageSelected(imageName){
+  function isImageSelected(imageName) {
     return type === imageName
   }
 
   const theme = useTheme()
   const isMediumScreen = useMediaQuery(theme.breakpoints.up('md'))
-  const [numberOfColForImages, setNumberOfColForImages] = useState(isMediumScreen ? 3 : 1)
+  const [numberOfColForImages, setNumberOfColForImages] = useState(
+    isMediumScreen ? 3 : 1
+  )
 
   function handleScreenSizeChange() {
     const updatedNumberOfColForImages = isMediumScreen ? 3 : 1
@@ -122,15 +143,15 @@ const RegistrationFormOwner = () => {
   }
 
   useEffect(() => {
-    window.addEventListener('resize', handleScreenSizeChange);
+    window.addEventListener('resize', handleScreenSizeChange)
     return () => {
-      window.removeEventListener('resize', handleScreenSizeChange);
-    };
-  }, [isMediumScreen]);
+      window.removeEventListener('resize', handleScreenSizeChange)
+    }
+  }, [isMediumScreen])
 
   function renderSteps(label) {
-    const stepProps = {};
-    const labelProps = {};
+    const stepProps = {}
+    const labelProps = {}
     return (
       <Step key={label} {...stepProps}>
         <StepLabel {...labelProps}>{label}</StepLabel>
@@ -140,39 +161,47 @@ const RegistrationFormOwner = () => {
 
   return (
     <>
-      <Typography component="h1" variant="h5" sx={{mb: 5}}>
+      <Typography component="h1" variant="h5" sx={{ mb: 5 }}>
         Registrujte se
       </Typography>
-      <Box sx={{width:'100%'}}>
+      <Box sx={{ width: '100%' }}>
         <Stepper
           activeStep={activeStep}
           alternativeLabel
           fullWidth
           sx={{
-            '& .MuiStepIcon-root.Mui-active': {color: StepperActiveColor},
-            '& .MuiStepIcon-root.Mui-completed': {color: StepperCompletedColor}
-          }}>
+            '& .MuiStepIcon-root.Mui-active': { color: StepperActiveColor },
+            '& .MuiStepIcon-root.Mui-completed': {
+              color: StepperCompletedColor,
+            },
+          }}
+        >
           {StepperStepsForOwner.map((label) => renderSteps(label))}
         </Stepper>
       </Box>
 
-      {activeStep === StepperStepsForOwner.length-1 ? (
+      {activeStep === StepperStepsForOwner.length - 1 ? (
         <>
-          <Box sx={{width: '100%', height: '100%'}}>
+          <Box sx={{ width: '100%', height: '100%' }}>
             <ImageList cols={numberOfColForImages}>
               <ImageListItem cols={numberOfColForImages}>
-                <Typography component="h1" variant="h5" sx={{mb: 3, mt: 2, alignSelf: 'center'}}>
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  sx={{ mb: 3, mt: 2, alignSelf: 'center' }}
+                >
                   Odaberite tip terena:
                 </Typography>
               </ImageListItem>
               {imagesDataForOwner.map((item) => (
                 <ToggleButton
+                  key={item.name}
                   value="check"
                   selected={type === item.name}
                   onChange={() => {
                     setType(item.name)
                   }}
-                  sx={{borderRadius: 0, p: 0, border: 0}}
+                  sx={{ borderRadius: 0, p: 0, border: 0 }}
                 >
                   <ImageListItem
                     key={item.img}
@@ -180,16 +209,17 @@ const RegistrationFormOwner = () => {
                     className={classes.imageList}
                     sx={{
                       opacity: isImageSelected(item.name) ? 0.8 : 1,
-                      border: isImageSelected(item.name) ? '5px solid #43bbbf' : '5px solid transparent',
-                    }}>
+                      border: isImageSelected(item.name)
+                        ? '5px solid #43bbbf'
+                        : '5px solid transparent',
+                    }}
+                  >
                     <img
                       src={`${item.img}`}
                       alt={item.title}
-                      loading={"eager"}
+                      loading={'eager'}
                     />
-                    <ImageListItemBar
-                      title={item.title}
-                    />
+                    <ImageListItemBar title={item.title} />
                   </ImageListItem>
                 </ToggleButton>
               ))}
@@ -215,18 +245,19 @@ const RegistrationFormOwner = () => {
               display: 'flex',
               flexDirection: 'row',
               justifyContent: 'space-between',
-              width: '100%'
-            }}>
+              width: '100%',
+            }}
+          >
             <Autocomplete
               disablePortal
               id="combo-box-demo"
               required
               options={cities}
               sx={{ width: '30%' }}
-              onChange={(event,newValue)=>{
+              onChange={(event, newValue) => {
                 setCity(newValue)
               }}
-              renderInput={(params) =>
+              renderInput={(params) => (
                 <TextField
                   {...params}
                   margin="normal"
@@ -236,7 +267,8 @@ const RegistrationFormOwner = () => {
                   value={city}
                   error={city === '' && stepButtonClicked}
                   required
-                />}
+                />
+              )}
             />
             <TextField
               margin="normal"
@@ -273,8 +305,9 @@ const RegistrationFormOwner = () => {
               display: 'flex',
               flexDirection: 'row',
               pt: '2',
-              width: '100%'
-            }}>
+              width: '100%',
+            }}
+          >
             <Button
               onClick={goToPreviousStep}
               type="button"
@@ -303,8 +336,9 @@ const RegistrationFormOwner = () => {
               sx={{
                 display: 'flex',
                 flexDirection: 'row',
-                justifyContent: 'space-between'
-              }}>
+                justifyContent: 'space-between',
+              }}
+            >
               <TextField
                 margin="normal"
                 required
@@ -316,7 +350,7 @@ const RegistrationFormOwner = () => {
                 onChange={(event) => {
                   setName(event.target.value)
                 }}
-                sx={{width: '47%'}}
+                sx={{ width: '47%' }}
               />
               <TextField
                 margin="normal"
@@ -329,15 +363,16 @@ const RegistrationFormOwner = () => {
                 onChange={(event) => {
                   setSurname(event.target.value)
                 }}
-                sx={{width:'47%'}}
+                sx={{ width: '47%' }}
               />
             </Box>
             <Box
               sx={{
                 display: 'flex',
                 flexDirection: 'row',
-                justifyContent: 'space-between'
-              }}>
+                justifyContent: 'space-between',
+              }}
+            >
               <TextField
                 margin="normal"
                 required
@@ -350,7 +385,7 @@ const RegistrationFormOwner = () => {
                 onChange={(event) => {
                   setEmail(event.target.value)
                 }}
-                sx={{width: '47%'}}
+                sx={{ width: '47%' }}
               />
               <TextField
                 margin="normal"
@@ -364,7 +399,7 @@ const RegistrationFormOwner = () => {
                 onChange={(event) => {
                   setPhone(event.target.value)
                 }}
-                sx={{width: '47%'}}
+                sx={{ width: '47%' }}
               />
             </Box>
             <TextField
@@ -390,7 +425,9 @@ const RegistrationFormOwner = () => {
               type="password"
               id="password"
               value={password}
-              error={password === '' && !/^\S+$/.test(password) && stepButtonClicked}
+              error={
+                password === '' && !/^\S+$/.test(password) && stepButtonClicked
+              }
               autoComplete="off"
               onChange={(event) => {
                 setPassword(event.target.value)
@@ -405,7 +442,10 @@ const RegistrationFormOwner = () => {
               type="password"
               id="repeatedPassword"
               value={repeatedPassword}
-              error={(repeatedPassword === '' || repeatedPassword !== password) && stepButtonClicked}
+              error={
+                (repeatedPassword === '' || repeatedPassword !== password) &&
+                stepButtonClicked
+              }
               autoComplete="off"
               onChange={(event) => {
                 setRepeatedPassword(event.target.value)

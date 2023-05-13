@@ -19,8 +19,16 @@ import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useEffect } from 'react'
 import useStyles from '../../AuthenticationFrame/styles'
-import {emailRegex, phoneRegex, StepperStepsForUser, cities, imagesDataForUser, StepperActiveColor, StepperCompletedColor, FRONTEND_URL} from '../../../constants/appDefaults'
-
+import {
+  emailRegex,
+  phoneRegex,
+  StepperStepsForUser,
+  cities,
+  imagesDataForUser,
+  StepperActiveColor,
+  StepperCompletedColor,
+  FRONTEND_URL,
+} from '../../../constants/appDefaults'
 
 const RegistrationFormUser = () => {
   const [name, setName] = useState('')
@@ -34,7 +42,7 @@ const RegistrationFormUser = () => {
   const [age, setAge] = useState('')
   const [interests, setInterests] = useState([])
   const [activeStep, setActiveStep] = useState(0)
-  const [inputFields, setInputFields] = useState([]);
+  const [inputFields, setInputFields] = useState([])
   const [stepButtonClicked, setStepButtonClicked] = useState(false)
   const classes = useStyles()
 
@@ -68,16 +76,25 @@ const RegistrationFormUser = () => {
       { name: 'repeatedPassword', value: repeatedPassword },
       { name: 'city', value: city },
       { name: 'age', value: age },
-      { name: 'interests', value: interests }
+      { name: 'interests', value: interests },
     ])
-  }, [name, surname, username, phone, email, password, repeatedPassword,
-    city, age, interests])
-
+  }, [
+    name,
+    surname,
+    username,
+    phone,
+    email,
+    password,
+    repeatedPassword,
+    city,
+    age,
+    interests,
+  ])
 
   function getMissingFields() {
     const missingFields = []
     inputFields.forEach((field) => {
-      if(field.value === '' || field.value === []){
+      if (field.value === '' || field.value === []) {
         missingFields.push(field.name)
       }
     })
@@ -85,20 +102,30 @@ const RegistrationFormUser = () => {
   }
 
   function isStepOptional(step) {
-    return step === 1;
+    return step === 1
   }
 
   function goToNextStep() {
     const missingFields = getMissingFields()
 
-    if(missingFields.length === 0){
+    if (missingFields.length === 0) {
       setStepButtonClicked(false)
       setActiveStep((previousActiveStep) => previousActiveStep + 1)
-    }else if(missingFields.length <= 3){
-      const requiredFields = ['name', 'surname', 'username', 'phone', 'email', 'password', 'repeatedPassword',];
-      const RequiredFieldsMissing = requiredFields.some(field => missingFields.includes(field))
+    } else if (missingFields.length <= 3) {
+      const requiredFields = [
+        'name',
+        'surname',
+        'username',
+        'phone',
+        'email',
+        'password',
+        'repeatedPassword',
+      ]
+      const RequiredFieldsMissing = requiredFields.some((field) =>
+        missingFields.includes(field)
+      )
 
-      if(!RequiredFieldsMissing){
+      if (!RequiredFieldsMissing) {
         setStepButtonClicked(false)
         setActiveStep((previousActiveStep) => previousActiveStep + 1)
       } else {
@@ -107,22 +134,21 @@ const RegistrationFormUser = () => {
     } else {
       setStepButtonClicked(true)
     }
-
   }
 
   function goToPreviousStep() {
-
     setActiveStep((previousActiveStep) => previousActiveStep - 1)
   }
 
-  function isImageSelected(imageName){
+  function isImageSelected(imageName) {
     return interests.includes(imageName)
   }
 
-
   const theme = useTheme()
   const isMediumScreen = useMediaQuery(theme.breakpoints.up('md'))
-  const [numberOfColForImages, setNumberOfColForImages] = useState(isMediumScreen ? 3 : 2)
+  const [numberOfColForImages, setNumberOfColForImages] = useState(
+    isMediumScreen ? 3 : 2
+  )
 
   function handleScreenSizeChange() {
     const updatedNumberOfColForImages = isMediumScreen ? 3 : 2
@@ -130,15 +156,15 @@ const RegistrationFormUser = () => {
   }
 
   useEffect(() => {
-    window.addEventListener('resize', handleScreenSizeChange);
+    window.addEventListener('resize', handleScreenSizeChange)
     return () => {
-      window.removeEventListener('resize', handleScreenSizeChange);
-    };
-  }, [isMediumScreen]);
+      window.removeEventListener('resize', handleScreenSizeChange)
+    }
+  }, [isMediumScreen])
 
   function renderSteps(label, index) {
-    const stepProps = {};
-    const labelProps = {};
+    const stepProps = {}
+    const labelProps = {}
     if (isStepOptional(index)) {
       labelProps.optional = (
         <Typography variant="caption">Opcionalno</Typography>
@@ -153,38 +179,42 @@ const RegistrationFormUser = () => {
 
   return (
     <>
-      <Typography component="h1" variant="h5" sx={{mb: 5}}>
+      <Typography component="h1" variant="h5" sx={{ mb: 5 }}>
         Registrujte se
       </Typography>
-      <Box sx={{width:'100%'}}>
+      <Box sx={{ width: '100%' }}>
         <Stepper
           activeStep={activeStep}
           alternativeLabel
           fullWidth
           sx={{
-            '& .MuiStepIcon-root.Mui-active': {color: StepperActiveColor},
-            '& .MuiStepIcon-root.Mui-completed': {color: StepperCompletedColor}
-          }}>
-          {StepperStepsForUser.map((label, index) => renderSteps(label,index))}
+            '& .MuiStepIcon-root.Mui-active': { color: StepperActiveColor },
+            '& .MuiStepIcon-root.Mui-completed': {
+              color: StepperCompletedColor,
+            },
+          }}
+        >
+          {StepperStepsForUser.map((label, index) => renderSteps(label, index))}
         </Stepper>
       </Box>
 
-      {activeStep === StepperStepsForUser.length-1 ? (
+      {activeStep === StepperStepsForUser.length - 1 ? (
         <>
           <Typography component="h1" variant="h5">
             Interesovanja
           </Typography>
-          <Box sx={{width: '100%', height: '100%'}}>
+          <Box sx={{ width: '100%', height: '100%' }}>
             <ImageList cols={numberOfColForImages}>
               <ImageListItem
                 key="Subheader"
                 cols={numberOfColForImages}
-                sx={{mb:3}}>
+                sx={{ mb: 3 }}
+              >
                 <p>
-                  Ovdje možete odabrati vaša interesovanja.
-                  Napominjemo da ovaj korak nije obavezan, ali će
-                  nam pomoći da vam prikažemo relevantne teme i
-                  sadržaj  iz oblasti koje vas najviše zanimaju.
+                  Ovdje možete odabrati vaša interesovanja. Napominjemo da ovaj
+                  korak nije obavezan, ali će nam pomoći da vam prikažemo
+                  relevantne teme i sadržaj iz oblasti koje vas najviše
+                  zanimaju.
                 </p>
               </ImageListItem>
               {imagesDataForUser.map((item) => (
@@ -193,14 +223,16 @@ const RegistrationFormUser = () => {
                   selected={interests.includes(item.name)}
                   onChange={() => {
                     let copy = [...interests]
-                    const isItemInList = copy.includes(item.name);
+                    const isItemInList = copy.includes(item.name)
                     if (isItemInList) {
-                      setInterests(copy.filter((element) => element !== item.name))
-                    }else{
-                      setInterests([...copy, item.name]) ;
+                      setInterests(
+                        copy.filter((element) => element !== item.name)
+                      )
+                    } else {
+                      setInterests([...copy, item.name])
                     }
                   }}
-                  sx={{borderRadius: 0, p: 0, border: 0}}
+                  sx={{ borderRadius: 0, p: 0, border: 0 }}
                 >
                   <ImageListItem
                     key={item.img}
@@ -208,16 +240,17 @@ const RegistrationFormUser = () => {
                     className={classes.imageList}
                     sx={{
                       opacity: isImageSelected(item.name) ? 0.8 : 1,
-                      border: isImageSelected(item.name) ? '5px solid #43bbbf' : '5px solid transparent',
-                    }}>
+                      border: isImageSelected(item.name)
+                        ? '5px solid #43bbbf'
+                        : '5px solid transparent',
+                    }}
+                  >
                     <img
                       src={`${item.img}`}
                       alt={item.title}
-                      loading={"lazy"}
+                      loading={'lazy'}
                     />
-                    <ImageListItemBar
-                      title={item.title}
-                    />
+                    <ImageListItemBar title={item.title} />
                   </ImageListItem>
                 </ToggleButton>
               ))}
@@ -228,8 +261,9 @@ const RegistrationFormUser = () => {
               display: 'flex',
               flexDirection: 'row',
               pt: '2',
-              width: '100%'
-            }}>
+              width: '100%',
+            }}
+          >
             <Button
               onClick={goToPreviousStep}
               type="button"
@@ -267,8 +301,9 @@ const RegistrationFormUser = () => {
               sx={{
                 display: 'flex',
                 flexDirection: 'row',
-                justifyContent: 'space-between'
-              }}>
+                justifyContent: 'space-between',
+              }}
+            >
               <TextField
                 margin="normal"
                 required
@@ -280,7 +315,7 @@ const RegistrationFormUser = () => {
                 onChange={(event) => {
                   setName(event.target.value)
                 }}
-                sx={{width: '47%'}}
+                sx={{ width: '47%' }}
               />
               <TextField
                 margin="normal"
@@ -293,15 +328,16 @@ const RegistrationFormUser = () => {
                 onChange={(event) => {
                   setSurname(event.target.value)
                 }}
-                sx={{width:'47%'}}
+                sx={{ width: '47%' }}
               />
             </Box>
             <Box
               sx={{
                 display: 'flex',
                 flexDirection: 'row',
-                justifyContent: 'space-between'
-              }}>
+                justifyContent: 'space-between',
+              }}
+            >
               <TextField
                 margin="normal"
                 required
@@ -314,7 +350,7 @@ const RegistrationFormUser = () => {
                 onChange={(event) => {
                   setEmail(event.target.value)
                 }}
-                sx={{width: '47%'}}
+                sx={{ width: '47%' }}
               />
               <TextField
                 margin="normal"
@@ -328,24 +364,25 @@ const RegistrationFormUser = () => {
                 onChange={(event) => {
                   setPhone(event.target.value)
                 }}
-                sx={{width: '47%'}}
+                sx={{ width: '47%' }}
               />
             </Box>
             <Box
               sx={{
                 display: 'flex',
                 flexDirection: 'row',
-                justifyContent: 'space-between'
-              }}>
+                justifyContent: 'space-between',
+              }}
+            >
               <Autocomplete
                 disablePortal
                 id="combo-box-demo"
                 options={cities}
                 sx={{ width: '47%' }}
-                onChange={(event,newValue)=>{
+                onChange={(event, newValue) => {
                   setCity(newValue)
                 }}
-                renderInput={(params) =>
+                renderInput={(params) => (
                   <TextField
                     {...params}
                     margin="normal"
@@ -353,7 +390,8 @@ const RegistrationFormUser = () => {
                     id="city"
                     value={city}
                     label="Grad"
-                  />}
+                  />
+                )}
               />
               <TextField
                 margin="normal"
@@ -366,7 +404,7 @@ const RegistrationFormUser = () => {
                 onChange={(event) => {
                   setAge(event.target.value)
                 }}
-                sx={{width: '47%'}}
+                sx={{ width: '47%' }}
               />
             </Box>
             <TextField
@@ -392,7 +430,9 @@ const RegistrationFormUser = () => {
               type="password"
               id="password"
               value={password}
-              error={password === '' && !/^\S+$/.test(password) && stepButtonClicked}
+              error={
+                password === '' && !/^\S+$/.test(password) && stepButtonClicked
+              }
               autoComplete="off"
               onChange={(event) => {
                 setPassword(event.target.value)
@@ -407,7 +447,10 @@ const RegistrationFormUser = () => {
               type="password"
               id="repPassword"
               value={repeatedPassword}
-              error={(repeatedPassword === '' || repeatedPassword !== password) && stepButtonClicked}
+              error={
+                (repeatedPassword === '' || repeatedPassword !== password) &&
+                stepButtonClicked
+              }
               autoComplete="off"
               onChange={(event) => {
                 setRepeatedPassword(event.target.value)

@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import { useState } from 'react'
+
 import useStyles from '../AuthenticationFrame/styles'
 import RegistrationFormOwner from './Owner/index'
 import RegistrationFormUser from './User/index'

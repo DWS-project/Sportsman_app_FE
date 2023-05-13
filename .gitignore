@@ -39,3 +39,13 @@ yarn-error.log*
 
 # Log files
 *.log
+
+# Default ignored files
+/shelf/
+/workspace.xml
+
+# Editor-based HTTP Client requests
+/httpRequests/
+
+# files specific to IDE
+.idea

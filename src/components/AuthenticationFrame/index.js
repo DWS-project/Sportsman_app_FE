@@ -1,15 +1,15 @@
-import useStyles from './styles'
-import Avatar from '@mui/material/Avatar'
-import CssBaseline from '@mui/material/CssBaseline'
-import Paper from '@mui/material/Paper'
-import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
+import Avatar from '@mui/material/Avatar'
+import Box from '@mui/material/Box'
+import CssBaseline from '@mui/material/CssBaseline'
+import Grid from '@mui/material/Grid'
+import Paper from '@mui/material/Paper'
+
 import LoginForm from '../Login'
-import RegistrationForm from "../Registration/index"
+import RegistrationForm from '../Registration/index'
+import useStyles from './styles'
 
-
-const AuthenticationFrame = ({route}) => {
+const AuthenticationFrame = ({ route }) => {
   const classes = useStyles()
 
   const avatar = (

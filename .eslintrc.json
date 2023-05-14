@@ -1,0 +1,29 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "extends": ["plugin:jsx-a11y/recommended"],
+  "plugins": ["jsx-a11y", "simple-import-sort"],
+  "rules": {
+    "react-hooks/rules-of-hooks": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "jsx-a11y/alt-text": "off",
+    "react/jsx-no-target-blank": "off",
+    "jsx-a11y/label-has-associated-control": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "react/display-name": "off",
+    "react/no-unknown-property": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "jsx-a11y/img-redundant-alt": "off",
+    "react/jsx-key": "off",
+    "jsx-a11y/anchor-is-valid": "off",
+    "simple-import-sort/imports": "warn",
+    "jsx-a11y/no-autofocus": [
+      "off",
+      {
+        "ignoreNonDOM": true
+      }
+    ]
+  }
+}

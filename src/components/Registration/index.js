@@ -1,12 +1,12 @@
-import { useState } from 'react'
-import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import { useState } from 'react'
+
 import useStyles from '../AuthenticationFrame/styles'
 import RegistrationFormOwner from './Owner/index'
 import RegistrationFormUser from './User/index'
 
-
-const RegistrationForm = ({avatar}) => {
+const RegistrationForm = ({ avatar }) => {
   const [chosenRegistration, setChosenRegistration] = useState(null)
   const classes = useStyles()
 
@@ -32,7 +32,7 @@ const RegistrationForm = ({avatar}) => {
 
   return (
     <Box className={classes.choosingContainer}>
-      <Box sx={{width: '100', height: '100%'}}>
+      <Box sx={{ width: '100', height: '100%' }}>
         <Box className={classes.wrapper}>
           <Box className={classes.sportField}>
             <Box className={classes.heroText}>
@@ -45,7 +45,6 @@ const RegistrationForm = ({avatar}) => {
                 Registruj se
               </Button>
             </Box>
-
           </Box>
         </Box>
         <Box className={classes.wrapper}>
@@ -55,7 +54,8 @@ const RegistrationForm = ({avatar}) => {
               <p className={classes.registerSub2}>kao igrač</p>
               <Button
                 className={classes.registerButton1}
-                onClick={() => handleOptionClick('user')}>
+                onClick={() => handleOptionClick('user')}
+              >
                 Registruj se
               </Button>
             </Box>

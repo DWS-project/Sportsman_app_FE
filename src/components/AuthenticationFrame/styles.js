@@ -117,6 +117,81 @@ const useStyles = makeStyles(() =>
       marginTop: 'auto',
       color: 'darkslategrey'
     },
+    landingPage: {
+      backgroundImage: `url(${process.env.REACT_APP_FRONTEND_URL}/images/landingPage.png)`,
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+      height: '50vh',
+    },
+    citiesLandingPage: {
+      marginTop: '-30px',
+      display: 'flex',
+      justifyContent: 'center',
+    },
+    buttonLandingPage: {
+      color: '#43bbbf !important',
+      backgroundColor: 'white !important',
+      padding: '15px 20px !important',
+      margin: '0 1vw !important',
+      boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.1)',
+      transition: 'all 0.3s ease 0s !important',
+      '&:hover': {
+        backgroundColor: '#43bbbf !important',
+        boxShadow: '0px 15px 20px rgba(46, 229, 219, 0.4) !important',
+        color: '#fff !important',
+        transform: 'translateY(-7px) !important',
+      },
+    },
+    searchIconWrapper: {
+      padding: '0px 16px',
+      height: '100%',
+      position: 'absolute',
+      pointerEvents: 'none',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    search: {
+      position: 'relative',
+      borderRadius: '4px',
+      backgroundColor: 'rgba(255, 255, 255, 0.15)',
+      '&:hover': {
+        backgroundColor: 'rgba(255, 255, 255, 0.25)',
+      },
+      marginLeft: '8px',
+      width: '50%',
+    },
+    searchField: {
+      color: 'inherit',
+      padding: '8px 8px 8px 0',
+      paddingLeft: 'calc(1em + 32px) !important',
+      '&:hover': {
+        border: 'none',
+      },
+      width: '100%',
+    },
+    forDate: {
+      padding: '15px 5px',
+      color: '#646464',
+      fontSize: '1rem',
+      border: '1px solid #43bbbf',
+      outline: 'none',
+      borderRadius: '5px',
+      '&:focus': {
+        border: '2px solid #43bbbf'
+      },
+    },
+    forChecks: {
+      '&.Mui-checked': {
+        color: '#43bbbf !important',
+      },
+    },
+    forSliders: {
+      color: '#43bbbf !important',
+    },
+
+
   })
 )
 

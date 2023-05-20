@@ -9,11 +9,17 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import useStyles from '../AuthenticationFrame/styles'
 import { FRONTEND_URL } from '../../constants/appDefaults'
+import { HTTPStatusCodes } from 'src/constants/statusCodes'
+import { useNavigate } from 'react-router-dom'
+import Cookies from 'js-cookie'
+import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser'
 
 const LoginForm = () => {
+  const classes = useStyles()
+  const navigate = useNavigate()
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const classes = useStyles()
 
   async function handleSubmit() {
     const data = {
@@ -21,9 +27,10 @@ const LoginForm = () => {
       password,
     }
 
-    const { status, message } = await axios.post(LOGIN, data)
-    console.log('status', status)
-    console.log('message', message)
+    const { status, data: userData } = await axios.post(LOGIN, data)
+    Cookies.set(COOKIE_AUTHENTICATION_FE, JSON.stringify(userData.user))
+
+    if (status === HTTPStatusCodes.OK) navigate('/')
   }
 
   return (

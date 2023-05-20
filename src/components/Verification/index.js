@@ -2,6 +2,7 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import withMainFrame from 'src/hoc/withMainFrame'
 
 import useStyles from './styles'
 
@@ -9,7 +10,7 @@ const Verification = () => {
   const classes = useStyles()
   const navigate = useNavigate()
 
-  return (
+  return withMainFrame(
     <div className={classes.containerWrapper}>
       <img
         src="/images/verification.svg"

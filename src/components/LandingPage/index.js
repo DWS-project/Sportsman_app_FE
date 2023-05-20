@@ -24,8 +24,10 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import SearchIcon from '@mui/icons-material/Search';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Autocomplete from "@mui/material/Autocomplete";
+import axios from "axios";
+import { REGISTRATION_PLAYER } from "../../constants/endpoints";
 
 
 
@@ -93,8 +95,38 @@ const LandingPage = () => {
   const [date, setDate] = useState('')
   const [time, setTime] = useState('')
   const [isSearchClicked, setIsSearchClicked] = useState(false)
-  const [isAccordionExpanded, setIsAccordionExpanded] = useState(false);
+  const [isAccordionExpanded, setIsAccordionExpanded] = useState(false)
+  const [cards, setCards] = useState([]);
+  const [filter, setFilter] =
+    useState({
+      sports: sports,
+      city: city,
+      capacity: capacity,
+      price: price,
+      date: date,
+      time: time,
+    });
   const classes = useStyles()
+  useEffect(() => {
+    // Update filter state when any of the variables change
+    setFilter({
+      sports: sports,
+      city: city,
+      capacity: capacity,
+      price: price,
+      date: date,
+      time: time,
+    });
+  }, [sports, city, capacity, price, date, time])
+
+  useEffect(() => {
+    fetchCards();
+  }, [filter])
+
+  async function fetchCards() {
+    const response = await axios.get(REGISTRATION_PLAYER, filter)
+    setCards(response.data)
+  }
 
   function includeSport(sport) {
     let copy = [...sports]

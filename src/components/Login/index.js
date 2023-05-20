@@ -29,11 +29,11 @@ const LoginForm = () => {
     }
 
     const { status, data: userData } = await axios.post(LOGIN, data)
-    Cookies.set(
-      COOKIE_AUTHENTICATION_FE,
-      { expires: moment().add(1, 'day').toDate() },
-      JSON.stringify(userData.user)
-    )
+    console.log('userData.data', JSON.stringify(userData.user))
+
+    Cookies.set(COOKIE_AUTHENTICATION_FE, JSON.stringify(userData.user), {
+      expires: moment().add(1, 'days').toDate(),
+    })
 
     if (status === HTTPStatusCodes.OK) navigate('/')
   }

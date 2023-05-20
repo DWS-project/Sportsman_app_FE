@@ -73,6 +73,10 @@ const useStyles = makeStyles((theme) => ({
       display: 'none',
     },
   },
+  item: {
+    textDecoration: 'none',
+    color: 'black',
+  },
 }))
 
 export default useStyles

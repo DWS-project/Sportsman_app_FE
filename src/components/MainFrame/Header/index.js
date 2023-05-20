@@ -107,7 +107,15 @@ const Header = () => {
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseSideMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                  <Typography
+                    textAlign="center"
+                    component="a"
+                    href={page.href}
+                    onClick={page.onClick}
+                    className={classes.item}
+                  >
+                    {page.name}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -131,11 +139,13 @@ const Header = () => {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
-                key={page}
+                key={page.name}
                 onClick={handleCloseSideMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
+                component="a"
+                href={page.href}
               >
-                {page}
+                {page.name}
               </Button>
             ))}
           </Box>
@@ -164,17 +174,33 @@ const Header = () => {
             >
               {isUserLogged ? (
                 <>
-                  {settingsForPlayer.map((setting) => (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                      <Typography textAlign="center">{setting}</Typography>
+                  {settingsForPlayer.map((item) => (
+                    <MenuItem key={item.name} onClick={handleCloseUserMenu}>
+                      <Typography
+                        textAlign="center"
+                        component="a"
+                        href={item.href}
+                        onClick={item.onClick}
+                        className={classes.item}
+                      >
+                        {item.name}
+                      </Typography>
                     </MenuItem>
                   ))}
                 </>
               ) : (
                 <>
-                  {settingsForGuestUser.map((setting) => (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                      <Typography textAlign="center">{setting}</Typography>
+                  {settingsForGuestUser.map((item) => (
+                    <MenuItem key={item.name} onClick={handleCloseUserMenu}>
+                      <Typography
+                        textAlign="center"
+                        component="a"
+                        href={item.href}
+                        onClick={item.onClick}
+                        className={classes.item}
+                      >
+                        {item.name}
+                      </Typography>
                     </MenuItem>
                   ))}
                 </>

@@ -5,7 +5,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    minHeight: '94vh',
+    minHeight: '80vh',
     padding: theme.spacing(2),
     backgroundColor: '#E5E5E5',
     [theme.breakpoints.down('md')]: {

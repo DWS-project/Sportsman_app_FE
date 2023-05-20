@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import { useState } from 'react'
+import { AppUserRoles } from 'src/constants/appUserRoles'
 
 import useStyles from '../AuthenticationFrame/styles'
 import RegistrationFormOwner from './Owner/index'
@@ -14,14 +15,14 @@ const RegistrationForm = ({ avatar }) => {
     setChosenRegistration(option)
   }
 
-  if (chosenRegistration === 'owner') {
+  if (chosenRegistration === AppUserRoles.Owner) {
     return (
       <Box sx={{ my: 2, mx: 4 }} className={classes.leftContainer}>
         {avatar}
         <RegistrationFormOwner />
       </Box>
     )
-  } else if (chosenRegistration === 'user') {
+  } else if (chosenRegistration === AppUserRoles.User) {
     return (
       <Box sx={{ my: 1, mx: 4 }} className={classes.leftContainer}>
         {avatar}
@@ -40,7 +41,7 @@ const RegistrationForm = ({ avatar }) => {
               <p className={classes.registerSub}>kao vlasnik terena</p>
               <Button
                 className={classes.registerButton1}
-                onClick={() => handleOptionClick('owner')}
+                onClick={() => handleOptionClick(AppUserRoles.Owner)}
               >
                 Registruj se
               </Button>
@@ -54,7 +55,7 @@ const RegistrationForm = ({ avatar }) => {
               <p className={classes.registerSub2}>kao igrač</p>
               <Button
                 className={classes.registerButton1}
-                onClick={() => handleOptionClick('user')}
+                onClick={() => handleOptionClick(AppUserRoles.User)}
               >
                 Registruj se
               </Button>

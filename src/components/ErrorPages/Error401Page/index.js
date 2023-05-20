@@ -1,9 +1,11 @@
 import { Button, Grid } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
 import axios from 'axios'
+import Cookies from 'js-cookie'
 import React from 'react'
 import { useNavigate } from 'react-router'
 import { LOGOUT } from 'src/constants/endpoints'
+import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser'
 import { HTTPStatusCodes } from 'src/constants/statusCodes'
 
 import Header from '../../Header'
@@ -15,7 +17,10 @@ const Error401Page = () => {
 
   async function redirectToLogin() {
     const { status } = await axios.post(LOGOUT, {})
-    if (status === HTTPStatusCodes.OK) navigate('/login')
+    if (status === HTTPStatusCodes.OK) {
+      Cookies.remove(COOKIE_AUTHENTICATION_FE)
+      navigate('/login')
+    }
   }
 
   return (

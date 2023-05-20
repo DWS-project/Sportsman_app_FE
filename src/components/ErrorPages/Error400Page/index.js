@@ -8,6 +8,8 @@ import { HTTPStatusCodes } from 'src/constants/statusCodes'
 
 import Header from '../../Header'
 import useStyles from '../styles'
+import Cookies from 'js-cookie'
+import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser'
 
 const Error400Page = () => {
   const classes = useStyles()
@@ -15,7 +17,10 @@ const Error400Page = () => {
 
   async function redirectToRegistration() {
     const { status } = await axios.post(LOGOUT, {})
-    if (status === HTTPStatusCodes.OK) navigate('/registration')
+    if (status === HTTPStatusCodes.OK) {
+      Cookies.remove(COOKIE_AUTHENTICATION_FE)
+      navigate('/registration')
+    }
   }
 
   return (

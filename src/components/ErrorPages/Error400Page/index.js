@@ -6,10 +6,11 @@ import { useNavigate } from 'react-router'
 import { LOGOUT } from 'src/constants/endpoints'
 import { HTTPStatusCodes } from 'src/constants/statusCodes'
 
-import Header from '../../Header'
+import Header from '../../MainFrame/Header'
 import useStyles from '../styles'
 import Cookies from 'js-cookie'
 import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser'
+import withMainFrame from 'src/hoc/withMainFrame'
 
 const Error400Page = () => {
   const classes = useStyles()
@@ -23,45 +24,39 @@ const Error400Page = () => {
     }
   }
 
-  return (
-    <>
-      <Header />
-      <div className={classes.container}>
-        <img
-          src={'/images/400ErrorIcon.svg'}
-          alt="Image 401 error page"
-          className={classes.image}
-        />
-        <Typography variant="h4" className={classes.title}>
-          Greška 400
-        </Typography>
-        <Typography variant="h5" className={classes.text}>
-          Kao prijavljeni korisnik nemate pristup stranicama za registraciju.
-        </Typography>
-        <Typography variant="h5" className={classes.text}>
-          Možete se vratiti nazad na početnu stranicu ili registrovati kao novi
-          korisnik.
-        </Typography>
-        <Grid container className={classes.buttonsWrapper}>
-          <Grid item>
-            <Button
-              className={classes.firstButton}
-              onClick={() => navigate('/')}
-            >
-              Početna stranica
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              className={classes.secondButton}
-              onClick={() => redirectToRegistration()}
-            >
-              Registruj se kao novi korisnik
-            </Button>
-          </Grid>
+  return withMainFrame(
+    <div className={classes.container}>
+      <img
+        src={'/images/400ErrorIcon.svg'}
+        alt="Image 401 error page"
+        className={classes.image}
+      />
+      <Typography variant="h4" className={classes.title}>
+        Greška 400
+      </Typography>
+      <Typography variant="h5" className={classes.text}>
+        Kao prijavljeni korisnik nemate pristup stranicama za registraciju.
+      </Typography>
+      <Typography variant="h5" className={classes.text}>
+        Možete se vratiti nazad na početnu stranicu ili registrovati kao novi
+        korisnik.
+      </Typography>
+      <Grid container className={classes.buttonsWrapper}>
+        <Grid item>
+          <Button className={classes.firstButton} onClick={() => navigate('/')}>
+            Početna stranica
+          </Button>
         </Grid>
-      </div>
-    </>
+        <Grid item>
+          <Button
+            className={classes.secondButton}
+            onClick={() => redirectToRegistration()}
+          >
+            Registruj se kao novi korisnik
+          </Button>
+        </Grid>
+      </Grid>
+    </div>
   )
 }
 

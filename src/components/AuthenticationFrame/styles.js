@@ -118,7 +118,7 @@ const useStyles = makeStyles(() =>
       color: 'darkslategrey'
     },
     landingPage: {
-      backgroundImage: `url(${process.env.REACT_APP_FRONTEND_URL}/images/landingPage.png)`,
+      backgroundImage: `url(${process.env.REACT_APP_FRONTEND_URL}/images/pozadina15.png)`,
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
       backgroundSize: 'cover',
@@ -190,7 +190,26 @@ const useStyles = makeStyles(() =>
     forSliders: {
       color: '#43bbbf !important',
     },
-
+    headlineWrapper: {
+      position: 'absolute',
+      top: '10vh',
+      left: '5vw',
+      display: 'flex',
+      flexDirection: 'column',
+    },
+    landingPageHeadline: {
+      fontFamily: 'sans-serif',
+      fontSize: '7rem',
+      margin: '0',
+      color: '#233535',
+    },
+    landingPageSubText: {
+      alignSelf: 'end',
+      fontFamily: 'sans-serif',
+      fontWeight: '700',
+      color: '#233535',
+      fontSize: '2rem',
+    },
 
   })
 )

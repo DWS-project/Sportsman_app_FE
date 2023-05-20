@@ -29,7 +29,6 @@ const LoginForm = () => {
     }
 
     const { status, data: userData } = await axios.post(LOGIN, data)
-    console.log('userData.data', JSON.stringify(userData.user))
 
     Cookies.set(COOKIE_AUTHENTICATION_FE, JSON.stringify(userData.user), {
       expires: moment().add(1, 'days').toDate(),

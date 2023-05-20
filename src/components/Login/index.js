@@ -13,6 +13,7 @@ import { HTTPStatusCodes } from 'src/constants/statusCodes'
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser'
+import moment from 'moment-timezone'
 
 const LoginForm = () => {
   const classes = useStyles()
@@ -28,7 +29,11 @@ const LoginForm = () => {
     }
 
     const { status, data: userData } = await axios.post(LOGIN, data)
-    Cookies.set(COOKIE_AUTHENTICATION_FE, JSON.stringify(userData.user))
+    Cookies.set(
+      COOKIE_AUTHENTICATION_FE,
+      { expires: moment().add(1, 'day').toDate() },
+      JSON.stringify(userData.user)
+    )
 
     if (status === HTTPStatusCodes.OK) navigate('/')
   }

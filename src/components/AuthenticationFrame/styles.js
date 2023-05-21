@@ -123,6 +123,7 @@ const useStyles = makeStyles(() =>
       backgroundRepeat: 'no-repeat',
       backgroundSize: 'cover',
       height: '50vh',
+      marginTop: '30px',
     },
     citiesLandingPage: {
       marginTop: '-30px',
@@ -192,7 +193,7 @@ const useStyles = makeStyles(() =>
     },
     headlineWrapper: {
       position: 'absolute',
-      top: '10vh',
+      top: '15vh',
       left: '5vw',
       display: 'flex',
       flexDirection: 'column',
@@ -204,11 +205,10 @@ const useStyles = makeStyles(() =>
       color: '#233535',
     },
     landingPageSubText: {
-      alignSelf: 'end',
       fontFamily: 'sans-serif',
-      fontWeight: '700',
       color: '#233535',
-      fontSize: '2rem',
+      fontSize: '1rem',
+      marginLeft: '4rem',
     },
 
   })

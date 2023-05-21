@@ -70,7 +70,11 @@ const HeadlineAndCityButtons = ({classes, setCity}) => {
       <Box className={classes.landingPage}>
       <Box className={classes.headlineWrapper}>
         <h1 className={classes.landingPageHeadline}>Sportista</h1>
-        <p className={classes.landingPageSubText}>Neki text malo duzi</p>
+        <p className={classes.landingPageSubText}>
+          Najbolje mjesto za iznajmljivanje sportskih dvorana i terena.
+          Pružamo vam <br/>jednostavan i siguran način pronalaženja i rezervisanja
+          idealnog prostora <br/>za vaš sportski trening, natjecanje ili rekreaciju.
+        </p>
       </Box>
     </Box>
       <Box sx = {{ display: 'flex', justifyContent: 'center', marginTop: '-30px' }}>
@@ -183,11 +187,11 @@ const LandingPage = () => {
     if (!sortByType) {
       setSortByType(true)
       setTypeButtonText('Vanjski')
-    } else if (typeButtonText === 'Unutrasnji') {
+    } else if (typeButtonText === 'Unutrašnji') {
       setSortByType(false)
       setTypeButtonText('Sortiraj po tipu')
     } else {
-      setTypeButtonText('Unutrasnji')
+      setTypeButtonText('Unutrašnji')
     }
   }
   function handleSortByPrice() {
@@ -206,7 +210,7 @@ const LandingPage = () => {
     <>
       <HeadlineAndCityButtons classes={classes} setCity={setCity}/>
 
-      <Box sx={{ marginTop: '5vh', marginBottom: '5vh', display: 'flex', flexDirection: 'column' }}>
+      <Box sx={{ marginTop: '10vh', marginBottom: '5vh', display: 'flex', flexDirection: 'column' }}>
         <Box sx={{ alignSelf: 'center', width: '80%', marginBottom: '20px' }}>
           <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static" >

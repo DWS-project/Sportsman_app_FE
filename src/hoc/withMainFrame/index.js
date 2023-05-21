@@ -1,7 +1,7 @@
 import Footer from 'src/components/MainFrame/Footer'
 import Header from 'src/components/MainFrame/Header'
 
-const withMainFrame = (children) => {
+const withMainFrame = ({ children }) => {
   return (
     <>
       <Header />

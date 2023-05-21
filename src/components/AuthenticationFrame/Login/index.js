@@ -12,9 +12,9 @@ import { useNavigate } from 'react-router-dom'
 import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser'
 import { HTTPStatusCodes } from 'src/constants/statusCodes'
 
-import { FRONTEND_URL } from '../../constants/appDefaults'
-import { LOGIN } from '../../constants/endpoints'
-import useStyles from '../AuthenticationFrame/styles'
+import { FRONTEND_URL } from '../../../constants/appDefaults'
+import { LOGIN } from '../../../constants/endpoints'
+import useStyles from '../styles'
 
 const LoginForm = () => {
   const classes = useStyles()
@@ -82,7 +82,10 @@ const LoginForm = () => {
         </Button>
         <Grid container>
           <Grid item xs>
-            <Link href="#" sx={{ color: '#43bbbf', textDecoration: 'none' }}>
+            <Link
+              href="/forgot-password"
+              sx={{ color: '#43bbbf', textDecoration: 'none' }}
+            >
               Zaboravili ste lozinku?
             </Link>
           </Grid>

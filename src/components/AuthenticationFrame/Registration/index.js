@@ -3,7 +3,7 @@ import Button from '@mui/material/Button'
 import { useState } from 'react'
 import { AppUserRoles } from 'src/constants/appUserRoles'
 
-import useStyles from '../AuthenticationFrame/styles'
+import useStyles from '../styles'
 import RegistrationFormOwner from './Owner/index'
 import RegistrationFormUser from './User/index'
 

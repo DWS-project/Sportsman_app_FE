@@ -24,16 +24,16 @@ import {
   cities,
   emailRegex,
   FRONTEND_URL,
-  imagesDataForUser,
+  imagesDataForOwner,
   phoneRegex,
   StepperActiveColor,
   StepperCompletedColor,
-  StepperStepsForUser,
-} from '../../../constants/appDefaults'
-import { REGISTRATION_PLAYER } from '../../../constants/endpoints'
-import useStyles from '../../AuthenticationFrame/styles'
+  StepperStepsForOwner,
+} from '../../../../constants/appDefaults'
+import { REGISTRATION_OWNER } from '../../../../constants/endpoints'
+import useStyles from '../../styles'
 
-const RegistrationFormUser = () => {
+const RegistrationFormOwner = () => {
   const classes = useStyles()
   const navigate = useNavigate()
 
@@ -45,28 +45,37 @@ const RegistrationFormUser = () => {
   const [password, setPassword] = useState('')
   const [repeatedPassword, setRepeatedPassword] = useState('')
   const [city, setCity] = useState('')
-  const [age, setAge] = useState('')
-  const [interests, setInterests] = useState([])
+  const [street, setStreet] = useState('')
+  const [streetNumber, setStreetNumber] = useState('')
+  const [type, setType] = useState('')
+  const [capacity, setCapacity] = useState('')
   const [activeStep, setActiveStep] = useState(0)
   const [inputFields, setInputFields] = useState([])
   const [stepButtonClicked, setStepButtonClicked] = useState(false)
 
   async function handleSubmit() {
-    const data = {
-      name,
-      surname,
-      username,
-      phone,
-      email,
-      password,
-      repeatedPassword,
-      city,
-      age,
-      interests,
-    }
+    const missingFields = getMissingFields()
+    if (missingFields.length === 0) {
+      const data = {
+        name,
+        surname,
+        username,
+        phone,
+        email,
+        password,
+        repeatedPassword,
+        city,
+        street,
+        streetNumber,
+        type,
+        capacity,
+      }
 
-    const { status } = await axios.post(REGISTRATION_PLAYER, data)
-    if (status === HTTPStatusCodes.CREATED) navigate('/')
+      const { status } = await axios.post(REGISTRATION_OWNER, data)
+      if (status === HTTPStatusCodes.CREATED) navigate('/')
+    } else {
+      setStepButtonClicked(true)
+    }
   }
 
   useEffect(() => {
@@ -79,8 +88,10 @@ const RegistrationFormUser = () => {
       { name: 'password', value: password },
       { name: 'repeatedPassword', value: repeatedPassword },
       { name: 'city', value: city },
-      { name: 'age', value: age },
-      { name: 'interests', value: interests },
+      { name: 'street', value: street },
+      { name: 'streetNumber', value: streetNumber },
+      { name: 'type', value: type },
+      { name: 'capacity', value: capacity },
     ])
   }, [
     name,
@@ -91,50 +102,26 @@ const RegistrationFormUser = () => {
     password,
     repeatedPassword,
     city,
-    age,
-    interests,
+    street,
+    streetNumber,
+    type,
+    capacity,
   ])
 
   function getMissingFields() {
     const missingFields = []
     inputFields.forEach((field) => {
-      if (field.value === '' || field.value === []) {
+      if (field.value === '') {
         missingFields.push(field.name)
       }
     })
     return missingFields
   }
-
-  function isStepOptional(step) {
-    return step === 1
-  }
-
   function goToNextStep() {
     const missingFields = getMissingFields()
-
-    if (missingFields.length === 0) {
+    if (missingFields.length === 5) {
       setStepButtonClicked(false)
       setActiveStep((previousActiveStep) => previousActiveStep + 1)
-    } else if (missingFields.length <= 3) {
-      const requiredFields = [
-        'name',
-        'surname',
-        'username',
-        'phone',
-        'email',
-        'password',
-        'repeatedPassword',
-      ]
-      const RequiredFieldsMissing = requiredFields.some((field) =>
-        missingFields.includes(field)
-      )
-
-      if (!RequiredFieldsMissing) {
-        setStepButtonClicked(false)
-        setActiveStep((previousActiveStep) => previousActiveStep + 1)
-      } else {
-        setStepButtonClicked(true)
-      }
     } else {
       setStepButtonClicked(true)
     }
@@ -145,17 +132,17 @@ const RegistrationFormUser = () => {
   }
 
   function isImageSelected(imageName) {
-    return interests.includes(imageName)
+    return type === imageName
   }
 
   const theme = useTheme()
   const isMediumScreen = useMediaQuery(theme.breakpoints.up('md'))
   const [numberOfColForImages, setNumberOfColForImages] = useState(
-    isMediumScreen ? 3 : 2
+    isMediumScreen ? 3 : 1
   )
 
   function handleScreenSizeChange() {
-    const updatedNumberOfColForImages = isMediumScreen ? 3 : 2
+    const updatedNumberOfColForImages = isMediumScreen ? 3 : 1
     setNumberOfColForImages(updatedNumberOfColForImages)
   }
 
@@ -166,14 +153,9 @@ const RegistrationFormUser = () => {
     }
   }, [isMediumScreen])
 
-  function renderSteps(label, index) {
+  function renderSteps(label) {
     const stepProps = {}
     const labelProps = {}
-    if (isStepOptional(index)) {
-      labelProps.optional = (
-        <Typography variant="caption">Opcionalno</Typography>
-      )
-    }
     return (
       <Step key={label} {...stepProps}>
         <StepLabel {...labelProps}>{label}</StepLabel>
@@ -198,43 +180,30 @@ const RegistrationFormUser = () => {
             },
           }}
         >
-          {StepperStepsForUser.map((label, index) => renderSteps(label, index))}
+          {StepperStepsForOwner.map((label) => renderSteps(label))}
         </Stepper>
       </Box>
 
-      {activeStep === StepperStepsForUser.length - 1 ? (
+      {activeStep === StepperStepsForOwner.length - 1 ? (
         <>
-          <Typography component="h1" variant="h5">
-            Interesovanja
-          </Typography>
           <Box sx={{ width: '100%', height: '100%' }}>
             <ImageList cols={numberOfColForImages}>
-              <ImageListItem
-                key="Subheader"
-                cols={numberOfColForImages}
-                sx={{ mb: 3 }}
-              >
-                <p>
-                  Ovdje možete odabrati vaša interesovanja. Napominjemo da ovaj
-                  korak nije obavezan, ali će nam pomoći da vam prikažemo
-                  relevantne teme i sadržaj iz oblasti koje vas najviše
-                  zanimaju.
-                </p>
+              <ImageListItem cols={numberOfColForImages}>
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  sx={{ mb: 3, mt: 2, alignSelf: 'center' }}
+                >
+                  Odaberite tip terena:
+                </Typography>
               </ImageListItem>
-              {imagesDataForUser.map((item) => (
+              {imagesDataForOwner.map((item) => (
                 <ToggleButton
+                  key={item.name}
                   value="check"
-                  selected={interests.includes(item.name)}
+                  selected={type === item.name}
                   onChange={() => {
-                    let copy = [...interests]
-                    const isItemInList = copy.includes(item.name)
-                    if (isItemInList) {
-                      setInterests(
-                        copy.filter((element) => element !== item.name)
-                      )
-                    } else {
-                      setInterests([...copy, item.name])
-                    }
+                    setType(item.name)
                   }}
                   sx={{ borderRadius: 0, p: 0, border: 0 }}
                 >
@@ -252,13 +221,88 @@ const RegistrationFormUser = () => {
                     <img
                       src={`${item.img}`}
                       alt={item.title}
-                      loading={'lazy'}
+                      loading={'eager'}
                     />
                     <ImageListItemBar title={item.title} />
                   </ImageListItem>
                 </ToggleButton>
               ))}
             </ImageList>
+          </Box>
+          <TextField
+            margin="normal"
+            name="capacity"
+            fullWidth
+            required
+            label="Broj terena koje posjedujete"
+            type="number"
+            id="capacity"
+            value={capacity}
+            error={capacity === '' && stepButtonClicked}
+            autoComplete="off"
+            onChange={(event) => {
+              setCapacity(event.target.value)
+            }}
+          />
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              width: '100%',
+            }}
+          >
+            <Autocomplete
+              disablePortal
+              id="combo-box-demo"
+              required
+              options={cities}
+              sx={{ width: '30%' }}
+              onChange={(event, newValue) => {
+                setCity(newValue)
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  margin="normal"
+                  name="city"
+                  id="city"
+                  label="Grad"
+                  value={city}
+                  error={city === '' && stepButtonClicked}
+                  required
+                />
+              )}
+            />
+            <TextField
+              margin="normal"
+              required
+              name="street"
+              label="Ulica"
+              id="street"
+              value={street}
+              error={street === '' && stepButtonClicked}
+              autoComplete="off"
+              onChange={(event) => {
+                setStreet(event.target.value)
+              }}
+              sx={{ width: '30%' }}
+            />
+            <TextField
+              margin="normal"
+              required
+              name="streetNumber"
+              label="Broj ulice"
+              type="number"
+              id="streetNumber"
+              value={streetNumber}
+              error={streetNumber === '' && stepButtonClicked}
+              autoComplete="off"
+              onChange={(event) => {
+                setStreetNumber(event.target.value)
+              }}
+              sx={{ width: '30%' }}
+            />
           </Box>
           <Box
             sx={{
@@ -278,15 +322,6 @@ const RegistrationFormUser = () => {
               Nazad
             </Button>
             <Box sx={{ flex: '1 1 auto' }} />
-            <Button
-              type="button"
-              variant="contained"
-              sx={{ mt: 3, mb: 2, mr: 1 }}
-              className={classes.customButton}
-              onClick={handleSubmit}
-            >
-              Preskoči
-            </Button>
             <Button
               type="button"
               variant="contained"
@@ -371,55 +406,15 @@ const RegistrationFormUser = () => {
                 sx={{ width: '47%' }}
               />
             </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}
-            >
-              <Autocomplete
-                disablePortal
-                id="combo-box-demo"
-                options={cities}
-                sx={{ width: '47%' }}
-                onChange={(event, newValue) => {
-                  setCity(newValue)
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    margin="normal"
-                    name="city"
-                    id="city"
-                    value={city}
-                    label="Grad"
-                  />
-                )}
-              />
-              <TextField
-                margin="normal"
-                name="age"
-                label="Broj godina"
-                type="number"
-                id="age"
-                value={age}
-                autoComplete="off"
-                onChange={(event) => {
-                  setAge(event.target.value)
-                }}
-                sx={{ width: '47%' }}
-              />
-            </Box>
             <TextField
               margin="normal"
               required
               fullWidth
               name="username"
               label="Korisničko ime"
-              id="username"
               value={username}
               error={username === '' && stepButtonClicked}
+              id="username"
               autoComplete="off"
               onChange={(event) => {
                 setUsername(event.target.value)
@@ -446,10 +441,10 @@ const RegistrationFormUser = () => {
               margin="normal"
               required
               fullWidth
-              name="repPassword"
+              name="repeatedPassword"
               label="Ponovljena lozinka"
               type="password"
-              id="repPassword"
+              id="repeatedPassword"
               value={repeatedPassword}
               error={
                 (repeatedPassword === '' || repeatedPassword !== password) &&
@@ -490,4 +485,4 @@ const RegistrationFormUser = () => {
   )
 }
 
-export default RegistrationFormUser
+export default RegistrationFormOwner

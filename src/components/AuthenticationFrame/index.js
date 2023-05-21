@@ -5,8 +5,8 @@ import CssBaseline from '@mui/material/CssBaseline'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 
-import LoginForm from '../Login'
-import RegistrationForm from '../Registration/index'
+import LoginForm from './Login'
+import RegistrationForm from './Registration/index'
 import useStyles from './styles'
 
 const AuthenticationFrame = ({ route }) => {

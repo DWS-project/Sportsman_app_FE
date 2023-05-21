@@ -3,6 +3,7 @@ import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import AuthenticationFrame from './components/AuthenticationFrame'
+import ForgotPassword from './components/AuthenticationFrame/ForgotPassword'
 import Error400Page from './components/ErrorPages/Error400Page'
 import Error401Page from './components/ErrorPages/Error401Page'
 import Error404Page from './components/ErrorPages/Error404Page'
@@ -22,6 +23,7 @@ function App() {
           path={'/registration'}
           element={<AuthenticationFrame route={'registration'} />}
         />
+        <Route path={'/forgot-password'} element={<ForgotPassword />} />
         <Route path={'*'} element={<Error404Page />} />
         <Route path={'/verification'} element={<Verification />} />
         <Route path={'/error/401'} element={<Error401Page />} />

@@ -1,14 +1,8 @@
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-
-import useStyles from '../AuthenticationFrame/styles'
-import ImageListItem from "@mui/material/ImageListItem";
-import { cities, imagesDataForUser } from "../../constants/appDefaults";
-import ToggleButton from "@mui/material/ToggleButton";
-import ImageListItemBar from "@mui/material/ImageListItemBar";
-import ImageList from "@mui/material/ImageList";
-import Link from "@mui/material/Link";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Box from "@mui/material/Box"
+import Button from "@mui/material/Button"
+import useStyles from './styles'
+import { cities } from "../../constants/appDefaults"
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import {
   Accordion, AccordionDetails,
   AccordionSummary,
@@ -19,50 +13,15 @@ import {
   CardMedia, Checkbox, FormControlLabel, FormGroup,
   InputBase, Slider,
   Toolbar
-} from "@mui/material";
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
-import SearchIcon from '@mui/icons-material/Search';
-import { useEffect, useState } from "react";
-import Autocomplete from "@mui/material/Autocomplete";
-import axios from "axios";
-import { LANDING_PAGE, REGISTRATION_PLAYER } from "../../constants/endpoints";
-
-
-
-const items = [
-  {
-    img: '/images/football.jpg',
-    title: 'Fudbal',
-    name: 'fudbal'
-  },
-  {
-    img: '/images/basketball.jpg',
-    title: 'Košarka',
-    name: 'kosarka'
-  },
-  {
-    img: '/images/handball.jpg',
-    title: 'Rukomet',
-    name: 'rukomet'
-  },
-  {
-    img: '/images/volleyball.jpg',
-    title: 'Odbojka',
-    name: 'odbojka'
-  },
-  {
-    img: '/images/tennis.jpg',
-    title: 'Tenis',
-    name: 'tenis'
-  },
-  {
-    img: '/images/paintball.png',
-    title: 'Paintball',
-    name: 'paintball'
-  },
-]
+} from "@mui/material"
+import Typography from "@mui/material/Typography"
+import Grid from "@mui/material/Grid"
+import TextField from "@mui/material/TextField"
+import SearchIcon from '@mui/icons-material/Search'
+import { useEffect, useState } from "react"
+import Autocomplete from "@mui/material/Autocomplete"
+import axios from "axios"
+import { LANDING_PAGE } from "../../constants/endpoints"
 
 const HeadlineAndCityButtons = ({classes, setCity}) => {
   return (
@@ -77,7 +36,7 @@ const HeadlineAndCityButtons = ({classes, setCity}) => {
         </p>
       </Box>
     </Box>
-      <Box sx = {{ display: 'flex', justifyContent: 'center', marginTop: '-30px' }}>
+      <Box className={classes.citiesLandingPage}>
         <Box sx = {{ display: 'flex', justifyContent: 'space-evenly' }}>
           <Button className={classes.buttonLandingPage} onClick={() => {setCity('Sarajevo')}} >Sarajevo</Button>
           <Button className={classes.buttonLandingPage} onClick={() => {setCity('Zenica')}} >Zenica</Button>
@@ -120,10 +79,10 @@ const LandingPage = () => {
       type: type,
       sort_type: typeButtonText,
       sort_price: priceButtonText,
-    });
+    })
   const classes = useStyles()
+
   useEffect(() => {
-    // Update filter state when any of the variables change
     setFilter({
       sports: sports,
       city: city,
@@ -134,21 +93,19 @@ const LandingPage = () => {
       type: type,
       sort_type: typeButtonText,
       sort_price: priceButtonText,
-    });
+    })
   }, [sports, city, capacity, price, date, time, searchText, type, typeButtonText, priceButtonText])
 
   useEffect(() => {
-    fetchCards();
+    fetchCards()
   }, [filter])
 
   async function fetchCards()  {
     try {
-      const response = await axios.get(LANDING_PAGE, {
-        params: filter,
-      });
+      const response = await axios.get(LANDING_PAGE, { params: filter, })
       setCards(response.data.data)
     } catch (error) {
-      console.error(error); // Handle the error
+      console.error(error)
     }
   }
 
@@ -176,13 +133,14 @@ const LandingPage = () => {
     }
   }
 
-  const handleAccordionChange = (event, expanded) => {
+  function handleAccordionChange(event, expanded) {
     if (isSearchClicked || isButtonTypeSortingClicked || isButtonPriceSortingClicked) {
       setIsAccordionExpanded(!expanded)
     }else{
       setIsAccordionExpanded(expanded)
     }
   }
+
   function handleSortByType() {
     if (!sortByType) {
       setSortByType(true)
@@ -194,6 +152,7 @@ const LandingPage = () => {
       setTypeButtonText('Unutrašnji')
     }
   }
+
   function handleSortByPrice() {
     if (!sortByPrice) {
       setSortByPrice(true)
@@ -208,20 +167,24 @@ const LandingPage = () => {
 
   return (
     <>
-      <HeadlineAndCityButtons classes={classes} setCity={setCity}/>
-
-      <Box sx={{ marginTop: '10vh', marginBottom: '5vh', display: 'flex', flexDirection: 'column' }}>
-        <Box sx={{ alignSelf: 'center', width: '80%', marginBottom: '20px' }}>
+      <HeadlineAndCityButtons classes={classes} setCity={setCity} />
+      <Box className={classes.contentWrapper} >
+        <Box className={classes.centerContent} >
           <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static" >
-              <Accordion expanded={isAccordionExpanded} onChange={(event, expanded)=>{handleAccordionChange(event,expanded)}}>
+              <Accordion
+                expanded={isAccordionExpanded}
+                onChange={(event, expanded) => {
+                  handleAccordionChange(event,expanded)
+                }}
+              >
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
                   id="panel1a-header"
-                  sx={{ backgroundColor: '#43bbbf !important', color: 'white', margin: '0', '& >div': {margin: '0 !important'},  }}
+                  className={classes.accordionSummaryContent}
                 >
-                  <Toolbar sx={{width: '100%'}}>
+                  <Toolbar sx={{ width: '100%' }} >
                     <Box className={classes.search}>
                       <Box className={classes.searchIconWrapper}>
                         <SearchIcon />
@@ -240,29 +203,27 @@ const LandingPage = () => {
                         onFocus={() => setIsButtonTypeSortingClicked(true)}
                         onBlur={() => setIsButtonTypeSortingClicked(false)}
                       >
-                        <Button className={classes.customButton} sx={{ color: 'white', whiteSpace: 'nowrap', width: '10rem'}} onClick={handleSortByType} >{typeButtonText}</Button>
+                        <Button className={classes.sortingButtons} onClick={handleSortByType} >{typeButtonText}</Button>
                       </Box>
                       <Box
                         onFocus={() => setIsButtonPriceSortingClicked(true)}
                         onBlur={() => setIsButtonPriceSortingClicked(false)}
                       >
-                        <Button className={classes.customButton} sx={{ color: 'white', whiteSpace: 'nowrap', width: '10rem' }} onClick={handleSortByPrice} >{priceButtonText}</Button>
+                        <Button className={classes.sortingButtons} onClick={handleSortByPrice} >{priceButtonText}</Button>
                       </Box>
                     </Box>
-
-
                     <Typography
                       variant="h6"
                       noWrap
                       component="div"
-                      sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' }, textAlign: 'end' }}
+                      className={classes.filterText}
                     >
                       Filtriraj
                     </Typography>
                   </Toolbar>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <Box sx={{ display:'flex', justifyContent: 'space-around', mt: 1 }}>
+                  <Box className={classes.filtersWrapper} >
                     <Box>
                       <Typography sx={{ marginLeft: '-10px' }}>Sportovi:</Typography>
                       <FormGroup>
@@ -274,7 +235,7 @@ const LandingPage = () => {
                         <FormControlLabel control={<Checkbox defaultChecked className={classes.forChecks} onChange={() => {includeSport('paintball')}} />} label="Paintball" />
                       </FormGroup>
                     </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <Box className={classes.typeLocationAndPriceDateWrapper}>
                       <Box>
                         <Typography>Tip terena:</Typography>
                         <FormGroup sx={{ marginLeft: '10px' }}>
@@ -303,9 +264,8 @@ const LandingPage = () => {
                           )}
                         />
                       </Box>
-
                     </Box>
-                    <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+                    <Box className={classes.typeLocationPriceDateWrapper} >
                       <Box>
                         <Typography>Cijena:</Typography>
                         <Slider
@@ -318,7 +278,7 @@ const LandingPage = () => {
                           }}
                         />
                         <Typography sx={{ mt:2 }}>Datum i vrijeme slobodnog termina:</Typography>
-                        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', mt: 1}}>
+                        <Box className={classes.dateAndTimeWrapper} >
                           <input
                             type="date"
                             className={classes.forDate}
@@ -340,7 +300,6 @@ const LandingPage = () => {
                     </Box>
                   </Box>
                 </AccordionDetails>
-
               </Accordion>
             </AppBar>
           </Box>
@@ -356,8 +315,8 @@ const LandingPage = () => {
               sx={{ alignItems: 'stretch' }}
             >
               {cards.map((item) => (
-                <Grid item xs={2} sm={4} md={4} key={item.id}>
-                  <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                <Grid item xs={2} sm={4} md={4} key={item.id} >
+                  <Card className={classes.card} >
                     <CardActionArea sx={{ objectFit: 'cover' }}>
                       <CardMedia
                         component="img"

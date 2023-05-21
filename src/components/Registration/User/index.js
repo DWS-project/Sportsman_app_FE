@@ -1,36 +1,42 @@
-import { useState } from 'react'
-import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import Link from '@mui/material/Link'
-import Grid from '@mui/material/Grid'
-import axios from 'axios'
-import { REGISTRATION_PLAYER } from '../../../constants/endpoints'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-import Stepper from '@mui/material/Stepper'
-import Step from '@mui/material/Step'
-import StepLabel from '@mui/material/StepLabel'
 import Autocomplete from '@mui/material/Autocomplete'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Grid from '@mui/material/Grid'
 import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
 import ImageListItemBar from '@mui/material/ImageListItemBar'
-import ToggleButton from '@mui/material/ToggleButton'
+import Link from '@mui/material/Link'
+import Step from '@mui/material/Step'
+import StepLabel from '@mui/material/StepLabel'
+import Stepper from '@mui/material/Stepper'
 import { useTheme } from '@mui/material/styles'
+import TextField from '@mui/material/TextField'
+import ToggleButton from '@mui/material/ToggleButton'
+import Typography from '@mui/material/Typography'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import axios from 'axios'
+import { useState } from 'react'
 import { useEffect } from 'react'
-import useStyles from '../../AuthenticationFrame/styles'
+import { useNavigate } from 'react-router-dom'
+import { HTTPStatusCodes } from 'src/constants/statusCodes'
+
 import {
-  emailRegex,
-  phoneRegex,
-  StepperStepsForUser,
   cities,
+  emailRegex,
+  FRONTEND_URL,
   imagesDataForUser,
+  phoneRegex,
   StepperActiveColor,
   StepperCompletedColor,
-  FRONTEND_URL,
+  StepperStepsForUser,
 } from '../../../constants/appDefaults'
+import { REGISTRATION_PLAYER } from '../../../constants/endpoints'
+import useStyles from '../../AuthenticationFrame/styles'
 
 const RegistrationFormUser = () => {
+  const classes = useStyles()
+  const navigate = useNavigate()
+
   const [name, setName] = useState('')
   const [surname, setSurname] = useState('')
   const [username, setUsername] = useState('')
@@ -44,7 +50,6 @@ const RegistrationFormUser = () => {
   const [activeStep, setActiveStep] = useState(0)
   const [inputFields, setInputFields] = useState([])
   const [stepButtonClicked, setStepButtonClicked] = useState(false)
-  const classes = useStyles()
 
   async function handleSubmit() {
     const data = {
@@ -60,9 +65,8 @@ const RegistrationFormUser = () => {
       interests,
     }
 
-    const { status, message } = await axios.post(REGISTRATION_PLAYER, data)
-    console.log('status', status)
-    console.log('message', message)
+    const { status } = await axios.post(REGISTRATION_PLAYER, data)
+    if (status === HTTPStatusCodes.CREATED) navigate('/')
   }
 
   useEffect(() => {

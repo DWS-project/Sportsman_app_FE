@@ -4,4 +4,5 @@ export const LOGIN = `${AUTHENTICATION}/login`
 export const REGISTRATION_PLAYER = `${AUTHENTICATION}/register-player`
 export const REGISTRATION_OWNER = `${AUTHENTICATION}/register-owner`
 export const LOGOUT = `${AUTHENTICATION}/logout`
+export const FORGOT_PASSWORD = `${AUTHENTICATION}/forgot-password`
 export const LANDING_PAGE = `${BASE_BACKEND_URL}/landing-page-cards/`

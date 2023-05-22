@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import AuthenticationFrame from './components/AuthenticationFrame'
 import LandingPage from './components/LandingPage'
+import { EditProfilePage } from './components/EditProfilePage'
 
 function App() {
   return (
@@ -19,6 +20,9 @@ function App() {
             path={'/registration'}
             element={<AuthenticationFrame route={'registration'} />}
           />
+          <Route path={'/editProfile'}
+            element={<EditProfilePage route={'editProfile'} />}
+            />
         </Routes>
       </BrowserRouter>
     </>

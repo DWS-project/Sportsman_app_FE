@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, InputLabel, TextField } from '@mui/material';
+import { Box, Button, FormControl, InputLabel, Paper, TextField } from '@mui/material';
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
@@ -41,15 +41,10 @@ const EditProfile = () => {
       }
     
       return (
+        <Paper elevation={3} sx={{width:"50%"}}>
     <Box 
     component= "form"
-    sx = {{my : 3,
-            display: 'flex',
-            flexDirection: 'column',
-            p: '2',
-            width: '50%',
-            alignItems: 'center',
-            justifyContent:'center'}}>
+    >
         <TextField
         label="Username"
         variant="outlined"
@@ -121,6 +116,7 @@ const EditProfile = () => {
         Update
       </Button>
     </Box>
+    </Paper>
   )
 }
 

@@ -23,12 +23,19 @@ const useStyles = makeStyles((theme) => ({
   centerContent: {
     alignSelf: 'center',
     width: '80%',
+    [theme.breakpoints.down('xs')]: {
+      width: '100%',
+    },
     marginBottom: '20px'
   },
   buttonLandingPage: {
     color: '#43bbbf !important',
     backgroundColor: 'white !important',
     padding: '15px 20px !important',
+    [theme.breakpoints.down('xs')]: {
+      padding: '6px 8px !important',
+      fontSize: '0.6rem !important',
+    },
     margin: '0 1vw !important',
     boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.1)',
     transition: 'all 0.3s ease 0s !important',
@@ -41,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
   },
   accordionSummaryContent: {
     backgroundColor: '#43bbbf !important',
-    color: 'white',
+    color: 'white !important',
     margin: '0',
     '& >div': {
       margin: '0 !important'
@@ -77,6 +84,9 @@ const useStyles = makeStyles((theme) => ({
   },
   forDate: {
     padding: '15px 5px',
+    [theme.breakpoints.down('xs')]: {
+      padding: '5px 0px',
+    },
     color: '#646464',
     fontSize: '1rem',
     border: '1px solid #43bbbf',
@@ -104,6 +114,9 @@ const useStyles = makeStyles((theme) => ({
   landingPageHeadline: {
     fontFamily: 'sans-serif',
     fontSize: '7rem',
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '3rem',
+    },
     margin: '0',
     color: '#233535',
   },
@@ -111,29 +124,48 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'sans-serif',
     color: '#233535',
     fontSize: '1rem',
+    [theme.breakpoints.down('md')]: {
+      fontSize: 'small !important',
+    },
     marginLeft: '4rem',
+    [theme.breakpoints.down('xs')]: {
+      marginLeft: '0',
+      fontSize: '0.7rem !important',
+    },
   },
   sortingButtons: {
     backgroundColor: '#43bbbf !important',
     '&:hover': {
       boxShadow:'0 0 0 0 #43bbbf,inset 6em 3.5em 0 0 #17a6ab !important',
     },
-    color: 'white',
+    color: 'white !important',
     whiteSpace: 'nowrap',
     width: '10rem',
+    [theme.breakpoints.down('md')]: {
+      fontSize: 'small',
+    },
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '0.5rem !important',
+      width: 'auto'
+    },
   },
   filterText: {
-    flexGrow: 1,
-    display: {
-      xs: 'none',
-      sm: 'block'
+    flexGrow: '1 !important',
+    display: "block",
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
     },
-    textAlign: 'end',
+    textAlign: 'end !important',
+    overflow: 'visible !important',
+    fontSize: '1rem !important',
+    [theme.breakpoints.down('md')]: {
+      fontSize: 'small !important',
+    },
   },
   filtersWrapper: {
     display:'flex',
     justifyContent: 'space-around',
-    mt: 1,
+    marginTop: '8px',
   },
   typeLocationAndPriceDateWrapper: {
     display: 'flex',
@@ -143,6 +175,10 @@ const useStyles = makeStyles((theme) => ({
   dateAndTimeWrapper: {
     display: 'flex',
     flexDirection: 'row',
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: 'column',
+      padding: '5px 0px'
+    },
     justifyContent: 'space-between',
     marginTop: '8px',
   },
@@ -152,7 +188,12 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'flex-start',
   },
-
+  cardsWrapper: {
+    width: '80%',
+    [theme.breakpoints.down('xs')]: {
+      width: '90%',
+    },
+  }
 }))
 
 export default useStyles

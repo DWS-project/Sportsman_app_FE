@@ -306,7 +306,7 @@ const LandingPage = () => {
         </Box>
 
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Box sx={{ width: '80%' }}>
+          <Box className={classes.cardsWrapper}>
             <Grid
               container
               spacing={{ xs: 2, md: 6 }}

@@ -30,7 +30,7 @@ import {
   StepperCompletedColor,
   StepperStepsForUser,
 } from '../../../../constants/appDefaults'
-import { REGISTRATION_PLAYER } from '../../../../constants/endpoints'
+import { BASE_BACKEND_URL, REGISTRATION_PLAYER } from '../../../../constants/endpoints'
 import useStyles from '../../styles'
 
 const RegistrationFormUser = () => {
@@ -64,7 +64,8 @@ const RegistrationFormUser = () => {
       age,
       interests,
     }
-
+    console.log(REGISTRATION_PLAYER);
+    console.log(BASE_BACKEND_URL);
     const { status } = await axios.post(REGISTRATION_PLAYER, data)
     if (status === HTTPStatusCodes.CREATED) navigate('/')
   }

@@ -5,3 +5,6 @@ export const REGISTRATION_PLAYER = `${AUTHENTICATION}/register-player`
 export const REGISTRATION_OWNER = `${AUTHENTICATION}/register-owner`
 export const LOGOUT = `${AUTHENTICATION}/logout`
 export const FORGOT_PASSWORD = `${AUTHENTICATION}/forgot-password`
+export const CHANGE_INFO = `${BASE_BACKEND_URL}/update/player`
+export const CHANGE_PASSWORD = `${BASE_BACKEND_URL}/update_password/player`
+export const CHANGE_PHOTO = `${BASE_BACKEND_URL}/update_photo/player`

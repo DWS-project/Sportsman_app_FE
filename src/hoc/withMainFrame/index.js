@@ -3,11 +3,11 @@ import Header from 'src/components/MainFrame/Header'
 
 const withMainFrame = ({ children }) => {
   return (
-    <>
+    <div>
       <Header />
       {children}
       <Footer />
-    </>
+    </div>
   )
 }
 

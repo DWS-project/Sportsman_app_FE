@@ -15,7 +15,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={'/'} element={<WithMainFrame children={[<LandingPage />]} />} />
+        <Route path={'/'} element={<WithMainFrame children={[<LandingPage key={'landing-page'}/>]} />} />
         <Route
           path={'/login'}
           element={<AuthenticationFrame route={'login'} />}

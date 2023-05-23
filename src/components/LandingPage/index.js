@@ -22,6 +22,8 @@ import { useEffect, useState } from "react"
 import Autocomplete from "@mui/material/Autocomplete"
 import axios from "axios"
 import { LANDING_PAGE } from "../../constants/endpoints"
+import Cookies from "js-cookie";
+import { COOKIE_AUTHENTICATION_FE } from "../../constants/keys/browser";
 
 const HeadlineAndCityButtons = ({classes, setCity}) => {
   return (
@@ -81,6 +83,20 @@ const LandingPage = () => {
       sort_price: priceButtonText,
     })
   const classes = useStyles()
+
+
+  useEffect(() => {
+    const userData = Cookies.get(COOKIE_AUTHENTICATION_FE)
+    const parsedUserData = userData && JSON.parse(userData)
+    const isUserLogged = userData && !!parsedUserData.id
+
+    if (isUserLogged && parsedUserData.interests !== '') {
+      setSports(JSON.parse(parsedUserData.interests).interests)
+    }
+    if(isUserLogged && parsedUserData.city !== ''){
+      setCity(parsedUserData.city)
+    }
+  }, [])
 
   useEffect(() => {
     setFilter({
@@ -227,12 +243,12 @@ const LandingPage = () => {
                     <Box>
                       <Typography sx={{ marginLeft: '-10px' }}>Sportovi:</Typography>
                       <FormGroup>
-                        <FormControlLabel control={<Checkbox defaultChecked className={classes.forChecks} onChange={() => {includeSport('fudbal')}} />} label="Fudbal" />
-                        <FormControlLabel control={<Checkbox defaultChecked className={classes.forChecks} onChange={() => {includeSport('kosarka')}} />} label="Kosarka" />
-                        <FormControlLabel control={<Checkbox defaultChecked className={classes.forChecks} onChange={() => {includeSport('odbojka')}} />} label="Odbojka" />
-                        <FormControlLabel control={<Checkbox defaultChecked className={classes.forChecks} onChange={() => {includeSport('rukomet')}} />} label="Rukomet" />
-                        <FormControlLabel control={<Checkbox defaultChecked className={classes.forChecks} onChange={() => {includeSport('tenis')}} />} label="Tenis" />
-                        <FormControlLabel control={<Checkbox defaultChecked className={classes.forChecks} onChange={() => {includeSport('paintball')}} />} label="Paintball" />
+                        <FormControlLabel control={<Checkbox checked={sports.includes('fudbal')} className={classes.forChecks} onChange={() => {includeSport('fudbal')}} />} label="Fudbal" />
+                        <FormControlLabel control={<Checkbox checked={sports.includes('kosarka')} className={classes.forChecks} onChange={() => {includeSport('kosarka')}} />} label="Kosarka" />
+                        <FormControlLabel control={<Checkbox checked={sports.includes('odbojka')} className={classes.forChecks} onChange={() => {includeSport('odbojka')}} />} label="Odbojka" />
+                        <FormControlLabel control={<Checkbox checked={sports.includes('rukomet')} className={classes.forChecks} onChange={() => {includeSport('rukomet')}} />} label="Rukomet" />
+                        <FormControlLabel control={<Checkbox checked={sports.includes('tenis')} className={classes.forChecks} onChange={() => {includeSport('tenis')}} />} label="Tenis" />
+                        <FormControlLabel control={<Checkbox checked={sports.includes('paintball')} className={classes.forChecks} onChange={() => {includeSport('paintball')}} />} label="Paintball" />
                       </FormGroup>
                     </Box>
                     <Box className={classes.typeLocationAndPriceDateWrapper}>

@@ -106,7 +106,7 @@ const Header = () => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseSideMenu}>
+                <MenuItem key={page.name} onClick={handleCloseSideMenu}>
                   <Typography
                     textAlign="center"
                     component="a"

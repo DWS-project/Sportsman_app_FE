@@ -5,6 +5,9 @@ const useStyles = makeStyles((theme) => ({
     padding: '100px 50px 50px 100px',
     backgroundColor: '#E5E5E5',
     minHeight: '90vh',
+    [theme.breakpoints.down('sm')]: {
+      padding: '100px 10px 50px 20px',
+    },
   },
   cardWrapper: {
     backgroundColor: '#43bbbf !important',

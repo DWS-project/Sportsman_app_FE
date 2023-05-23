@@ -42,7 +42,7 @@ const ListOfSportHalls = () => {
                   />
                 }
                 title={card.title}
-                subheader="September 14, 2016"
+                subheader={card.city ? card.city : ''}
                 className={classes.text}
               />
               <CardMedia

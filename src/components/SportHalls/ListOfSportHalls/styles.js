@@ -4,6 +4,7 @@ const useStyles = makeStyles((theme) => ({
   container: {
     padding: '100px 50px 50px 100px',
     backgroundColor: '#E5E5E5',
+    minHeight: '90vh',
   },
   cardWrapper: {
     backgroundColor: '#43bbbf !important',

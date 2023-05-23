@@ -1,50 +1,94 @@
-import Box from "@mui/material/Box"
-import Button from "@mui/material/Button"
-import useStyles from './styles'
-import { cities } from "../../constants/appDefaults"
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import SearchIcon from '@mui/icons-material/Search'
 import {
-  Accordion, AccordionDetails,
+  Accordion,
+  AccordionDetails,
   AccordionSummary,
   AppBar,
   Card,
   CardActionArea,
   CardContent,
-  CardMedia, Checkbox, FormControlLabel, FormGroup,
-  InputBase, Slider,
-  Toolbar
-} from "@mui/material"
-import Typography from "@mui/material/Typography"
-import Grid from "@mui/material/Grid"
-import TextField from "@mui/material/TextField"
-import SearchIcon from '@mui/icons-material/Search'
-import { useEffect, useState } from "react"
-import Autocomplete from "@mui/material/Autocomplete"
-import axios from "axios"
-import { LANDING_PAGE } from "../../constants/endpoints"
-import Cookies from "js-cookie";
-import { COOKIE_AUTHENTICATION_FE } from "../../constants/keys/browser";
+  CardMedia,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  InputBase,
+  Slider,
+  Toolbar,
+} from '@mui/material'
+import Autocomplete from '@mui/material/Autocomplete'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Grid from '@mui/material/Grid'
+import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import { useEffect, useState } from 'react'
+import withMainFrame from 'src/hoc/withMainFrame'
 
-const HeadlineAndCityButtons = ({classes, setCity}) => {
+import { cities } from '../../constants/appDefaults'
+import { LANDING_PAGE } from '../../constants/endpoints'
+import { COOKIE_AUTHENTICATION_FE } from '../../constants/keys/browser'
+import useStyles from './styles'
+
+const HeadlineAndCityButtons = ({ classes, setCity }) => {
   return (
     <>
       <Box className={classes.landingPage}>
-      <Box className={classes.headlineWrapper}>
-        <h1 className={classes.landingPageHeadline}>Sportista</h1>
-        <p className={classes.landingPageSubText}>
-          Najbolje mjesto za iznajmljivanje sportskih dvorana i terena.
-          Pružamo vam <br/>jednostavan i siguran način pronalaženja i rezervisanja
-          idealnog prostora <br/>za vaš sportski trening, natjecanje ili rekreaciju.
-        </p>
+        <Box className={classes.headlineWrapper}>
+          <h1 className={classes.landingPageHeadline}>Sportista</h1>
+          <p className={classes.landingPageSubText}>
+            Najbolje mjesto za iznajmljivanje sportskih dvorana i terena.
+            Pružamo vam <br />
+            jednostavan i siguran način pronalaženja i rezervisanja idealnog
+            prostora <br />
+            za vaš sportski trening, natjecanje ili rekreaciju.
+          </p>
+        </Box>
       </Box>
-    </Box>
       <Box className={classes.citiesLandingPage}>
-        <Box sx = {{ display: 'flex', justifyContent: 'space-evenly' }}>
-          <Button className={classes.buttonLandingPage} onClick={() => {setCity('Sarajevo')}} >Sarajevo</Button>
-          <Button className={classes.buttonLandingPage} onClick={() => {setCity('Zenica')}} >Zenica</Button>
-          <Button className={classes.buttonLandingPage} onClick={() => {setCity('Mostar')}} >Mostar</Button>
-          <Button className={classes.buttonLandingPage} onClick={() => {setCity('Banja Luka')}} >Banja Luka</Button>
-          <Button className={classes.buttonLandingPage} onClick={() => {setCity('Tuzla')}} >Tuzla</Button>
+        <Box sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
+          <Button
+            className={classes.buttonLandingPage}
+            onClick={() => {
+              setCity('Sarajevo')
+            }}
+          >
+            Sarajevo
+          </Button>
+          <Button
+            className={classes.buttonLandingPage}
+            onClick={() => {
+              setCity('Zenica')
+            }}
+          >
+            Zenica
+          </Button>
+          <Button
+            className={classes.buttonLandingPage}
+            onClick={() => {
+              setCity('Mostar')
+            }}
+          >
+            Mostar
+          </Button>
+          <Button
+            className={classes.buttonLandingPage}
+            onClick={() => {
+              setCity('Banja Luka')
+            }}
+          >
+            Banja Luka
+          </Button>
+          <Button
+            className={classes.buttonLandingPage}
+            onClick={() => {
+              setCity('Tuzla')
+            }}
+          >
+            Tuzla
+          </Button>
         </Box>
       </Box>
     </>
@@ -52,7 +96,14 @@ const HeadlineAndCityButtons = ({classes, setCity}) => {
 }
 
 const LandingPage = () => {
-  const [sports, setSports] = useState(['fudbal', 'kosarka', 'rukomet', 'odbojka', 'tenis', 'paintball'])
+  const [sports, setSports] = useState([
+    'fudbal',
+    'kosarka',
+    'rukomet',
+    'odbojka',
+    'tenis',
+    'paintball',
+  ])
   const [type, setType] = useState(['vanjski', 'unutrasnji'])
   const [capacity, setCapacity] = useState(30)
   const [city, setCity] = useState('')
@@ -67,23 +118,23 @@ const LandingPage = () => {
   const [typeButtonText, setTypeButtonText] = useState('Sortiraj po tipu')
   const [sortByPrice, setSortByPrice] = useState(false)
   const [priceButtonText, setPriceButtonText] = useState('Sortiraj po cijeni')
-  const [isButtonPriceSortingClicked, setIsButtonPriceSortingClicked] = useState(false)
-  const [isButtonTypeSortingClicked, setIsButtonTypeSortingClicked] = useState(false)
-  const [filter, setFilter] =
-    useState({
-      sports: sports,
-      city: city,
-      capacity: capacity,
-      price: price,
-      date: date,
-      time: time,
-      searchText: searchText,
-      type: type,
-      sort_type: typeButtonText,
-      sort_price: priceButtonText,
-    })
+  const [isButtonPriceSortingClicked, setIsButtonPriceSortingClicked] =
+    useState(false)
+  const [isButtonTypeSortingClicked, setIsButtonTypeSortingClicked] =
+    useState(false)
+  const [filter, setFilter] = useState({
+    sports: sports,
+    city: city,
+    capacity: capacity,
+    price: price,
+    date: date,
+    time: time,
+    searchText: searchText,
+    type: type,
+    sort_type: typeButtonText,
+    sort_price: priceButtonText,
+  })
   const classes = useStyles()
-
 
   useEffect(() => {
     const userData = Cookies.get(COOKIE_AUTHENTICATION_FE)
@@ -93,7 +144,7 @@ const LandingPage = () => {
     if (isUserLogged && parsedUserData.interests !== '') {
       setSports(JSON.parse(parsedUserData.interests).interests)
     }
-    if(isUserLogged && parsedUserData.city !== ''){
+    if (isUserLogged && parsedUserData.city !== '') {
       setCity(parsedUserData.city)
     }
   }, [])
@@ -110,15 +161,26 @@ const LandingPage = () => {
       sort_type: typeButtonText,
       sort_price: priceButtonText,
     })
-  }, [sports, city, capacity, price, date, time, searchText, type, typeButtonText, priceButtonText])
+  }, [
+    sports,
+    city,
+    capacity,
+    price,
+    date,
+    time,
+    searchText,
+    type,
+    typeButtonText,
+    priceButtonText,
+  ])
 
   useEffect(() => {
     fetchCards()
   }, [filter])
 
-  async function fetchCards()  {
+  async function fetchCards() {
     try {
-      const response = await axios.get(LANDING_PAGE, { params: filter, })
+      const response = await axios.get(LANDING_PAGE, { params: filter })
       setCards(response.data.data)
     } catch (error) {
       console.error(error)
@@ -129,9 +191,7 @@ const LandingPage = () => {
     let copy = [...sports]
     const isItemInList = copy.includes(sport)
     if (isItemInList) {
-      setSports(
-        copy.filter((element) => element !== sport)
-      )
+      setSports(copy.filter((element) => element !== sport))
     } else {
       setSports([...copy, sport])
     }
@@ -141,18 +201,20 @@ const LandingPage = () => {
     let copy = [...type]
     const isItemInList = copy.includes(typeOfFields)
     if (isItemInList) {
-      setType(
-        copy.filter((element) => element !== typeOfFields)
-      )
+      setType(copy.filter((element) => element !== typeOfFields))
     } else {
       setType([...copy, typeOfFields])
     }
   }
 
   function handleAccordionChange(event, expanded) {
-    if (isSearchClicked || isButtonTypeSortingClicked || isButtonPriceSortingClicked) {
+    if (
+      isSearchClicked ||
+      isButtonTypeSortingClicked ||
+      isButtonPriceSortingClicked
+    ) {
       setIsAccordionExpanded(!expanded)
-    }else{
+    } else {
       setIsAccordionExpanded(expanded)
     }
   }
@@ -181,17 +243,17 @@ const LandingPage = () => {
     }
   }
 
-  return (
+  return withMainFrame(
     <>
       <HeadlineAndCityButtons classes={classes} setCity={setCity} />
-      <Box className={classes.contentWrapper} >
-        <Box className={classes.centerContent} >
+      <Box className={classes.contentWrapper}>
+        <Box className={classes.centerContent}>
           <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" >
+            <AppBar position="static">
               <Accordion
                 expanded={isAccordionExpanded}
                 onChange={(event, expanded) => {
-                  handleAccordionChange(event,expanded)
+                  handleAccordionChange(event, expanded)
                 }}
               >
                 <AccordionSummary
@@ -200,7 +262,7 @@ const LandingPage = () => {
                   id="panel1a-header"
                   className={classes.accordionSummaryContent}
                 >
-                  <Toolbar sx={{ width: '100%' }} >
+                  <Toolbar sx={{ width: '100%' }}>
                     <Box className={classes.search}>
                       <Box className={classes.searchIconWrapper}>
                         <SearchIcon />
@@ -212,20 +274,30 @@ const LandingPage = () => {
                         onFocus={() => setIsSearchClicked(true)}
                         onBlur={() => setIsSearchClicked(false)}
                         onChange={(event) => setSearchText(event.target.value)}
-                      ></InputBase>
+                      />
                     </Box>
                     <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                       <Box
                         onFocus={() => setIsButtonTypeSortingClicked(true)}
                         onBlur={() => setIsButtonTypeSortingClicked(false)}
                       >
-                        <Button className={classes.sortingButtons} onClick={handleSortByType} >{typeButtonText}</Button>
+                        <Button
+                          className={classes.sortingButtons}
+                          onClick={handleSortByType}
+                        >
+                          {typeButtonText}
+                        </Button>
                       </Box>
                       <Box
                         onFocus={() => setIsButtonPriceSortingClicked(true)}
                         onBlur={() => setIsButtonPriceSortingClicked(false)}
                       >
-                        <Button className={classes.sortingButtons} onClick={handleSortByPrice} >{priceButtonText}</Button>
+                        <Button
+                          className={classes.sortingButtons}
+                          onClick={handleSortByPrice}
+                        >
+                          {priceButtonText}
+                        </Button>
                       </Box>
                     </Box>
                     <Typography
@@ -239,24 +311,114 @@ const LandingPage = () => {
                   </Toolbar>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <Box className={classes.filtersWrapper} >
+                  <Box className={classes.filtersWrapper}>
                     <Box>
-                      <Typography sx={{ marginLeft: '-10px' }}>Sportovi:</Typography>
+                      <Typography sx={{ marginLeft: '-10px' }}>
+                        Sportovi:
+                      </Typography>
                       <FormGroup>
-                        <FormControlLabel control={<Checkbox checked={sports.includes('fudbal')} className={classes.forChecks} onChange={() => {includeSport('fudbal')}} />} label="Fudbal" />
-                        <FormControlLabel control={<Checkbox checked={sports.includes('kosarka')} className={classes.forChecks} onChange={() => {includeSport('kosarka')}} />} label="Kosarka" />
-                        <FormControlLabel control={<Checkbox checked={sports.includes('odbojka')} className={classes.forChecks} onChange={() => {includeSport('odbojka')}} />} label="Odbojka" />
-                        <FormControlLabel control={<Checkbox checked={sports.includes('rukomet')} className={classes.forChecks} onChange={() => {includeSport('rukomet')}} />} label="Rukomet" />
-                        <FormControlLabel control={<Checkbox checked={sports.includes('tenis')} className={classes.forChecks} onChange={() => {includeSport('tenis')}} />} label="Tenis" />
-                        <FormControlLabel control={<Checkbox checked={sports.includes('paintball')} className={classes.forChecks} onChange={() => {includeSport('paintball')}} />} label="Paintball" />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={sports.includes('fudbal')}
+                              className={classes.forChecks}
+                              onChange={() => {
+                                includeSport('fudbal')
+                              }}
+                            />
+                          }
+                          label="Fudbal"
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={sports.includes('kosarka')}
+                              className={classes.forChecks}
+                              onChange={() => {
+                                includeSport('kosarka')
+                              }}
+                            />
+                          }
+                          label="Kosarka"
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={sports.includes('odbojka')}
+                              className={classes.forChecks}
+                              onChange={() => {
+                                includeSport('odbojka')
+                              }}
+                            />
+                          }
+                          label="Odbojka"
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={sports.includes('rukomet')}
+                              className={classes.forChecks}
+                              onChange={() => {
+                                includeSport('rukomet')
+                              }}
+                            />
+                          }
+                          label="Rukomet"
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={sports.includes('tenis')}
+                              className={classes.forChecks}
+                              onChange={() => {
+                                includeSport('tenis')
+                              }}
+                            />
+                          }
+                          label="Tenis"
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={sports.includes('paintball')}
+                              className={classes.forChecks}
+                              onChange={() => {
+                                includeSport('paintball')
+                              }}
+                            />
+                          }
+                          label="Paintball"
+                        />
                       </FormGroup>
                     </Box>
                     <Box className={classes.typeLocationAndPriceDateWrapper}>
                       <Box>
                         <Typography>Tip terena:</Typography>
                         <FormGroup sx={{ marginLeft: '10px' }}>
-                          <FormControlLabel control={<Checkbox defaultChecked className={classes.forChecks} onChange={() => {includeType('vanjski')}} />} label={"Vanjski"} />
-                          <FormControlLabel control={<Checkbox defaultChecked className={classes.forChecks} onChange={() => {includeType('unutrasnji')}} />} label={"Unutrasnji"} />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                defaultChecked
+                                className={classes.forChecks}
+                                onChange={() => {
+                                  includeType('vanjski')
+                                }}
+                              />
+                            }
+                            label={'Vanjski'}
+                          />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                defaultChecked
+                                className={classes.forChecks}
+                                onChange={() => {
+                                  includeType('unutrasnji')
+                                }}
+                              />
+                            }
+                            label={'Unutrasnji'}
+                          />
                         </FormGroup>
                       </Box>
                       <Box>
@@ -281,7 +443,7 @@ const LandingPage = () => {
                         />
                       </Box>
                     </Box>
-                    <Box className={classes.typeLocationPriceDateWrapper} >
+                    <Box className={classes.typeLocationPriceDateWrapper}>
                       <Box>
                         <Typography>Cijena:</Typography>
                         <Slider
@@ -293,8 +455,10 @@ const LandingPage = () => {
                             setPrice(event.target.value)
                           }}
                         />
-                        <Typography sx={{ mt:2 }}>Datum i vrijeme slobodnog termina:</Typography>
-                        <Box className={classes.dateAndTimeWrapper} >
+                        <Typography sx={{ mt: 2 }}>
+                          Datum i vrijeme slobodnog termina:
+                        </Typography>
+                        <Box className={classes.dateAndTimeWrapper}>
                           <input
                             type="date"
                             className={classes.forDate}
@@ -331,8 +495,8 @@ const LandingPage = () => {
               sx={{ alignItems: 'stretch' }}
             >
               {cards.map((item) => (
-                <Grid item xs={2} sm={4} md={4} key={item.id} >
-                  <Card className={classes.card} >
+                <Grid item xs={2} sm={4} md={4} key={item.id}>
+                  <Card className={classes.card}>
                     <CardActionArea sx={{ objectFit: 'cover' }}>
                       <CardMedia
                         component="img"
@@ -341,7 +505,12 @@ const LandingPage = () => {
                         alt={item.title}
                       />
                       <CardContent sx={{ flex: '1' }}>
-                        <Typography noWrap gutterBottom variant="h5" component="div">
+                        <Typography
+                          noWrap
+                          gutterBottom
+                          variant="h5"
+                          component="div"
+                        >
                           {item.title}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">

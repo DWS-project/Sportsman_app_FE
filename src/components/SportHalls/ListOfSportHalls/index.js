@@ -1,7 +1,5 @@
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
-import ShareIcon from '@mui/icons-material/Share'
 import { Box, Card, CardContent, Grid, Typography } from '@mui/material'
 import Avatar from '@mui/material/Avatar'
 import CardActions from '@mui/material/CardActions'
@@ -29,12 +27,10 @@ const ListOfSportHalls = () => {
     getAllSportHalls()
   }, [])
 
-  console.log('sporthall', sporthalls)
-
   return withMainFrame(
     <Grid container spacing={2} className={classes.container}>
       {sporthalls.map((card, index) => (
-        <Grid item xs={12} sm={6} md={4} key={`${card.id}_${index}`}>
+        <Grid item xs={12} sm={6} md={4} key={index}>
           <Card sx={{ maxWidth: 345 }} className={classes.cardWrapper}>
             <Box position="relative">
               <CardHeader

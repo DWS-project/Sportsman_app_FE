@@ -5,3 +5,4 @@ export const REGISTRATION_PLAYER = `${AUTHENTICATION}/register-player`
 export const REGISTRATION_OWNER = `${AUTHENTICATION}/register-owner`
 export const LOGOUT = `${AUTHENTICATION}/logout`
 export const FORGOT_PASSWORD = `${AUTHENTICATION}/forgot-password`
+export const GET_SPORT_HALLS = `${BASE_BACKEND_URL}/sport-halls`

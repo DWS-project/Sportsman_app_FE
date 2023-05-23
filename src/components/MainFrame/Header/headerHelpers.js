@@ -1,8 +1,8 @@
-import { LOGOUT } from 'src/constants/endpoints'
 import axios from 'axios'
-import { HTTPStatusCodes } from 'src/constants/statusCodes'
 import Cookies from 'js-cookie'
+import { LOGOUT } from 'src/constants/endpoints'
 import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser'
+import { HTTPStatusCodes } from 'src/constants/statusCodes'
 
 async function logout() {
   const { status } = await axios.post(LOGOUT, {})
@@ -19,6 +19,10 @@ export const pages = [
   {
     name: 'Objekti',
     href: '/',
+  },
+  {
+    name: 'Tereni',
+    href: '/sport-halls',
   },
   {
     name: 'Kontakt',

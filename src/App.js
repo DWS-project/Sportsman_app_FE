@@ -8,6 +8,7 @@ import Error400Page from './components/ErrorPages/Error400Page'
 import Error401Page from './components/ErrorPages/Error401Page'
 import Error404Page from './components/ErrorPages/Error404Page'
 import LandingPage from './components/LandingPage'
+import ListOfSportHalls from './components/SportHalls/ListOfSportHalls'
 import Verification from './components/Verification'
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Route path={'/error/401'} element={<Error401Page />} />
         <Route path={'/error/404'} element={<Error404Page />} />
         <Route path={'/error/400'} element={<Error400Page />} />
+        <Route path={'/sport-halls'} element={<ListOfSportHalls />} />
       </Routes>
     </BrowserRouter>
   )

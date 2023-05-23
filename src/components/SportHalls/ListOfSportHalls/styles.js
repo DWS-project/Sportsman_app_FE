@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 1,
     width: '130px',
   },
-  ribbonText: {
+  text: {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',

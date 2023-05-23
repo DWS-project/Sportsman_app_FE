@@ -41,13 +41,9 @@ const ListOfSportHalls = () => {
                     aria-label="recipe"
                   />
                 }
-                action={
-                  <IconButton aria-label="settings">
-                    <MoreVertIcon />
-                  </IconButton>
-                }
                 title={card.title}
                 subheader="September 14, 2016"
+                className={classes.text}
               />
               <CardMedia
                 component="img"
@@ -63,7 +59,7 @@ const ListOfSportHalls = () => {
                 <Typography
                   variant="body2"
                   color="text.secondary"
-                  className={classes.ribbonText}
+                  className={classes.text}
                 >
                   {card.description}
                 </Typography>

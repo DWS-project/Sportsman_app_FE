@@ -1,11 +1,12 @@
 import axios from 'axios'
-import { Avatar, Box, Button, Divider, Grid, List, ListItemAvatar, ListItemButton, ListItemText, ListSubheader, Paper, TextField } from '@mui/material'
+import {Box, Button, Divider, Grid, List, ListItemAvatar, ListItemButton, ListItemText, ListSubheader, Paper, TextField } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import useStyles from '../styles'
+import { BASE_BACKEND_URL, CHANGE_OWNER_INFO, CHANGE_OWNER_PASSWORD } from 'src/constants/endpoints'
 
 export const EditOwnerPage = ({id}) => {
+
     const classes = useStyles()
-  
     const [editInfo, setEditInfo] = useState(true);
     const [editPassword, setEditPassword] = useState(false);
   
@@ -22,13 +23,13 @@ export const EditOwnerPage = ({id}) => {
     });
   
     const [password, setPassword] = useState({
-      password1: "",
-      password2: "",
-      password3: "",
+      newPassword: "",
+      newRepeatedPassword: "",
+      oldPassword: "",
     });
   
     useEffect(() => {
-      axios.get(`http://localhost:8000/owner/${id}/`)
+      axios.get(`${BASE_BACKEND_URL}/owner/${id}/`)
       .then(response => 
           {
           const data = response.data[0];
@@ -59,13 +60,13 @@ export const EditOwnerPage = ({id}) => {
   
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await axios.put(`http://127.0.0.1:8000/update_owner/${id}/`, user);
+        await axios.put(`${CHANGE_OWNER_INFO}/${id}/`, user);
         alert("Uspješno ste ažurirali podatke");
     }
   
     const handlePasswordSubmit = async (e) => {
       e.preventDefault();
-      await axios.put(`http://127.0.0.1:8000/update_password/owner/${id}/`, password);
+      await axios.put(`${CHANGE_OWNER_PASSWORD}/${id}/`, password);
       alert("Uspješno ste promijenili šifru");
     }
     const handleClick = (key) => {
@@ -208,7 +209,7 @@ export const EditOwnerPage = ({id}) => {
           label="Enter password"
           variant="outlined"
           placeholder='********'
-          name = "password1"
+          name = "newPassword"
           onChange={handlePasswordChange}
           margin='normal'
           fullWidth
@@ -220,7 +221,7 @@ export const EditOwnerPage = ({id}) => {
           label="Confirm password"
           variant="outlined"
           placeholder='********'
-          name = "password2"
+          name = "newRepeatedPassword"
           onChange={handlePasswordChange}
           margin='normal'
           fullWidth
@@ -232,7 +233,7 @@ export const EditOwnerPage = ({id}) => {
           label="Enter old password"
           variant="outlined"
           placeholder='********'
-          name = "password3"
+          name = "oldPassword"
           onChange={handlePasswordChange}
           margin='normal'
           fullWidth

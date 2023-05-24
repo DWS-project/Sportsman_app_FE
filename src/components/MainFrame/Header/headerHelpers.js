@@ -44,7 +44,7 @@ export const settingsForPlayer = [
   },
   {
     name: 'Postavke',
-    href: '/',
+    href: '/editprofile',
   },
   {
     name: 'Odjavi se',

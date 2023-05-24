@@ -30,7 +30,7 @@ import {
   StepperCompletedColor,
   StepperStepsForUser,
 } from '../../../../constants/appDefaults'
-import { BASE_BACKEND_URL, REGISTRATION_PLAYER } from '../../../../constants/endpoints'
+import { REGISTRATION_PLAYER } from '../../../../constants/endpoints'
 import useStyles from '../../styles'
 
 const RegistrationFormUser = () => {

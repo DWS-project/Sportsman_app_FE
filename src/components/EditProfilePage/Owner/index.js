@@ -1,17 +1,10 @@
 import axios from 'axios'
 import { Avatar, Box, Button, Divider, Grid, List, ListItemAvatar, ListItemButton, ListItemText, ListSubheader, Paper, TextField } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { BASE_BACKEND_URL, CHANGE_INFO, CHANGE_PASSWORD } from 'src/constants/endpoints';
+import useStyles from '../styles'
 
 export const EditOwnerPage = ({id}) => {
-    const style = {
-      width: '100%',
-      maxWidth: 360,
-      bgcolor: 'background.paper',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: "center"
-    };
+    const classes = useStyles()
   
     const [editInfo, setEditInfo] = useState(true);
     const [editPassword, setEditPassword] = useState(false);
@@ -88,17 +81,17 @@ export const EditOwnerPage = ({id}) => {
     return (
     <Grid container justifyContent={"space-between"} alignItems={"center"} mt={6} p={4}>
       <Grid item xs={12} md={5}>
-      <List sx={style} component="nav" aria-label="mailbox folders" 
+      <List style={classes.sidebar} component="nav" aria-label="mailbox folders" 
       subheader={<ListSubheader>Ažuriraj profil</ListSubheader>}
       >
         
-      <div key = {1} className='listItems'>
+      <div key = {1} className={classes.listItems}>
         <ListItemButton onClick={() => handleClick(2)}>
           <ListItemText primary="Promijeni lične podatke"/>
         </ListItemButton>
         <Divider/>
       </div>
-      <div key = {2} className='listItems'>
+      <div key = {2} className={classes.listItems}>
         <ListItemButton onClick={() => handleClick(3)}>
           <ListItemText primary="Promijeni password"/>
         </ListItemButton>

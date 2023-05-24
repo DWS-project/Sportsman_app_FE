@@ -2,18 +2,11 @@ import axios from 'axios'
 import { Avatar, Box, Button, Divider, Grid, List, ListItemAvatar, ListItemButton, ListItemText, ListSubheader, Paper, TextField } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { BASE_BACKEND_URL, CHANGE_INFO, CHANGE_PASSWORD, CHANGE_PHOTO } from 'src/constants/endpoints';
-import './index.css'
+import useStyles from '../styles';
+
 export const EditUserPage = ({id}) => {
 
-  const style = {
-    width: '100%',
-    maxWidth: 360,
-    bgcolor: 'background.paper',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: "center"
-  };
-  
+  const classes = useStyles()
   const [editInfo, setEditInfo] = useState(true);
   const [editPassword, setEditPassword] = useState(false);
   const [editPhoto, setEditPhoto] = useState(false);
@@ -29,13 +22,13 @@ export const EditUserPage = ({id}) => {
   });
 
   const [password, setPassword] = useState({
-    password1: "",
-    password2: "",
-    password3: "",
+    newPassword: "",
+    newRepeatedPassword: "",
+    oldPassword: "",
   });
 
   useEffect(() => {
-    axios.get(`${BASE_BACKEND_URL}/player/${id}/`)
+    axios.get(`${BASE_BACKEND_URL}/player/${id}`)
     .then(response => 
         {
         const data = response.data[0];
@@ -64,22 +57,25 @@ export const EditUserPage = ({id}) => {
 
   const handleSubmit = async (e) => {
       e.preventDefault();
-      await axios.put(`${CHANGE_INFO}/${id}/`, user);
+      await axios.put(`${CHANGE_INFO}/${id}`, user);
       alert("Uspješno ste ažurirali podatke");
   }
 
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
-    await axios.put(`${CHANGE_PASSWORD}/${id}/`, password);
+    await axios.put(`${CHANGE_PASSWORD}/${id}`, password);
     alert("Uspješno ste promijenili šifru");
   }
+
   const handlePhotoSubmit = async(e) => {
     e.preventDefault();
     const file = e.target.photo.files[0];
     const formData = new FormData();
     formData.append('photo', file);
-    await axios.put(`${CHANGE_PHOTO}/${id}/`, formData)
+    await axios.put(`${CHANGE_PHOTO}/${id}`, formData);
+    alert("Profilna slika uspjesno promijenjena");
   }
+
   const handleClick = (key) => {
     if (key === 1) {
       setEditInfo(false);
@@ -100,7 +96,7 @@ export const EditUserPage = ({id}) => {
   return (
   <Grid container justifyContent={"space-between"} alignItems={"center"} mt={6} p={4}>
     <Grid item xs={12} md={5}>
-    <List sx={style} component="nav" aria-label="mailbox folders" 
+    <List className={classes.sidebar} component="nav" aria-label="mailbox folders" 
     subheader={<ListSubheader>Ažuriraj profil</ListSubheader>}
     >
       
@@ -109,21 +105,21 @@ export const EditUserPage = ({id}) => {
           sx={{borderRadius:"50%", width:"100px", height:"100px"}}/>
       </ListItemAvatar>
       
-    <div key = {1} className ='listItems'>
+    <div key = {1} className = {classes.listItems}>
       <ListItemButton onClick={() => handleClick(1)}>
         <ListItemText primary="Promijeni profilnu sliku"/>
       </ListItemButton>
       <Divider/>
     </div>
     
-    <div key = {2} className='listItems' >
+    <div key = {2} className={classes.listItems} >
       <ListItemButton onClick={() => handleClick(2)}>
         <ListItemText primary="Promijeni lične podatke"/>
       </ListItemButton>
       <Divider/>
     </div>
-    <div key = {3} className='listItems'>
-      <ListItemButton className='listItems' onClick={() => handleClick(3)}>
+    <div key = {3} className={classes.listItems}>
+      <ListItemButton onClick={() => handleClick(3)}>
         <ListItemText primary="Promijeni password"/>
       </ListItemButton>
       <Divider/>
@@ -225,7 +221,7 @@ export const EditUserPage = ({id}) => {
         label="Enter password"
         variant="outlined"
         placeholder='********'
-        name = "password1"
+        name = "newPassword"
         onChange={handlePasswordChange}
         margin='normal'
         fullWidth
@@ -237,7 +233,7 @@ export const EditUserPage = ({id}) => {
         label="Confirm password"
         variant="outlined"
         placeholder='********'
-        name = "password2"
+        name = "newRepeatedPassword"
         onChange={handlePasswordChange}
         margin='normal'
         fullWidth
@@ -249,7 +245,7 @@ export const EditUserPage = ({id}) => {
         label="Enter old password"
         variant="outlined"
         placeholder='********'
-        name = "password3"
+        name = "oldPassword"
         onChange={handlePasswordChange}
         margin='normal'
         fullWidth

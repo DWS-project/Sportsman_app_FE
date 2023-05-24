@@ -64,8 +64,6 @@ const RegistrationFormUser = () => {
       age,
       interests,
     }
-    console.log(REGISTRATION_PLAYER);
-    console.log(BASE_BACKEND_URL);
     const { status } = await axios.post(REGISTRATION_PLAYER, data)
     if (status === HTTPStatusCodes.CREATED) navigate('/')
   }

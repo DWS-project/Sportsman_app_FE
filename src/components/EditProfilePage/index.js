@@ -8,10 +8,9 @@ import { EditOwnerPage } from './Owner';
 export const EditProfilePage = () => {
   
   const cookie = Cookies.get(COOKIE_AUTHENTICATION_FE);
-  console.log(cookie);
   const cookie_data = JSON.parse(cookie);
   const id = cookie_data.id;
-  console.log(cookie_data)
+  
   return withMainFrame(
     <EditUserPage id={id}/>
   )

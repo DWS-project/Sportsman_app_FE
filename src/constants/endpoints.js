@@ -1,4 +1,4 @@
-export const BASE_BACKEND_URL = process.env.REACT_APP_BACKEND_URL
+export const BASE_BACKEND_URL = 'http://localhost:8000'
 export const AUTHENTICATION = `${BASE_BACKEND_URL}/authentication`
 export const LOGIN = `${AUTHENTICATION}/login`
 export const REGISTRATION_PLAYER = `${AUTHENTICATION}/register-player`
@@ -7,6 +7,6 @@ export const LOGOUT = `${AUTHENTICATION}/logout`
 export const FORGOT_PASSWORD = `${AUTHENTICATION}/forgot-password`
 export const LANDING_PAGE = `${BASE_BACKEND_URL}/landing-page-cards/`
 export const GET_SPORT_HALLS = `${BASE_BACKEND_URL}/sport-halls`
-export const CHANGE_INFO = `${BASE_BACKEND_URL}/update/player`
-export const CHANGE_PASSWORD = `${BASE_BACKEND_URL}/update_password/player`
-export const CHANGE_PHOTO = `${BASE_BACKEND_URL}/update_photo/player`
+export const CHANGE_INFO = `${BASE_BACKEND_URL}/player/update`
+export const CHANGE_PASSWORD = `${BASE_BACKEND_URL}/player/change-password`
+export const CHANGE_PHOTO = `${BASE_BACKEND_URL}/player/change-profile-photo`

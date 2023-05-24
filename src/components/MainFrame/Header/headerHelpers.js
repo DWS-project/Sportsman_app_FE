@@ -26,7 +26,7 @@ export const pages = [
   },
   {
     name: 'Kontakt',
-    href: '/',
+    href: '/contact-us',
   },
 ]
 export const settingsForPlayer = [

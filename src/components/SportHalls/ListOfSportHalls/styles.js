@@ -11,6 +11,9 @@ const useStyles = makeStyles((theme) => ({
   },
   cardWrapper: {
     backgroundColor: '#43bbbf !important',
+    '&:hover': {
+      cursor: 'pointer',
+    },
   },
   ribbon: {
     textAlign: 'center',

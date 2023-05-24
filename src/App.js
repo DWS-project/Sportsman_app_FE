@@ -1,9 +1,8 @@
-import './App.css'
-
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import AuthenticationFrame from './components/AuthenticationFrame'
 import ForgotPassword from './components/AuthenticationFrame/ForgotPassword'
+import ContactUs from './components/ContactUs'
 import Error400Page from './components/ErrorPages/Error400Page'
 import Error401Page from './components/ErrorPages/Error401Page'
 import Error404Page from './components/ErrorPages/Error404Page'
@@ -28,6 +27,7 @@ function App() {
         />
         <Route path={'/sport-halls'} element={<ListOfSportHalls />} />
         <Route path={'/forgot-password'} element={<ForgotPassword />} />
+        <Route path={'/contact-us'} element={<ContactUs />} />
         <Route path={'*'} element={<Error404Page />} />
         <Route path={'/verification'} element={<Verification />} />
         <Route path={'/error/401'} element={<Error401Page />} />

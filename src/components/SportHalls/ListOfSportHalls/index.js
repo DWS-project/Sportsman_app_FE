@@ -9,6 +9,7 @@ import { red } from '@mui/material/colors'
 import IconButton from '@mui/material/IconButton'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { GET_SPORT_HALLS } from 'src/constants/endpoints'
 import { HTTPStatusCodes } from 'src/constants/statusCodes'
 import withMainFrame from 'src/hoc/withMainFrame'
@@ -17,6 +18,7 @@ import useStyles from './styles'
 
 const ListOfSportHalls = () => {
   const classes = useStyles()
+  const navigate = useNavigate()
   const [sporthalls, setSportHalls] = useState([])
 
   useEffect(() => {
@@ -29,9 +31,13 @@ const ListOfSportHalls = () => {
 
   return withMainFrame(
     <Grid container spacing={2} className={classes.container}>
-      {sporthalls.map((card, index) => (
+      {sporthalls.map((sporthall, index) => (
         <Grid item xs={12} sm={6} md={4} key={index}>
-          <Card sx={{ maxWidth: 345 }} className={classes.cardWrapper}>
+          <Card
+            sx={{ maxWidth: 345 }}
+            className={classes.cardWrapper}
+            onClick={() => navigate(`/sport-hall/${sporthall.id}`)}
+          >
             <Box position="relative">
               <CardHeader
                 avatar={
@@ -41,17 +47,15 @@ const ListOfSportHalls = () => {
                     aria-label="recipe"
                   />
                 }
-                title={card.title}
-                subheader={card.city ? card.city : ''}
+                title={sporthall.title}
+                subheader={sporthall.city ? sporthall.city : ''}
                 className={classes.text}
               />
               <CardMedia
                 component="img"
                 height="194"
                 image={
-                  card.pictures
-                    ? card.pictures
-                    : 'https://sport.leeds.ac.uk/wp-content/uploads/2022/09/6-The-Edge-Sports-Hall-1030x686.jpeg'
+                  sporthall.pictures ? sporthall.pictures : '/images/logo.svg'
                 }
                 alt="Paella dish"
               />
@@ -61,7 +65,7 @@ const ListOfSportHalls = () => {
                   color="text.secondary"
                   className={classes.text}
                 >
-                  {card.description}
+                  {sporthall.description}
                 </Typography>
               </CardContent>
               <CardActions disableSpacing>
@@ -72,14 +76,14 @@ const ListOfSportHalls = () => {
                   Zaprati teren
                 </Typography>
               </CardActions>
-              {card.status === 'closed' && (
+              {sporthall.status === 'closed' && (
                 <Box component="div" className={classes.ribbon}>
                   <Typography variant="body2" color="text.secondary">
                     Zatvoreno
                   </Typography>
                 </Box>
               )}
-              {card.status === 'featured' && (
+              {sporthall.status === 'featured' && (
                 <Box component="div" className={classes.featuredRibbon}>
                   <Typography variant="body2" color="text.secondary">
                     Istaknuto

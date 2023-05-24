@@ -4,6 +4,10 @@ import Box from '@mui/material/Box'
 import CssBaseline from '@mui/material/CssBaseline'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
+import Cookies from 'js-cookie'
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser'
 
 import LoginForm from './Login'
 import RegistrationForm from './Registration/index'
@@ -11,6 +15,14 @@ import useStyles from './styles'
 
 const AuthenticationFrame = ({ route }) => {
   const classes = useStyles()
+  const navigate = useNavigate()
+  const userData = Cookies.get(COOKIE_AUTHENTICATION_FE)
+  const parsedUserData = userData && JSON.parse(userData)
+  const isUserLogged = userData && !!parsedUserData.id
+
+  useEffect(() => {
+    if (isUserLogged) navigate('/error/400')
+  }, [userData])
 
   const avatar = (
     <>

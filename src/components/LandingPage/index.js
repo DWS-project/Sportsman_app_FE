@@ -27,13 +27,207 @@ import Cookies from 'js-cookie'
 import { useEffect, useState } from 'react'
 import withMainFrame from 'src/hoc/withMainFrame'
 
-import { cities } from '../../constants/appDefaults'
-import { LANDING_PAGE } from '../../constants/endpoints'
-import { COOKIE_AUTHENTICATION_FE } from '../../constants/keys/browser'
+import { cities } from 'src/constants/appDefaults'
+import { LANDING_PAGE } from 'src/constants/endpoints'
+import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser'
 import useStyles from './styles'
 
-const HeadlineAndCityButtons = ({ classes, setCity }) => {
-  return (
+const landingPageCities = [
+  'Sarajevo',
+  'Zenica',
+  'Mostar',
+  'Banja Luka',
+  'Tuzla'
+]
+
+const sportNames = [
+  'fudbal',
+  'kosarka',
+  'odbojka',
+  'rukomet',
+  'tenis',
+  'paintball'
+]
+
+const LandingPage = () => {
+  const [initialValues, setInitialValues] = useState({
+    sports: sportNames,
+    type: ['vanjski', 'unutrasnji'],
+    capacity: 30,
+    city: '',
+    price: 100,
+    date: '',
+    time: '',
+    searchText: '',
+    isSearchClicked: false,
+    isAccordionExpanded: false,
+    cards: [],
+    sortByType: false,
+    typeButtonText: 'Sortiraj po tipu',
+    sortByPrice: false,
+    priceButtonText: 'Sortiraj po cijeni',
+    isButtonPriceSortingClicked: false,
+    isButtonTypeSortingClicked: false
+  })
+  const [filter, setFilter] = useState({
+    sports: initialValues.sports,
+    city: initialValues.city,
+    capacity: initialValues.capacity,
+    price: initialValues.price,
+    date: initialValues.date,
+    time: initialValues.time,
+    searchText: initialValues.searchText,
+    type: initialValues.type,
+    sort_type: initialValues.typeButtonText,
+    sort_price: initialValues.priceButtonText
+  })
+
+
+  useEffect(() => {
+    const userData = Cookies.get(COOKIE_AUTHENTICATION_FE)
+    const parsedUserData = userData && JSON.parse(userData)
+    const isUserLogged = userData && !!parsedUserData.id
+
+    if(isUserLogged){
+      if (parsedUserData.interests !== '') {
+        setInitialValues((prevState) => ({
+          ...prevState,
+          sports: JSON.parse(parsedUserData.interests).interests
+        }))
+      }
+      if (parsedUserData.city !== '') {
+        setInitialValues((prevState) => ({
+          ...prevState,
+          city: parsedUserData.city
+        }))
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    setFilter({
+      sports: initialValues.sports,
+      city: initialValues.city,
+      price: initialValues.price,
+      date: initialValues.date,
+      time: initialValues.time,
+      searchText: initialValues.searchText,
+      type: initialValues.type,
+      sort_type: initialValues.typeButtonText,
+      sort_price: initialValues.priceButtonText
+    })
+  }, [initialValues])
+
+  useEffect(() => {
+    fetchCards()
+  }, [filter])
+
+  const classes = useStyles()
+
+  async function fetchCards() {
+    try {
+      const response = await axios.get(LANDING_PAGE, { params: filter })
+      setInitialValues((prevState) => ({
+        ...prevState,
+        cards: response.data.data
+      }))
+
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  function includeSport(sport) {
+    const isItemInList = initialValues.sports.includes(sport)
+    if (isItemInList) {
+      setInitialValues((prevState) => ({
+        ...prevState,
+        sports: initialValues.sports.filter((element) => element !== sport)
+      }))
+    } else {
+      setInitialValues((prevState) => ({
+        ...prevState,
+        sports: [...initialValues.sports, sport]
+      }))
+    }
+  }
+
+  function includeType(typeOfFields) {
+    const isItemInList = initialValues.type.includes(typeOfFields)
+    if (isItemInList) {
+      setInitialValues((prevState) => ({
+        ...prevState,
+        type: initialValues.type.filter((element) => element !== typeOfFields)
+      }))
+    } else {
+      setInitialValues((prevState) => ({
+        ...prevState,
+        type: [...initialValues.type, typeOfFields]
+      }))
+    }
+  }
+
+  function handleAccordionChange(event, expanded) {
+    if (
+      initialValues.isSearchClicked ||
+      initialValues.isButtonTypeSortingClicked ||
+      initialValues.isButtonPriceSortingClicked
+    ) {
+      setInitialValues((prevState) => ({
+        ...prevState,
+        isAccordionExpanded: !expanded
+      }))
+    } else {
+      setInitialValues((prevState) => ({
+        ...prevState,
+        isAccordionExpanded: expanded
+      }))
+    }
+  }
+
+  function handleSortByType() {
+    if (!initialValues.sortByType) {
+      setInitialValues((prevState) => ({
+        ...prevState,
+        sortByType: true,
+        typeButtonText: 'Vanjski'
+      }))
+    } else if (initialValues.typeButtonText === 'Unutrašnji') {
+      setInitialValues((prevState) => ({
+        ...prevState,
+        sortByType: false,
+        typeButtonText: 'Sortiraj po tipu'
+      }))
+    } else {
+      setInitialValues((prevState) => ({
+        ...prevState,
+        typeButtonText: 'Unutrašnji'
+      }))
+    }
+  }
+
+  function handleSortByPrice() {
+    if (!initialValues.sortByPrice) {
+      setInitialValues((prevState) => ({
+        ...prevState,
+        sortByPrice: true,
+        priceButtonText: 'Najjeftiniji'
+      }))
+    } else if (initialValues.priceButtonText === 'Najskuplji') {
+      setInitialValues((prevState) => ({
+        ...prevState,
+        sortByPrice: false,
+        priceButtonText: 'Sortiraj po cijeni'
+      }))
+    } else {
+      setInitialValues((prevState) => ({
+        ...prevState,
+        priceButtonText: 'Najskuplji'
+      }))
+    }
+  }
+
+  return withMainFrame(
     <>
       <Box className={classes.landingPage}>
         <Box className={classes.headlineWrapper}>
@@ -49,209 +243,28 @@ const HeadlineAndCityButtons = ({ classes, setCity }) => {
       </Box>
       <Box className={classes.citiesLandingPage}>
         <Box sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
-          <Button
-            className={classes.buttonLandingPage}
-            onClick={() => {
-              setCity('Sarajevo')
-            }}
-          >
-            Sarajevo
-          </Button>
-          <Button
-            className={classes.buttonLandingPage}
-            onClick={() => {
-              setCity('Zenica')
-            }}
-          >
-            Zenica
-          </Button>
-          <Button
-            className={classes.buttonLandingPage}
-            onClick={() => {
-              setCity('Mostar')
-            }}
-          >
-            Mostar
-          </Button>
-          <Button
-            className={classes.buttonLandingPage}
-            onClick={() => {
-              setCity('Banja Luka')
-            }}
-          >
-            Banja Luka
-          </Button>
-          <Button
-            className={classes.buttonLandingPage}
-            onClick={() => {
-              setCity('Tuzla')
-            }}
-          >
-            Tuzla
-          </Button>
+          {landingPageCities.map((city) => (
+            <Button
+              key={city}
+              className={classes.buttonLandingPage}
+              onClick={() => {
+                setInitialValues((prevState) => ({
+                  ...prevState,
+                  city
+                }))
+              }}
+            >
+              {city}
+            </Button>
+          ))}
         </Box>
       </Box>
-    </>
-  )
-}
-
-const LandingPage = () => {
-  const [sports, setSports] = useState([
-    'fudbal',
-    'kosarka',
-    'rukomet',
-    'odbojka',
-    'tenis',
-    'paintball',
-  ])
-  const [type, setType] = useState(['vanjski', 'unutrasnji'])
-  const [capacity, setCapacity] = useState(30)
-  const [city, setCity] = useState('')
-  const [price, setPrice] = useState(100)
-  const [date, setDate] = useState('')
-  const [time, setTime] = useState('')
-  const [searchText, setSearchText] = useState('')
-  const [isSearchClicked, setIsSearchClicked] = useState(false)
-  const [isAccordionExpanded, setIsAccordionExpanded] = useState(false)
-  const [cards, setCards] = useState([])
-  const [sortByType, setSortByType] = useState(false)
-  const [typeButtonText, setTypeButtonText] = useState('Sortiraj po tipu')
-  const [sortByPrice, setSortByPrice] = useState(false)
-  const [priceButtonText, setPriceButtonText] = useState('Sortiraj po cijeni')
-  const [isButtonPriceSortingClicked, setIsButtonPriceSortingClicked] =
-    useState(false)
-  const [isButtonTypeSortingClicked, setIsButtonTypeSortingClicked] =
-    useState(false)
-  const [filter, setFilter] = useState({
-    sports: sports,
-    city: city,
-    capacity: capacity,
-    price: price,
-    date: date,
-    time: time,
-    searchText: searchText,
-    type: type,
-    sort_type: typeButtonText,
-    sort_price: priceButtonText,
-  })
-  const classes = useStyles()
-
-  useEffect(() => {
-    const userData = Cookies.get(COOKIE_AUTHENTICATION_FE)
-    const parsedUserData = userData && JSON.parse(userData)
-    const isUserLogged = userData && !!parsedUserData.id
-
-    if (isUserLogged && parsedUserData.interests !== '') {
-      setSports(JSON.parse(parsedUserData.interests).interests)
-    }
-    if (isUserLogged && parsedUserData.city !== '') {
-      setCity(parsedUserData.city)
-    }
-  }, [])
-
-  useEffect(() => {
-    setFilter({
-      sports: sports,
-      city: city,
-      price: price,
-      date: date,
-      time: time,
-      searchText: searchText,
-      type: type,
-      sort_type: typeButtonText,
-      sort_price: priceButtonText,
-    })
-  }, [
-    sports,
-    city,
-    capacity,
-    price,
-    date,
-    time,
-    searchText,
-    type,
-    typeButtonText,
-    priceButtonText,
-  ])
-
-  useEffect(() => {
-    fetchCards()
-  }, [filter])
-
-  async function fetchCards() {
-    try {
-      const response = await axios.get(LANDING_PAGE, { params: filter })
-      setCards(response.data.data)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  function includeSport(sport) {
-    let copy = [...sports]
-    const isItemInList = copy.includes(sport)
-    if (isItemInList) {
-      setSports(copy.filter((element) => element !== sport))
-    } else {
-      setSports([...copy, sport])
-    }
-  }
-
-  function includeType(typeOfFields) {
-    let copy = [...type]
-    const isItemInList = copy.includes(typeOfFields)
-    if (isItemInList) {
-      setType(copy.filter((element) => element !== typeOfFields))
-    } else {
-      setType([...copy, typeOfFields])
-    }
-  }
-
-  function handleAccordionChange(event, expanded) {
-    if (
-      isSearchClicked ||
-      isButtonTypeSortingClicked ||
-      isButtonPriceSortingClicked
-    ) {
-      setIsAccordionExpanded(!expanded)
-    } else {
-      setIsAccordionExpanded(expanded)
-    }
-  }
-
-  function handleSortByType() {
-    if (!sortByType) {
-      setSortByType(true)
-      setTypeButtonText('Vanjski')
-    } else if (typeButtonText === 'Unutrašnji') {
-      setSortByType(false)
-      setTypeButtonText('Sortiraj po tipu')
-    } else {
-      setTypeButtonText('Unutrašnji')
-    }
-  }
-
-  function handleSortByPrice() {
-    if (!sortByPrice) {
-      setSortByPrice(true)
-      setPriceButtonText('Najjeftiniji')
-    } else if (priceButtonText === 'Najskuplji') {
-      setSortByPrice(false)
-      setPriceButtonText('Sortiraj po cijeni')
-    } else {
-      setPriceButtonText('Najskuplji')
-    }
-  }
-
-  return withMainFrame(
-    <>
-      <HeadlineAndCityButtons classes={classes} setCity={setCity} />
       <Box className={classes.contentWrapper}>
         <Box className={classes.centerContent}>
           <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
               <Accordion
-                expanded={isAccordionExpanded}
+                expanded={initialValues.isAccordionExpanded}
                 onChange={(event, expanded) => {
                   handleAccordionChange(event, expanded)
                 }}
@@ -271,32 +284,67 @@ const LandingPage = () => {
                         className={classes.searchField}
                         placeholder="Search..."
                         sx={{ outline: 'none', border: 'none' }}
-                        onFocus={() => setIsSearchClicked(true)}
-                        onBlur={() => setIsSearchClicked(false)}
-                        onChange={(event) => setSearchText(event.target.value)}
+                        onFocus={() => {
+                          setInitialValues((prevState) => ({
+                            ...prevState,
+                            isSearchClicked: true
+                          }))
+                        }}
+                        onBlur={() => {
+                          setInitialValues((prevState) => ({
+                            ...prevState,
+                            isSearchClicked: false
+                          }))
+                        }}
+                        onChange={(event) => {
+                          setInitialValues((prevState) => ({
+                            ...prevState,
+                            searchText: event.target.value
+                          }))
+                        }}
                       />
                     </Box>
                     <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                       <Box
-                        onFocus={() => setIsButtonTypeSortingClicked(true)}
-                        onBlur={() => setIsButtonTypeSortingClicked(false)}
+                        onFocus={() => {
+                          setInitialValues((prevState) => ({
+                            ...prevState,
+                            isButtonTypeSortingClicked: true
+                          }))
+                        }}
+                        onBlur={() => {
+                          setInitialValues((prevState) => ({
+                            ...prevState,
+                            isButtonTypeSortingClicked: false
+                          }))
+                        }}
                       >
                         <Button
                           className={classes.sortingButtons}
                           onClick={handleSortByType}
                         >
-                          {typeButtonText}
+                          {initialValues.typeButtonText}
                         </Button>
                       </Box>
                       <Box
-                        onFocus={() => setIsButtonPriceSortingClicked(true)}
-                        onBlur={() => setIsButtonPriceSortingClicked(false)}
+                        onFocus={() => {
+                          setInitialValues((prevState) => ({
+                            ...prevState,
+                            isButtonPriceSortingClicked: true
+                          }))
+                        }}
+                        onBlur={() => {
+                          setInitialValues((prevState) => ({
+                            ...prevState,
+                            isButtonPriceSortingClicked: false
+                          }))
+                        }}
                       >
                         <Button
                           className={classes.sortingButtons}
                           onClick={handleSortByPrice}
                         >
-                          {priceButtonText}
+                          {initialValues.priceButtonText}
                         </Button>
                       </Box>
                     </Box>
@@ -317,78 +365,19 @@ const LandingPage = () => {
                         Sportovi:
                       </Typography>
                       <FormGroup>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={sports.includes('fudbal')}
-                              className={classes.forChecks}
-                              onChange={() => {
-                                includeSport('fudbal')
-                              }}
-                            />
-                          }
-                          label="Fudbal"
-                        />
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={sports.includes('kosarka')}
-                              className={classes.forChecks}
-                              onChange={() => {
-                                includeSport('kosarka')
-                              }}
-                            />
-                          }
-                          label="Kosarka"
-                        />
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={sports.includes('odbojka')}
-                              className={classes.forChecks}
-                              onChange={() => {
-                                includeSport('odbojka')
-                              }}
-                            />
-                          }
-                          label="Odbojka"
-                        />
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={sports.includes('rukomet')}
-                              className={classes.forChecks}
-                              onChange={() => {
-                                includeSport('rukomet')
-                              }}
-                            />
-                          }
-                          label="Rukomet"
-                        />
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={sports.includes('tenis')}
-                              className={classes.forChecks}
-                              onChange={() => {
-                                includeSport('tenis')
-                              }}
-                            />
-                          }
-                          label="Tenis"
-                        />
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={sports.includes('paintball')}
-                              className={classes.forChecks}
-                              onChange={() => {
-                                includeSport('paintball')
-                              }}
-                            />
-                          }
-                          label="Paintball"
-                        />
+                        {sportNames.map((sport) => (
+                          <FormControlLabel
+                            key={sport}
+                            control={
+                              <Checkbox
+                                checked={initialValues.sports.includes(sport)}
+                                className={classes.forChecks}
+                                onChange={() => includeSport(sport)}
+                              />
+                            }
+                            label={sport.charAt(0).toUpperCase() + sport.slice(1)}
+                          />
+                        ))}
                       </FormGroup>
                     </Box>
                     <Box className={classes.typeLocationAndPriceDateWrapper}>
@@ -427,8 +416,11 @@ const LandingPage = () => {
                           disablePortal
                           id="combo-box-demo"
                           options={cities}
-                          onChange={(event, newValue) => {
-                            setCity(newValue)
+                          onChange={(event, city) => {
+                            setInitialValues((prevState) => ({
+                              ...prevState,
+                              city
+                            }))
                           }}
                           renderInput={(params) => (
                             <TextField
@@ -436,7 +428,7 @@ const LandingPage = () => {
                               margin="normal"
                               name="city"
                               id="city"
-                              value={city}
+                              value={initialValues.city}
                               label="Grad"
                             />
                           )}
@@ -452,7 +444,10 @@ const LandingPage = () => {
                           className={classes.forSliders}
                           valueLabelDisplay="auto"
                           onChange={(event) => {
-                            setPrice(event.target.value)
+                            setInitialValues((prevState) => ({
+                              ...prevState,
+                              price: event.target.value
+                            }))
                           }}
                         />
                         <Typography sx={{ mt: 2 }}>
@@ -465,14 +460,20 @@ const LandingPage = () => {
                             min="2023-01-01"
                             max="2025-12-31"
                             onChange={(event) => {
-                              setDate(event.target.value)
+                              setInitialValues((prevState) => ({
+                                ...prevState,
+                                date: event.target.value
+                              }))
                             }}
                           />
                           <input
                             type="time"
                             className={classes.forDate}
                             onChange={(event) => {
-                              setTime(event.target.value)
+                              setInitialValues((prevState) => ({
+                                ...prevState,
+                                time: event.target.value
+                              }))
                             }}
                           />
                         </Box>
@@ -494,7 +495,7 @@ const LandingPage = () => {
               justifyContent="space-evenly"
               sx={{ alignItems: 'stretch' }}
             >
-              {cards.map((item) => (
+              {initialValues.cards.map((item) => (
                 <Grid item xs={2} sm={4} md={4} key={item.id}>
                   <Card className={classes.card}>
                     <CardActionArea sx={{ objectFit: 'cover' }}>

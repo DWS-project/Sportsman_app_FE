@@ -8,6 +8,7 @@ import Error400Page from './components/ErrorPages/Error400Page'
 import Error401Page from './components/ErrorPages/Error401Page'
 import Error404Page from './components/ErrorPages/Error404Page'
 import LandingPage from './components/LandingPage'
+import ListOfSportHalls from './components/SportHalls/ListOfSportHalls'
 import Verification from './components/Verification'
 import { EditProfilePage } from './components/EditProfilePage/index'
 
@@ -25,6 +26,7 @@ function App() {
           path={'/registration'}
           element={<AuthenticationFrame route={'registration'} />}
         />
+        <Route path={'/sport-halls'} element={<ListOfSportHalls />} />
         <Route path={'/forgot-password'} element={<ForgotPassword />} />
         <Route path={'*'} element={<Error404Page />} />
         <Route path={'/verification'} element={<Verification />} />

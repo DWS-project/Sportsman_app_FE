@@ -9,11 +9,13 @@ import Error404Page from './components/ErrorPages/Error404Page'
 import LandingPage from './components/LandingPage'
 import ListOfSportHalls from './components/SportHalls/ListOfSportHalls'
 import Verification from './components/Verification'
+import { EditProfilePage } from './components/EditProfilePage/index'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+      <Route path={'/editprofile'} element={<EditProfilePage />} />
         <Route path={'/'} element={<LandingPage />} />
         <Route
           path={'/login'}

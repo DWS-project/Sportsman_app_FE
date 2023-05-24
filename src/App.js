@@ -10,6 +10,7 @@ import Error404Page from './components/ErrorPages/Error404Page'
 import LandingPage from './components/LandingPage'
 import ListOfSportHalls from './components/SportHalls/ListOfSportHalls'
 import Verification from './components/Verification'
+import WithMainFrame from "./hoc/withMainFrame";
 
 function App() {
   return (

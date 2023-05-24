@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   landingPage: {
-    backgroundImage: `url(${process.env.REACT_APP_FRONTEND_URL}/images/pozadina15.png)`,
+    backgroundImage: `url(${process.env.REACT_APP_FRONTEND_URL}/images/landingPageImage.png)`,
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',

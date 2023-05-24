@@ -173,8 +173,7 @@ const Header = () => {
               onClose={handleCloseUserMenu}
             >
               {isUserLogged ? (
-                <>
-                  {settingsForPlayer.map((item) => (
+                  settingsForPlayer.map((item) => (
                     <MenuItem key={item.name} onClick={handleCloseUserMenu}>
                       <Typography
                         textAlign="center"
@@ -186,11 +185,9 @@ const Header = () => {
                         {item.name}
                       </Typography>
                     </MenuItem>
-                  ))}
-                </>
+                  ))
               ) : (
-                <>
-                  {settingsForGuestUser.map((item) => (
+                  settingsForGuestUser.map((item) => (
                     <MenuItem key={item.name} onClick={handleCloseUserMenu}>
                       <Typography
                         textAlign="center"
@@ -202,8 +199,7 @@ const Header = () => {
                         {item.name}
                       </Typography>
                     </MenuItem>
-                  ))}
-                </>
+                  ))
               )}
             </Menu>
           </Box>

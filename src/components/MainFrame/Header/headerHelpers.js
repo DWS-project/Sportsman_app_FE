@@ -26,7 +26,7 @@ export const pages = [
   },
   {
     name: 'Kontakt',
-    href: '/',
+    href: '/contact-us',
   },
 ]
 export const settingsForPlayer = [
@@ -44,7 +44,7 @@ export const settingsForPlayer = [
   },
   {
     name: 'Postavke',
-    href: '/',
+    href: '/editprofile',
   },
   {
     name: 'Odjavi se',

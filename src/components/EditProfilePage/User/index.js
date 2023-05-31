@@ -73,6 +73,7 @@ export const EditUserPage = ({id}) => {
     const formData = new FormData();
     formData.append('photo', file);
     await axios.put(`${CHANGE_PHOTO}/${id}`, formData);
+    window.location.reload();
     alert("Profilna slika uspjesno promijenjena");
   }
 

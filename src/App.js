@@ -10,11 +10,13 @@ import LandingPage from './components/LandingPage'
 import ListOfSportHalls from './components/SportHalls/ListOfSportHalls'
 import Verification from './components/Verification'
 import { EditProfilePage } from './components/EditProfilePage/index'
+import UserProfile from './components/UserProfile'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path={'/my-profile'} element={<UserProfile />} />
       <Route path={'/editprofile'} element={<EditProfilePage />} />
         <Route path={'/'} element={<LandingPage />} />
         <Route

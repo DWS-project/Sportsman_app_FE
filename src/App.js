@@ -10,12 +10,14 @@ import LandingPage from './components/LandingPage'
 import ListOfSportHalls from './components/SportHalls/ListOfSportHalls'
 import Verification from './components/Verification'
 import { EditProfilePage } from './components/EditProfilePage/index'
+import CreateTeam from './components/CreateTeam'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-      <Route path={'/editprofile'} element={<EditProfilePage />} />
+        <Route path={'/editprofile'} element={<EditProfilePage />} />
+        <Route path={'/createTeam'} element={<CreateTeam />} />
         <Route path={'/'} element={<LandingPage />} />
         <Route
           path={'/login'}

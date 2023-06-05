@@ -10,6 +10,7 @@ import LandingPage from './components/LandingPage'
 import ListOfSportHalls from './components/SportHalls/ListOfSportHalls'
 import Verification from './components/Verification'
 import { EditProfilePage } from './components/EditProfilePage/index'
+import SportHallPage from './components/SportHalls/SportHallPage/index'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Routes>
       <Route path={'/editprofile'} element={<EditProfilePage />} />
         <Route path={'/'} element={<LandingPage />} />
+        <Route path="/sporthall/:id" element={<SportHallPage />} />
         <Route
           path={'/login'}
           element={<AuthenticationFrame route={'login'} />}

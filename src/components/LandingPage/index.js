@@ -27,7 +27,7 @@ import Cookies from 'js-cookie'
 import { useEffect, useState } from 'react'
 import withMainFrame from 'src/hoc/withMainFrame'
 
-import { cities } from 'src/constants/appDefaults'
+import { cities, FRONTEND_URL } from "src/constants/appDefaults";
 import { LANDING_PAGE } from 'src/constants/endpoints'
 import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser'
 import useStyles from './styles'
@@ -498,11 +498,11 @@ const LandingPage = () => {
               {initialValues.cards.map((item) => (
                 <Grid item xs={2} sm={4} md={4} key={item.id}>
                   <Card className={classes.card}>
-                    <CardActionArea sx={{ objectFit: 'cover' }}>
+                    <CardActionArea sx={{ objectFit: 'cover' }} href={`${FRONTEND_URL}/sporthall/${item.id}`}>
                       <CardMedia
                         component="img"
                         height="140"
-                        image={item.pictures}
+                        image={item.pictures ? JSON.parse(item.pictures).pictures[0] : '/images/footballField.png'}
                         alt={item.title}
                       />
                       <CardContent sx={{ flex: '1' }}>

@@ -27,6 +27,11 @@ const UserProfile = () => {
     const [friends, setFriends] = useState('');
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('sender__username');
+    const [historyOrder, setHistoryOrder] = useState('asc');
+    const [historyOrderBy, setHistoryOrderBy] = useState('hall_name');
+    const [friendsOrder, setFriendsOrder] = useState('asc');
+    const [friendsOrderBy, setFriendsOrderBy] = useState('user2__username');
+    const [gamesPlayed, setgamesPlayed] = useState([]);
 
     const cookie = Cookies.get(COOKIE_AUTHENTICATION_FE);
     const cookie_data = JSON.parse(cookie);
@@ -56,9 +61,20 @@ const UserProfile = () => {
         const isAsc = orderBy === column && order === 'asc'
         setOrder(isAsc ? 'desc': 'asc')
         setOrderBy(column);
+        let status = 0;
+        if(showOnHoldInvites){
+            status = 0;
+        }
+        else if(showAcceptedInvites){
+            status = 1;
+        }
+        else {
+            status = 2;
+        }
         const data = {
             'column': column,
             'order': order,
+            'status': status,
         }
         axios.get(`${BASE_BACKEND_URL}/player/sort-invitations/${id}`, {
             params: data
@@ -66,12 +82,62 @@ const UserProfile = () => {
         .then(response => 
             {
             const data = response.data;
-            setRows(data);
+            if(data[0].status === 0) {
+                setOnHoldInvites(data);
+            }
+            else if(data[0].status === 1) {
+                setAcceptedInvites(data);
+            }
+            else if (data[0].status === 2){
+                setDeniedInvites(data);
+            } 
             })
         .catch(error => {
         console.error(error);
         });
+    }
 
+    const handleHistorySort = (order, column) =>{
+        const isAsc = historyOrderBy === column && order === 'asc'
+        setHistoryOrder(isAsc ? 'desc': 'asc')
+        setHistoryOrderBy(column);
+        const data = {
+            'column': column,
+            'order': order,
+        }
+        console.log(data);
+        axios.get(`${BASE_BACKEND_URL}/player/sort-history/${id}`, {
+            params: data
+        })
+        .then(response => 
+            {
+            const data = response.data;
+            setgamesPlayed(data);
+            })
+        .catch(error => {
+            console.error(error);
+        });
+    }
+
+    const handleFriendsSort = (order, column) =>{
+        const isAsc = friendsOrderBy === column && order === 'asc'
+        setFriendsOrder(isAsc ? 'desc': 'asc')
+        setFriendsOrderBy(column);
+        const data = {
+            'column': column,
+            'order': order,
+        }
+        axios.get(`${BASE_BACKEND_URL}/player/sort-friends/${id}`, {
+            params: data
+        })
+        .then(response => 
+            {
+            const data = response.data;
+            setFriends(data);
+            })
+        .catch(error => {
+            console.error(error);
+        });
     }
 
     useEffect(() => {
@@ -98,6 +164,18 @@ const UserProfile = () => {
             {
             const data = response.data;
             setFriends(data);
+            })
+        .catch(error => {
+        console.error(error);
+        });
+      }, []);
+
+      useEffect(() => {
+        axios.get(`${BASE_BACKEND_URL}/player/games/${id}`)
+        .then(response => 
+            {
+            const data = response.data;
+            setgamesPlayed(data);
             })
         .catch(error => {
         console.error(error);
@@ -211,10 +289,18 @@ const UserProfile = () => {
             </TableCell>
             <TableCell sx={{fontWeight:'bold'}} align="right">
                 <TableSortLabel
+                active={orderBy === 'type'}
+                direction= {order}
+                onClick={() => handleInvitationsSort(order, 'type')}>
+                    Tip tima: 
+                </TableSortLabel>
+             </TableCell>
+             <TableCell sx={{fontWeight:'bold'}} align="right">
+                <TableSortLabel
                 active={orderBy === 'details'}
                 direction= {order}
                 onClick={() => handleInvitationsSort(order, 'details')}>
-                    Sportska sala: 
+                    Ime tima: 
                 </TableSortLabel>
              </TableCell>
             <TableCell sx={{fontWeight:'bold'}} align="right">
@@ -237,8 +323,11 @@ const UserProfile = () => {
               <TableCell component="th" scope="row">
                 {row.sender__username}
               </TableCell>
-              <TableCell align="right">{row.time_sent}</TableCell>
-              <TableCell align="right">{row.time_sent}</TableCell>
+              <TableCell align="right">{row.type}</TableCell>
+              {row.details && 
+              <TableCell align="right">{JSON.parse(row.details).team_name}</TableCell>}
+              <TableCell align="right">{new Date(row.time_sent).toDateString()}</TableCell>
+              
               <TableCell align="right"><IconButton onClick={() => handleAccept(row.id)}>
                                         <CheckIcon/></IconButton></TableCell>
               <TableCell align="right"><IconButton onClick={() => handleDeny(row.id)}>
@@ -253,7 +342,10 @@ const UserProfile = () => {
               <TableCell component="th" scope="row">
                 {row.sender__username}
               </TableCell>
-              <TableCell align="right">{row.time_sent}</TableCell>
+              <TableCell align="right">{row.type}</TableCell>
+              {row.details && 
+              <TableCell align="right">{JSON.parse(row.details).team_name}</TableCell>}
+              <TableCell align="right">{new Date(row.time_sent).toDateString()}</TableCell>
               <TableCell></TableCell>
             </TableRow>
           ))}
@@ -265,7 +357,10 @@ const UserProfile = () => {
               <TableCell component="th" scope="row">
                 {row.sender__username}
               </TableCell>
-              <TableCell align="right">{row.time_sent}</TableCell>
+              <TableCell align="right">{row.type}</TableCell>
+              {row.details && 
+              <TableCell align="right">{JSON.parse(row.details).team_name}</TableCell>}
+              <TableCell align="right">{new Date(row.time_sent).toDateString()}</TableCell>
               <TableCell></TableCell>
             </TableRow>
           ))}
@@ -275,7 +370,51 @@ const UserProfile = () => {
       </div>}
       {showInvitationHistory && <div>
       <Grid item>
-        <p>History</p>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{fontWeight:'bold'}}>
+                <TableSortLabel
+                active={historyOrderBy === 'hall_name'}
+                direction= {historyOrder}
+                onClick={() => handleHistorySort(historyOrder, 'hall_name')}>
+                    Ime sale:
+                </TableSortLabel>
+            </TableCell>
+             <TableCell sx={{fontWeight:'bold'}} align="right">
+                <TableSortLabel
+                active={historyOrderBy === 'team_id__permanentteams__team_name'}
+                direction= {historyOrder}
+                onClick={() => handleHistorySort(historyOrder, 'team_id__permanentteams__team_name')}>
+                    Ime tima: 
+                </TableSortLabel>
+             </TableCell>
+            <TableCell sx={{fontWeight:'bold'}} align="right">
+                <TableSortLabel
+                active={historyOrderBy === 'time_appointed'} 
+                direction = {historyOrder}
+                onClick={() => handleHistorySort(historyOrder, 'time_appointed')}>
+                    Vrijeme:
+                </TableSortLabel>
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+        {gamesPlayed && gamesPlayed.map((row) => (
+            <TableRow
+              key={row.id}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 }, backgroundColor: 'lightgray' }
+            }
+            >
+              <TableCell component="th" scope="row">
+                {row.hall_name}
+              </TableCell>
+              <TableCell align="right">{row.team_name}</TableCell>
+              <TableCell align="right">{new Date(row.time_appointed).toDateString()}</TableCell>
+            </TableRow>
+        ))}
+        </TableBody>
+      </Table>
       </Grid>
       </div>}
       {showFriends && <div>
@@ -284,8 +423,11 @@ const UserProfile = () => {
         <TableHead>
           <TableRow>
             <TableCell sx={{fontWeight:'bold'}}>
-                <TableSortLabel direction='asc'>
-                    Prijatelji:
+            <TableSortLabel
+                active={friendsOrderBy === 'user2__username'} 
+                direction = {friendsOrder}
+                onClick={() => handleFriendsSort(friendsOrder, 'user2__username')}>
+                    Ime prijatelja:
                 </TableSortLabel></TableCell>
           </TableRow>
         </TableHead>

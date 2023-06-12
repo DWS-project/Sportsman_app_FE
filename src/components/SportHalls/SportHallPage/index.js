@@ -26,13 +26,13 @@ import { useParams } from "react-router-dom"
 import SwipeableViews from 'react-swipeable-views'
 import { emailRegex, phoneRegex } from "src/constants/appDefaults"
 import {
-  GET_FRIENDS, GET_INVITED_USERS,
+  GET_FRIENDS, GET_INVITED_USERS, GET_PERMANENT_TEAMS,
   GET_SPORT_HALL_RESERVATIONS,
   GET_SPORT_HALL_USER,
-  GET_TEAMS, GET_USERS, INVITE_TEMPORARY_TEAM,
+  GET_USERS, INVITE_TEMPORARY_TEAM,
   REMOVE_INVITE_TEMPORARY_TEAM,
   RESERVATION
-} from "src/constants/endpoints"
+} from "src/constants/endpoints";
 import { COOKIE_AUTHENTICATION_FE } from "src/constants/keys/browser"
 import withMainFrame from "src/hoc/withMainFrame"
 import useStyles from './styles'
@@ -145,7 +145,7 @@ const SportHallPage = () => {
   async function fetchTeams() {
     try {
       const user_id = initialValues.user.id
-      const response = await axios.get(GET_TEAMS, { params: { id: user_id } })
+      const response = await axios.get(GET_PERMANENT_TEAMS, { params: { id: user_id } })
       setInitialValues((prevState) => ({
         ...prevState,
         teams: response.data.data,

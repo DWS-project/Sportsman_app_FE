@@ -21,4 +21,4 @@ export const GET_TEAMS = `${BASE_BACKEND_URL}/get-teams`
 export const GET_USERS = `${BASE_BACKEND_URL}/get-users`
 export const INVITE_TEMPORARY_TEAM = `${BASE_BACKEND_URL}/invite-temporary-team`
 export const REMOVE_INVITE_TEMPORARY_TEAM = `${BASE_BACKEND_URL}/remove-invite-temporary-team`
-export const GET_USER = `${BASE_BACKEND_URL}/get-user`
+export const GET_INVITED_USERS = `${BASE_BACKEND_URL}/get-invited-users`

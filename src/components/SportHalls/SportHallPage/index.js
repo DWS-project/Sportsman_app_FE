@@ -1,55 +1,43 @@
-import { useParams } from "react-router-dom"
-import SwipeableViews from 'react-swipeable-views'
-import Box from "@mui/material/Box"
 import { Button } from "@material-ui/core"
-import { useEffect, useState } from "react"
-import { useTheme } from "@mui/material/styles"
-import Typography from "@mui/material/Typography"
+import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material"
+import AddCircleIcon from '@mui/icons-material/AddCircle'
+import HighlightOffIcon from '@mui/icons-material/HighlightOff'
+import SearchIcon from "@mui/icons-material/Search"
 import {
+  Alert,
   InputBase, List,
   ListItem,
   ListItemText,
   MobileStepper,
-  Modal, Tab, Tabs,
-  ToggleButtonGroup
-} from "@mui/material";
-import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material"
-import useStyles from './styles'
-import withMainFrame from "../../../hoc/withMainFrame"
-import ToggleButton from "@mui/material/ToggleButton"
-import TextField from "@mui/material/TextField"
-import { cities, emailRegex, phoneRegex } from "../../../constants/appDefaults"
+  Modal, Snackbar, Tab, Tabs
+} from "@mui/material"
 import Autocomplete from "@mui/material/Autocomplete"
-import SearchIcon from "@mui/icons-material/Search"
 import Avatar from "@mui/material/Avatar"
-import AddCircleIcon from '@mui/icons-material/AddCircle'
+import Box from "@mui/material/Box"
 import Paper from "@mui/material/Paper"
-import HighlightOffIcon from '@mui/icons-material/HighlightOff'
-import axios from "axios";
+import { styled, useTheme } from "@mui/material/styles"
+import TextField from "@mui/material/TextField"
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip"
+import Typography from "@mui/material/Typography"
+import axios from "axios"
+import Cookies from "js-cookie"
+import { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
+import SwipeableViews from 'react-swipeable-views'
+import { emailRegex, phoneRegex } from "src/constants/appDefaults"
 import {
-  GET_FRIENDS,
+  GET_FRIENDS, GET_INVITED_USERS,
   GET_SPORT_HALL_RESERVATIONS,
   GET_SPORT_HALL_USER,
-  GET_TEAMS, GET_USER, GET_USERS, INVITE_TEMPORARY_TEAM,
-  LANDING_PAGE,
-  REGISTRATION_PLAYER, REMOVE_INVITE_TEMPORARY_TEAM,
-  RESERVATION,
-  RESERVATION_PERMANENT_TEAM,
-  RESERVATION_TEMPORARY_TEAM,
-  RESERVATION_USER
-} from "../../../constants/endpoints";
-import Cookies from "js-cookie";
-import { COOKIE_AUTHENTICATION_FE } from "../../../constants/keys/browser";
+  GET_TEAMS, GET_USERS, INVITE_TEMPORARY_TEAM,
+  REMOVE_INVITE_TEMPORARY_TEAM,
+  RESERVATION
+} from "src/constants/endpoints"
+import { COOKIE_AUTHENTICATION_FE } from "src/constants/keys/browser"
+import withMainFrame from "src/hoc/withMainFrame"
+import useStyles from './styles'
 
 const daysOfWeek = ['PON', 'UTO', 'SRI', 'CET', 'PET', 'SUB', 'NED']
-
-const timelines = Array.from({ length: 16 }, (_, index) => {
-  const startHour = index + 7
-  const endHour = startHour + 1
-  const startTime = `${startHour.toString().padStart(2, '0')}:00`
-  const endTime = `${endHour.toString().padStart(2, '0')}:00`
-  return `${startTime} - ${endTime}`
-})
 
 const tabs = [
   { label: 'Sakupi raju', value: 'temporary'},
@@ -57,58 +45,75 @@ const tabs = [
   { label: 'Rezerviši', value: 'reservation'}
 ]
 
-
-const detailsTabs = [
-  { label: 'Upcoming', value: 'upcoming' },
-  { label: 'Development', value: 'development' },
-  { label: 'Completed', value: 'completed' },
-]
+const LightTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} classes={{ popper: className }}/>
+    ))(({ theme }) => ({
+      [`& .${tooltipClasses.tooltip}`]: {
+        backgroundColor: theme.palette.common.white,
+        color: 'rgba(0, 0, 0, 0.87)',
+        boxShadow: theme.shadows[1],
+        fontSize: 12,
+        fontFamily: 'sans-serif'
+      },
+}))
 
 const SportHallPage = () => {
-  const [detailTab, setDetailTab] = useState(0)
-  const [sportHall, setSportHall] = useState([])
-  const [reservations, setReservations] = useState([])
-  const [friends, setFriends] = useState([])
-  const [activeStep, setActiveStep] = useState(0)
-  const [selectedForm, setSelectedForm] = useState('reservation')
-  const [name, setName] = useState('')
-  const [surname, setSurname] = useState('')
-  const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
-  const [reservationButtonClicked, setReservationButtonClicked] = useState(false)
-  const [fromTime, setFromTime] = useState('')
-  const [toTime, setToTime] = useState('')
-  const [date, setDate] = useState('')
-  const [team, setTeam] = useState('')
-  const [openModal, setOpenModal] = useState(false)
-  const [searchText, setSearchText] = useState('')
-  const [suggestions, setSuggestions] = useState([])
-  const [openDropdown, setOpenDropdown] = useState(false)
-  const [anchorEl, setAnchorEl] = useState(null)
-  const [selectedFriends, setSelectedFriends] = useState([])
-  const [areMembersInvited, setAreMembersInvited] = useState(false)
-  const [availableFriends, setAvailableFriends] = useState(friends)
-  const [user, setUser] = useState(null)
-  const [teams, setTeams] = useState([])
-  const [pictures, setPictures] = useState([])
-  const [invitations, setInvitations] = useState([])
-  const [gliderPosition, setGliderPosition] = useState(2)
-  const [location, setLocation] = useState('')
-
-
+  const [initialValues, setInitialValues] = useState({
+    sportHall: [],
+    reservations: [],
+    friends: [],
+    searchText: '',
+    suggestions: [],
+    selectedFriends: [],
+    availableFriends: [],
+    user: null,
+    teams: [],
+    teamNames: [],
+    pictures: [],
+    invitations: [],
+    location: '',
+    areMembersInvited: false,
+  })
+  const [pageStates, setPageStates] = useState({
+    detailTab: 0,
+    activeStep: 0,
+    windowWidth: window.innerWidth,
+    showSnackbar: false,
+    gliderPosition: 2,
+    openDropdown: false,
+    openModal: false,
+    reservationButtonClicked: false,
+    selectedForm: 'reservation',
+  })
+  const [reservationInfo, setReservationInfo] = useState({
+    name: '',
+    surname: '',
+    phone: '',
+    team: '',
+    email: '',
+    date: '',
+    fromTime: '',
+    toTime: ''
+  })
   let maxSteps = 1
   const classes = useStyles()
-  const theme = useTheme()
   const { id } = useParams()
+  let minDate = new Date()
+  minDate.setDate(minDate.getDate() - 1)
+  let maxDate = new Date()
+  maxDate.setFullYear(maxDate.getFullYear() + 1)
 
   async function fetchSportHall() {
     try {
       const response = await axios.get(GET_SPORT_HALL_USER, { params: { id } })
       const sporthall = response.data.data
-      setSportHall(sporthall)
-      setPictures(JSON.parse(sporthall.pictures).pictures)
-      setLocation(sporthall.city + ', ' + JSON.parse(sporthall.address).street + ' ' + JSON.parse(sporthall.address).streetNumber)
-      maxSteps = pictures.length
+      setInitialValues((prevState) => ({
+        ...prevState,
+        sportHall: sporthall,
+        pictures: JSON.parse(sporthall.pictures).pictures,
+        location: sporthall.city + ', ' + JSON.parse(sporthall.address).street + ' ' + JSON.parse(sporthall.address).streetNumber
+      }))
+      maxSteps = initialValues.pictures.length
     } catch (error) {
       console.error(error)
     }
@@ -116,40 +121,55 @@ const SportHallPage = () => {
   async function fetchReservations() {
     try {
       const response = await axios.get(GET_SPORT_HALL_RESERVATIONS, { params: { id } })
-      setReservations(response.data.data)
+      setInitialValues((prevState) => ({
+        ...prevState,
+        reservations: response.data.data
+      }))
     } catch (error) {
       console.error(error)
     }
   }
   async function fetchFriends() {
     try {
-      const response = await axios.get(GET_FRIENDS, { params: { id: user.id }  })
-      await setFriends(response.data.data)
-      await setAvailableFriends(response.data.data)
+      const user_id = initialValues.user.id
+      const response = await axios.get(GET_FRIENDS, { params: { id: user_id }  })
+      await setInitialValues((prevState) => ({
+        ...prevState,
+        friends: response.data.data,
+        availableFriends: response.data.data
+      }))
     } catch (error) {
       console.error(error)
     }
   }
   async function fetchTeams() {
     try {
-      const response = await axios.get(GET_TEAMS, { params: { id: user.id } })
-      setTeams(response.data.data)
+      const user_id = initialValues.user.id
+      const response = await axios.get(GET_TEAMS, { params: { id: user_id } })
+      setInitialValues((prevState) => ({
+        ...prevState,
+        teams: response.data.data,
+        teamNames: response.data.data.map((temp) => temp.team_name)
+      }))
     } catch (error) {
       console.error(error)
     }
   }
   async function fetchUsers() {
     try {
+      const searchText = initialValues.searchText
       const response = await axios.get(GET_USERS, { params: { searchText }})
-      setSuggestions(response.data.data)
+      setInitialValues((prevState) => ({
+        ...prevState,
+        suggestions: response.data.data
+      }))
     } catch (error) {
       console.error(error)
     }
   }
-
-  async function fetchUser(invitationId) {
+  async function fetchInvitedUsers(recipientsIds) {
     try {
-      const response = await axios.get(GET_USER, { params: { invitationId }})
+      const response = await axios.get(GET_INVITED_USERS, { params: { recipientsIds }})
       return response.data.data
     } catch (error) {
       console.error(error)
@@ -163,127 +183,245 @@ const SportHallPage = () => {
     const parsedUserData = userData && JSON.parse(userData)
     const isUserLogged = userData && !!parsedUserData.id
     if(isUserLogged){
-      setUser(parsedUserData)
+      setInitialValues((prevState) => ({
+        ...prevState,
+        user: parsedUserData
+      }))
+    }
+    const handleResize = () => {
+      setPageStates((prevState) => ({
+        ...prevState,
+        windowWidth: window.innerWidth
+      }))
+    }
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
     }
   }, [])
 
   useEffect(() => {
-    if(user){
+    if(initialValues.user){
       fetchFriends()
       fetchTeams()
     }
-  }, [user])
+  }, [initialValues.user])
 
   useEffect(() => {
-    if (searchText.length > 0) {
+    checkExistingInvitations()
+  }, [initialValues.sportHall])
+
+  useEffect(() => {
+    if (initialValues.searchText.length > 0) {
       fetchUsers()
     } else {
-      setSuggestions([])
+      setInitialValues((prevState) => ({
+        ...prevState,
+        suggestions: []
+      }))
     }
-  }, [searchText])
+  }, [initialValues.searchText])
 
   useEffect(() => {
-    if(invitations.length > 0){
-      localStorage.setItem('invitations-' + sportHall.id, JSON.stringify(invitations))
+    if(initialValues.invitations.length > 0){
+      localStorage.setItem('invitations-' + initialValues.sportHall.id, JSON.stringify(initialValues.invitations))
     }
+  }, [initialValues.invitations])
 
-  }, [invitations])
+  function checkExistingInvitations() {
+    let existingInvitations = localStorage.getItem('invitations-' + initialValues.sportHall.id)
+    if(existingInvitations) {
+      existingInvitations = JSON.parse(existingInvitations)
+      if(existingInvitations.length > 0){
+        setInitialValues((prevState) => ({
+          ...prevState,
+          invitations: existingInvitations
+        }))
+        let recipientIds = []
+        for(const invitation of existingInvitations){
+          recipientIds.push(invitation.fields.recipient)
+        }
+        const recipientIdsString = recipientIds.join(',')
+        fetchInvitedUsers(recipientIdsString)
+          .then((recipients) => {
+            setInitialValues((prevState) => ({
+              ...prevState,
+              selectedFriends: recipients,
+              areMembersInvited: true
+            }))
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+        for(const invitation of existingInvitations){
+          setInitialValues((prevState) => ({
+            ...prevState,
+            availableFriends: prevState.availableFriends.filter((availableFriend) => availableFriend.id !== invitation.fields.recipient)
+          }))
+        }
+      }
+    }
+  }
 
   const handleDetailsTabChange = (event, newValue) => {
-    setDetailTab(newValue)
+    setPageStates((prevState) => ({
+      ...prevState,
+      detailTab: newValue
+    }))
   }
 
   const handleTabChange = (tab, index) => {
-    setSelectedForm(tab)
-    setGliderPosition(index)
+    if(initialValues.user){
+      setPageStates((prevState) => ({
+        ...prevState,
+        selectedForm: tab,
+        gliderPosition: index,
+        reservationButtonClicked: false
+      }))
+    }
   }
   async function handleReservation() {
-    const isValidDate = /^\d{4}-\d{2}-\d{2}$/.test(date)
-    const isValidTimeFormat = /^\d{2}:(00|30)$/.test(fromTime) && /^\d{2}:(00|30)$/.test(toTime)
-    const fromTimeObj = new Date(`2000-01-01T${fromTime}`)
-    const toTimeObj = new Date(`2000-01-01T${toTime}`)
+    const isValidDate = /^\d{4}-\d{2}-\d{2}$/.test(reservationInfo.date)
+    const isValidTimeFormat = /^\d{2}:\d*[05]$/.test(reservationInfo.fromTime) && /^\d{2}:\d*[05]$/.test(reservationInfo.toTime)
+    const fromTimeObj = new Date(`2000-01-01T${reservationInfo.fromTime}`)
+    const toTimeObj = new Date(`2000-01-01T${reservationInfo.toTime}`)
     const isTimeValid = isValidTimeFormat && fromTimeObj < toTimeObj
-    const isReservationAvailable = !reservations.some((reservation) => {
+    const isReservationAvailable = !initialValues.reservations.some((reservation) => {
       const beginTime = new Date(`${reservation.date}T${reservation.time_from}`)
       const endTime = new Date(`${reservation.date}T${reservation.time_to}`)
-      const chosenDate = new Date(date)
-      const chosenFromTime = new Date(`${date}T${fromTime}`)
-      const chosenToTime = new Date(`${date}T${toTime}`)
+      const chosenDate = new Date(reservationInfo.date)
+      const chosenFromTime = new Date(`${reservationInfo.date}T${reservationInfo.fromTime}`)
+      const chosenToTime = new Date(`${reservationInfo.date}T${reservationInfo.toTime}`)
 
       return (
         chosenDate.toDateString() === beginTime.toDateString() &&
-        ((chosenFromTime >= beginTime && chosenFromTime < endTime) ||
-          (chosenToTime > beginTime && chosenToTime <= endTime) ||
-          (chosenFromTime <= beginTime && chosenToTime >= endTime))
+        (chosenFromTime >= beginTime && chosenFromTime < endTime &&
+          chosenToTime > beginTime && chosenToTime <= endTime)
       )
     })
     if (isValidDate && isTimeValid && isReservationAvailable) {
       let userId = 0, teamId = 0, validInputs = true
+      let user = initialValues.user
       if(user){
         userId = user.id
-        if(name !== user.name || surname !== user.surname || email !== user.email){
+        if(reservationInfo.name !== user.name || reservationInfo.surname !== user.surname || reservationInfo.email !== user.email){
           validInputs = false
         }
       }
-      if(team){
-        teamId = team
+      if(reservationInfo.team){
+        const selectedTeam = initialValues.teams.find((temp) => reservationInfo.team === temp.team_name);
+        if (selectedTeam) {
+          teamId = selectedTeam.team_id_id
+        }
       }
-
       const data = {
-        name,
-        surname,
-        email,
-        phone,
-        date,
-        fromTime,
-        toTime,
+        name: reservationInfo.name,
+        surname: reservationInfo.surname,
+        email: reservationInfo.email,
+        phone: reservationInfo.phone,
+        date: reservationInfo.date,
+        fromTime: reservationInfo.fromTime,
+        toTime: reservationInfo.toTime,
         sportHallId: id,
         userId,
         teamId,
-        type: selectedForm,
-        teamMembers: selectedFriends
+        type: pageStates.selectedForm,
+        teamMembers: initialValues.selectedFriends
       }
       if(validInputs){
         const { status } = await axios.post(RESERVATION, data)
         if(status){
           await fetchReservations()
+          await resetFields()
+          await setPageStates((prevState) => ({
+            ...prevState,
+            showSnackbar: true,
+            reservationButtonClicked: false
+          }))
         }
+      }else{
+        setPageStates((prevState) => ({
+          ...prevState,
+          reservationButtonClicked: true
+        }))
       }
+    }else{
+      setPageStates((prevState) => ({
+        ...prevState,
+        reservationButtonClicked: true
+      }))
     }
   }
 
+  function resetFields(){
+    setReservationInfo((prevState) => ({
+      ...prevState,
+      name: '',
+      surname: '',
+      toTime: '',
+      fromTime: '',
+      date: '',
+      phone: '',
+      email: '',
+      team: ''
+    }))
+    setInitialValues((prevState) => ({
+      ...prevState,
+      selectedFriends: [],
+      invitations: [],
+      areMembersInvited: false,
+      availableFriends: prevState.friends
+    }))
+  }
+
   function handleSuggestionClick(suggestion) {
-    setSearchText('')
-    setSelectedFriends((prevSelectedFriends) => [...prevSelectedFriends, suggestion])
-    setOpenDropdown(false)
+    setInitialValues((prevState) => ({
+      ...prevState,
+      searchText: '',
+      selectedFriends: [...prevState.selectedFriends, suggestion],
+      availableFriends: prevState.availableFriends.filter((friend) => friend.id !== suggestion.id)
+    }))
+    setPageStates((prevState) => ({
+      ...prevState,
+      openDropdown: false
+    }))
   }
 
   function handleAddFriend(friend){
-    setSelectedFriends((prevSelectedFriends) => [...prevSelectedFriends, friend])
-    setAvailableFriends((prevAvailableFriends) =>
-        prevAvailableFriends.filter((availableFriend) => availableFriend.id !== friend.id)
-    )
+    setInitialValues((prevState) => ({
+      ...prevState,
+      selectedFriends: [...prevState.selectedFriends, friend],
+      availableFriends: prevState.availableFriends.filter((availableFriend) => availableFriend.id !== friend.id)
+    }))
   }
 
   async function deleteInvite(invite_id){
-    await axios.delete(REMOVE_INVITE_TEMPORARY_TEAM, { id: invite_id })
-    localStorage.setItem('invitations-' + sportHall.id, JSON.stringify(invitations))
+    await axios.delete(REMOVE_INVITE_TEMPORARY_TEAM, { data: { id: invite_id } })
+    localStorage.setItem('invitations-' + initialValues.sportHall.id, JSON.stringify(initialValues.invitations.filter((invitation) => invitation.fields.id !== invite_id)))
+    if(initialValues.selectedFriends.length === 0){
+      setInitialValues((prevState) => ({
+        ...prevState,
+        areMembersInvited: false
+      }))
+    }
   }
 
   async function handleInviteUsers(){
     try {
-
-      for (const friend of selectedFriends) {
+      for (const friend of initialValues.selectedFriends) {
         const data = {
-          senderId: user.id,
+          senderId: initialValues.user.id,
           recipientId: friend.id,
-          sportHallId: sportHall.id,
-          sportHallTitle: sportHall.title
+          sportHallId: initialValues.sportHall.id,
+          sportHallTitle: initialValues.sportHall.title
         }
         const response = await axios.post(INVITE_TEMPORARY_TEAM, data)
         if (response.data.status) {
           const newInvitation = response.data.data
-          setInvitations((previousInvitations) => [...previousInvitations, newInvitation])
+          setInitialValues((prevState) => ({
+            ...prevState,
+            invitations: [...prevState.invitations, newInvitation]
+          }))
         }
       }
       handleModalClose()
@@ -293,48 +431,53 @@ const SportHallPage = () => {
   }
 
   const handleRemoveFriend = (person) => {
-    setInvitations((previousInvitations) =>
-      previousInvitations.filter((invite) => invite.fields.recipient !== person.id)
-    )
-    const invitation = invitations.find((invite) => invite.fields.recipient === person.id)
+    const invitation = initialValues.invitations.find((invite) => invite.fields.recipient === person.id)
     if (invitation) {
       deleteInvite(invitation.fields.id)
     }
-    setSelectedFriends((prevSelectedFriends) =>
-      prevSelectedFriends.filter((selectedFriend) => selectedFriend.id !== person.id)
-    )
-
-    if(friends.some((friend) => friend.id === person.id)){
-      setAvailableFriends((prevAvailableFriends) => [...prevAvailableFriends, person])
+    setInitialValues((prevState) => ({
+      ...prevState,
+      invitations: prevState.invitations.filter((invite) => invite.fields.recipient !== person.id),
+      selectedFriends: prevState.selectedFriends.filter((selectedFriend) => selectedFriend.id !== person.id)
+    }))
+    if(initialValues.friends.some((friend) => friend.id === person.id)){
+      setInitialValues((prevState) => ({
+        ...prevState,
+        availableFriends: [...prevState.availableFriends, person]
+      }))
     }
   }
 
 
   const handleNext = () => {
-    if (activeStep !== pictures.length - 1){
-      setActiveStep((previousActiveStep) => previousActiveStep + 1)
+    if (pageStates.activeStep !== initialValues.pictures.length - 1){
+      setPageStates((prevState) => ({
+        ...prevState,
+        activeStep: prevState.activeStep + 1
+      }))
     }
   }
 
   const handleBack = () => {
-    if (activeStep !== 0){
-      setActiveStep((previousActiveStep) => previousActiveStep - 1)
+    if (pageStates.activeStep !== 0){
+      setPageStates((prevState) => ({
+        ...prevState,
+        activeStep: prevState.activeStep - 1
+      }))
     }
   }
 
   const handleStepChange = (step) => {
-    setActiveStep(step)
-  }
-
-  const handleSelectedOption = (event, newValue) => {
-    if (selectedForm !== newValue) {
-      setSelectedForm(newValue)
-    }
+    setPageStates((prevState) => ({
+      ...prevState,
+      activeStep: step
+    }))
   }
 
   function getWeekday(index) {
     const today = new Date()
-    const weekdayIndex = (today.getDay() + index - 1) % 7
+    let weekdayIndex = (today.getDay() + index - 1) % 7
+    if(weekdayIndex === -1) weekdayIndex = 6
     return daysOfWeek[weekdayIndex]
   }
 
@@ -344,55 +487,102 @@ const SportHallPage = () => {
     return selectedDate.toLocaleDateString()
   }
 
-  function isTimeSlotAppointed(index, time) {
-    const currentDate = new Date()
-    const selectedDate = new Date()
-    selectedDate.setDate(currentDate.getDate() + index)
-    let partOne = ''
-    let partTwo = ''
-    if(time.startsWith('-')){
-      partOne = (parseInt(time.slice(1).slice(0, -3)) - 1) + ':30'
-      partTwo = time.slice(1)
-    }else {
-      partOne = time
-      partTwo = time.slice(0, -3) + ':30'
-    }
-
-    const formattedDate = selectedDate.toISOString().split('T')[0]
-    const isAppointed = reservations.some((reservation) => {
-      const reservationDate = reservation.date
-      const reservationTime = reservation.time_from
-      const reservationTimeEnd = reservation.time_to
-      const startTime = new Date(`${reservationDate}T${reservationTime}`)
-      const endTime = new Date(`${reservationDate}T${reservationTimeEnd}`)
-      const checkTime1 = new Date(`${formattedDate}T${partOne + ':00'}`)
-      const checkTime2 = new Date(`${formattedDate}T${partTwo + ':00'}`)
-      return (
-        reservationDate === formattedDate &&
-        checkTime1 >= startTime && checkTime2 <= endTime
-      )
-    })
-    return isAppointed
+  function getDateForReservation(index) {
+    const today = new Date()
+    const selectedDate = new Date(today.setDate(today.getDate() + index))
+    const year = selectedDate.getFullYear();
+    const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+    const day = String(selectedDate.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`
   }
 
+  function getRangeDates(date) {
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
+
+
+
+  function getReservation(reservation){
+    const start = reservation.time_from.split(':');
+    const end = reservation.time_to.split(':');
+    const startHour = Number(start[0]);
+    const startMinute = Number(start[1]);
+    const endHour = Number(end[0]);
+    const endMinute = Number(end[1]);
+
+    const totalMinutes = (endHour * 60 + endMinute) - (startHour * 60 + startMinute);
+    const hourRowsHeight = 26
+    const weekdayRowHeight = 40
+    const height = (totalMinutes / 60) * hourRowsHeight
+    const top = ((startHour - 7) * hourRowsHeight) + (startMinute * (hourRowsHeight/60)) + weekdayRowHeight
+
+    return (
+      <Box
+        key={reservation.id}
+        className={classes.appointment}
+        sx={{
+          top: `${top}px`,
+          height: `${height}px`,
+        }}
+      >
+        {start[0]}:{start[1]} - {end[0]}:{end[1]}
+      </Box>
+    )
+  }
+
+
   function handleModalOpen() {
-    setOpenModal(true)
+    setPageStates((prevState) => ({
+      ...prevState,
+      openModal: true
+    }))
   }
 
   function handleModalClose(){
-    setOpenModal(false)
+    setPageStates((prevState) => ({
+      ...prevState,
+      openModal: false
+    }))
   }
 
-  //<p className={classes.subtextHeadline}>{sportHall.description}</p>
   return withMainFrame(
     <>
-      <Box sx={{ display: 'flex', flexDirection: 'row', marginTop: '30px', marginBottom: '5rem' }}>
-        <Box sx={{ width: '50%', height: '60vh', display: 'flex', justifyContent: 'end', alignItems: 'end' }}>
+      <Box className={classes.snackbar}>
+        <Snackbar
+          open={pageStates.showSnackbar}
+          autoHideDuration={3000}
+          onClose={() => {
+            setPageStates((prevState) => ({
+              ...prevState,
+              showSnackbar: false
+            }))
+          }}
+          className={classes.customSnackbar}
+        >
+          <Alert
+            onClose={() => {
+              setPageStates((prevState) => ({
+                ...prevState,
+                showSnackbar: false
+              }))
+            }}
+            severity="success"
+            sx={{ width: '100%' }}
+          >
+            Uspješno ste rezervisali termin!
+          </Alert>
+        </Snackbar>
+      </Box>
+      <Box className={classes.firstPartOfPageWrapper}>
+        <Box className={classes.headlineAndDetailsWrapper}>
           <Box className={classes.headlineWrapper}>
-            <h2 className={classes.headline}>{sportHall.title}</h2>
+            <h2 className={classes.headline}>{initialValues.sportHall.title}</h2>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <Tabs
-                value={detailTab}
+                value={pageStates.detailTab}
                 onChange={handleDetailsTabChange}
                 TabIndicatorProps={{ style: { backgroundColor: '#43bbbf' } }}
                 variant="scrollable"
@@ -401,63 +591,46 @@ const SportHallPage = () => {
                 <Tab
                   label={'Detalji'}
                   value={0}
-                  style={{color: detailTab === 0 ? 'black' : ''}}
+                  style={{color: pageStates.detailTab === 0 ? 'black' : ''}}
                 />
                 <Tab
                   label={'Recenzije'}
                   value={1}
-                  style={{color: detailTab === 1 ? 'black' : '' }}
+                  style={{color: pageStates.detailTab === 1 ? 'black' : '' }}
                 />
                 <Tab
                   label={'Ocjene'}
                   value={2}
-                  style={{color: detailTab === 2 ? 'black' : '' }}
+                  style={{color: pageStates.detailTab === 2 ? 'black' : '' }}
                 />
               </Tabs>
             </Box>
             <Box>
-              {detailTab === 0 ? (
+              {pageStates.detailTab === 0 ? (
                   <Box className={classes.subtextHeadline}>
-                    <p><span style={{ borderBottom: '2px solid grey'}}>Opis</span></p>
-                    <p>{sportHall.description}</p>
-                    {sportHall.capacity ? (
-                        <p><span style={{ borderBottom: '2px solid grey'}}>Kapacitet</span>: {sportHall.capacity}</p>
+                    <p>{initialValues.sportHall.description}</p>
+                    {initialValues.sportHall.capacity ? (
+                        <p><span>Kapacitet</span>: {initialValues.sportHall.capacity}</p>
                     ): null}
-                    <p><span style={{ borderBottom: '2px solid grey'}}>Lokacija</span></p>
-                    <p>{location}</p>
+                    <p>Lokacija: {initialValues.location}</p>
                   </Box>
-              ) : detailTab === 1 ? (
-                <p>neke recenzije</p>
+              ) : pageStates.detailTab === 1 ? (
+                <p>bonus feature recenzije</p>
               ) : (
-                <p>neke ocjene</p>
+                <p>bonus feature ocjene</p>
               )}
             </Box>
           </Box>
-          {detailTab === 0 ? (
-            <Box className={classes.priceBox}>{sportHall.price}KM/h</Box>
+          {pageStates.detailTab === 0 ? (
+            <Box className={classes.priceBox}>{initialValues.sportHall.price}KM/h</Box>
           ) : null}
         </Box>
-        <Box sx={{ width: '50%' }}>
+        <Box className={classes.wrapperForImages}>
           <MobileStepper
-            steps={pictures ? pictures.length : maxSteps}
+            steps={initialValues.pictures ? initialValues.pictures.length : maxSteps}
             position="static"
-            activeStep={activeStep}
-            sx={{
-              justifyContent: 'center',
-              position: 'absolute',
-              top: '58%',
-              left: '75%',
-              right: '25%',
-              zIndex: '1',
-              backgroundColor: 'transparent',
-              '& .MuiMobileStepper-dot': {
-                width: 12,
-                height: 12,
-              },
-              '& .MuiMobileStepper-dotActive': {
-                backgroundColor: '#43bbbf',
-              },
-            }}
+            activeStep={pageStates.activeStep}
+            className={classes.mobileStepper}
           />
           <KeyboardArrowRight
             onClick={handleNext}
@@ -469,26 +642,20 @@ const SportHallPage = () => {
           />
           <SwipeableViews
             axis={'x'}
-            index={activeStep}
+            index={pageStates.activeStep}
             onChangeIndex={handleStepChange}
             enableMouseEvents
             sx={{width: '100%'}}
           >
-            {pictures.map((step, index) => (
+            {initialValues.pictures.map((step, index) => (
               <div key={step}>
-                {Math.abs(activeStep - index) <= 2 ? (
+                {Math.abs(pageStates.activeStep - index) <= 2 ? (
                   <Box
                     component="img"
-                    sx={{
-                      display: 'block',
-                      overflow: 'hidden',
-                      width: '100%',
-                      height: '60vh'
-                    }}
+                    className={classes.imageStyle}
                     src={step}
-                    alt={sportHall.title}
+                    alt={initialValues.sportHall.title}
                   />
-
                 ) : null}
               </div>
             ))}
@@ -499,45 +666,77 @@ const SportHallPage = () => {
           <Box className={classes.tabs}>
             <Box
               className={classes.glider}
-              style={{ transform: `translateX(${gliderPosition * 200}px)` }}
+              sx={{
+                transform: `translateX(${pageStates.gliderPosition * 
+                (pageStates.windowWidth < 600 ? 100 : pageStates.windowWidth < 960 ? 160 : 200)}px)`
+              }}
             ></Box>
-            {tabs.map((tab, index) => (
-              <Box
-                className={classes.tab}
-                key={tab.value}
-                onClick={() => handleTabChange(tab.value, index)}
-                sx={{ color: selectedForm === tab.value ? 'white' : ''}}
-              >
-                {tab.label}
-              </Box>
-            ))}
+            {initialValues.user ? (
+              tabs.map((tab, index) => (
+                  <Box
+                    className={classes.tab}
+                    key={tab.value}
+                    onClick={() => handleTabChange(tab.value, index)}
+                    sx={{ color: pageStates.selectedForm === tab.value ? 'white' : ''}}
+                  >
+                    {tab.label}
+                  </Box>
+                ))
+              ) : (
+                <>
+                  {tabs.map((tab, index) => index !== 2 ? (
+                    <LightTooltip
+                      title="Ove opcije su dostupne samo prijavljenim korisnicima"
+                      placement="top-start"
+                      key={`${tab.value}-${index}`}
+                    >
+                      <Box
+                        className={classes.disabledTab}
+                        key={tab.value}
+                      >
+                        {tab.label}
+                      </Box>
+                    </LightTooltip>
+                  ) : (
+                    <Box
+                      className={classes.tab}
+                      key={tab.value}
+                      onClick={() => handleTabChange(tab.value, index)}
+                      sx={{ color: pageStates.selectedForm === tab.value ? 'white' : ''}}
+                    >
+                      {tab.label}
+                    </Box>
+                  ))}
+              </>
+                )}
           </Box>
         </Box>
-      {selectedForm === 'temporary' ? (
+      {pageStates.selectedForm === 'temporary' ? (
         <>
           <Box className={classes.formWrapper} sx={{ alignItems: 'inherit'}}>
-            <Box >
               <Box className={classes.reservationFormTemporary}>
-                <Typography component="h1" variant="h5" className={classes.reservationFormHeadline}>
-                  Pojedinosti rezervacije
-                </Typography>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  className={classes.reservationFormHeadline}
                 >
+                  Detalji rezervacije
+                </Typography>
+                <Box className={classes.flexRowBetween}>
                   <TextField
                     margin="normal"
                     required
                     id="name"
                     label="Ime"
                     name="name"
-                    value={name}
-                    error={(name === '' || name.length <= 2) && reservationButtonClicked}
+                    value={reservationInfo.name}
+                    error={(reservationInfo.name === '' || reservationInfo.name.length <= 2)
+                      && pageStates.reservationButtonClicked}
                     onChange={(event) => {
-                      setName(event.target.value)
+                      setReservationInfo((prevState) => ({
+                        ...prevState,
+                        name: event.target.value
+                      }))
                     }}
                     sx={{ width: '47%' }}
                   />
@@ -547,55 +746,64 @@ const SportHallPage = () => {
                     id="surname"
                     label="Prezime"
                     name="surname"
-                    value={surname}
-                    error={surname === '' && reservationButtonClicked}
+                    value={reservationInfo.surname}
+                    error={reservationInfo.surname === '' && pageStates.reservationButtonClicked}
                     onChange={(event) => {
-                      setSurname(event.target.value)
+                      setReservationInfo((prevState) => ({
+                        ...prevState,
+                        surname: event.target.value
+                      }))
                     }}
                     sx={{ width: '47%' }}
                   />
                 </Box>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}
-                >
+                <Box className={classes.flexRowBetween}>
                   <Box sx={{width:'47%'}} className={classes.dateTimeWrapper}>
-                    <label style={{fontFamily: 'sans-serif'}}>Od: </label>
+                    <label style={{ fontFamily: 'sans-serif'}}>Od: </label>
                     <input
-                      value={fromTime}
-                      style={{width: '70%'}}
+                      value={reservationInfo.fromTime}
+                      style={{ width: '70%'}}
                       type="time"
-                      className={classes.forDate}
+                      className={reservationInfo.fromTime === '' && pageStates.reservationButtonClicked ?
+                        classes.forDateError : classes.forDate}
                       onChange={(event) => {
-                        setFromTime(event.target.value)
+                        setReservationInfo((prevState) => ({
+                          ...prevState,
+                          fromTime: event.target.value
+                        }))
                       }}
                     />
                   </Box>
                   <Box sx={{width:'47%'}} className={classes.dateTimeWrapper}>
-                    <label style={{fontFamily: 'sans-serif'}}>Do:</label>
+                    <label style={{ fontFamily: 'sans-serif'}}>Do:</label>
                     <input
-                      value={toTime}
+                      value={reservationInfo.toTime}
                       style={{width: '70%'}}
                       type="time"
-                      className={classes.forDate}
+                      className={reservationInfo.toTime === '' && pageStates.reservationButtonClicked ?
+                        classes.forDateError : classes.forDate}
                       onChange={(event) => {
-                        setToTime(event.target.value)
+                        setReservationInfo((prevState) => ({
+                          ...prevState,
+                          toTime: event.target.value
+                        }))
                       }}
                     />
                   </Box>
                 </Box>
                 <Box className={classes.dateTimeWrapper}>
                 <input
-                  style={{width: '100%'}}
+                  style={{ width: '100%'}}
                   type="date"
-                  className={classes.forDate}
-                  min="2023-01-01"
-                  max="2025-12-31"
+                  className={reservationInfo.date === '' && pageStates.reservationButtonClicked ?
+                    classes.forDateError : classes.forDate}
+                  min={getRangeDates(minDate)}
+                  max={getRangeDates(maxDate)}
                   onChange={(event) => {
-                    setDate(event.target.value)
+                    setReservationInfo((prevState) => ({
+                      ...prevState,
+                      date: event.target.value
+                    }))
                   }}
                 />
               </Box>
@@ -607,10 +815,13 @@ const SportHallPage = () => {
                   name="email"
                   autoComplete="off"
                   fullWidth
-                  value={email}
-                  error={!emailRegex.test(email) && reservationButtonClicked}
+                  value={reservationInfo.email}
+                  error={!emailRegex.test(reservationInfo.email) && pageStates.reservationButtonClicked}
                   onChange={(event) => {
-                    setEmail(event.target.value)
+                    setReservationInfo((prevState) => ({
+                      ...prevState,
+                      email: event.target.value
+                    }))
                   }}
                 />
                 <TextField
@@ -620,143 +831,170 @@ const SportHallPage = () => {
                   label="Kontakt telefon"
                   name="phone"
                   fullWidth
-                  value={phone}
-                  error={!phoneRegex.test(phone) && reservationButtonClicked}
+                  value={reservationInfo.phone}
+                  error={!phoneRegex.test(reservationInfo.phone) && pageStates.reservationButtonClicked}
                   autoComplete="off"
                   onChange={(event) => {
-                    setPhone(event.target.value)
+                    setReservationInfo((prevState) => ({
+                      ...prevState,
+                      phone: event.target.value
+                    }))
                   }}
                 />
               </Box>
-            </Box>
-            <Box className={classes.reservationForm} sx={{width: '25vw'}}>
+            <Box
+              className={classes.reservationFormTemporary}
+              sx={{
+                height: `${pageStates.windowWidth < 960 ? '60vh' : null}`,
+                width: `${pageStates.windowWidth > 960 ? '25vw' : '60vw'}`
+              }}>
               <Modal
-                open={openModal}
+                open={pageStates.openModal}
                 onClose={handleModalClose}
                 aria-labelledby="child-modal-title"
                 aria-describedby="child-modal-description"
               >
-                  <Box className={classes.modal}>
-                    <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', height: '90%'}}>
-                      <Box sx={{ width: '45%', display: 'flex', flexDirection: 'column' }}>
-                        <Box className={classes.friendsHeadline}>PRIJATELJI</Box>
-                        <Box className={classes.teamMembersWrapperModal} sx={{overflow: 'auto' }}>
-                          {availableFriends.map((friend) => (
-                            <Box className={classes.teamMember} key={friend.id}>
-                              <Box sx={{ display: 'flex', alignItems: 'center'}}>
-                                {friend.picture ? (
-                                  <Avatar src={friend.picture}></Avatar>
-                                ) : (
-                                  <Avatar src="/images/defaultUserImage.jpg"/>
-
-                                )}
-                                <Typography sx={{ ml: 1}}>{friend.username}</Typography>
-                              </Box>
-
-                              <AddCircleIcon
-                                sx={{ color: '#43bbbf' }}
-                                onClick={() => {
-                                  handleAddFriend(friend)
-                                }}/>
+                <Box className={classes.modal}>
+                  <Box className={classes.friendsWrapper}>
+                    <Box className={classes.availableFriendWrapper}>
+                      <Box className={classes.friendsHeadline}>PRIJATELJI</Box>
+                      <Box className={classes.teamMembersWrapperModal}>
+                        {initialValues.availableFriends.map((friend) => (
+                          <Box className={classes.teamMember} key={friend.id}>
+                            <Box className={classes.teamMemberPhotoUsername}>
+                              {friend.picture ? (
+                                <Avatar src={friend.picture}></Avatar>
+                              ) : (
+                                <Avatar src="/images/defaultUserImage.jpg"/>
+                              )}
+                              <Typography sx={{ ml: 1}}>{friend.username}</Typography>
                             </Box>
-                          ))}
-                        </Box>
-                      </Box>
-                      <Box sx={{ width: '45%', display: 'flex', flexDirection: 'column' }}>
-                        <Box sx={{ height: '3rem', color: 'white', backgroundColor: '#43bbbf'}}>
-                          <Box className={classes.search}>
-                            <Box className={classes.searchIconWrapper}>
-                              <SearchIcon />
-                            </Box>
-                            <InputBase
-                              className={classes.searchField}
-                              placeholder="Traži..."
-                              value={searchText}
-                              sx={{ outline: 'none', border: 'none' }}
-                              onChange={(event) => {
-                                setSearchText(event.target.value)
-                              }}
-                              onFocus={(event) => {
-                                setAnchorEl(event.currentTarget)
-                                setOpenDropdown(true)
-                              }}
-                              onBlur={() => {
-                                setTimeout(() => {
-                                  setAnchorEl(null)
-                                  setOpenDropdown(false)
-                                }, 200)
+                            <AddCircleIcon
+                              sx={{ color: '#43bbbf' }}
+                              onClick={() => {
+                                handleAddFriend(friend)
                               }}
                             />
-
                           </Box>
-                          {openDropdown && suggestions.length !== 0 ? (
-                            <Paper>
-                              <List sx={{ backgroundColor: 'white', zIndex: '10' }}>
-                                {suggestions.map((suggestion) => (
-                                  <ListItem
-                                    key={suggestion.id}
-                                    button
-                                    onClick={() => {
-                                      handleSuggestionClick(suggestion)
-                                    }}>
-                                    {suggestion.picture ? (
-                                      <Avatar src={suggestion.picture}></Avatar>
-                                    ) : (
-                                      <Avatar src="/images/defaultUserImage.jpg"/>
-                                    )}
-                                    <ListItemText primary={suggestion.username} sx={{ ml: 1 }}/>
-                                  </ListItem>
-                                ))}
-                              </List>
-                            </Paper>
-                          ) : null}
-                        </Box>
-                        <Box className={classes.teamMembersWrapperModal} sx={{ overflow: 'auto' }}>
-                          {selectedFriends.map((friend) => (
-                            <Box className={classes.teamMember} key={friend.id}>
-                              <Box sx={{ display: 'flex', alignItems: 'center'}}>
-                                {friend.picture ? (
-                                  <Avatar src={friend.picture}></Avatar>
-                                ) : (
-                                  <Avatar src="/images/defaultUserImage.jpg"/>
-                                )}
-                                <Typography sx={{ ml: 1}}>{friend.username}</Typography>
-                              </Box>
-
-                              <HighlightOffIcon
-                                sx={{ color: '#43bbbf' }}
-                                onClick={() => {
-                                  handleRemoveFriend(friend)
-                                }}/>
-                            </Box>
-                          ))}
-                        </Box>
+                        ))}
                       </Box>
                     </Box>
-                    <Box className={classes.modalFooter}>
-                      <Button onClick={handleModalClose}>
-                        Zatvori
-                      </Button>
-                      <Button onClick={() => {
-                        setAreMembersInvited(true)
-                        handleInviteUsers()
-                      }}>
-                        Pozovi
-                      </Button>
+                    <Box className={classes.searchMembersPartModal}>
+                      <Box className={classes.searchWrapper}>
+                        <Box className={classes.search}>
+                          <Box className={classes.searchIconWrapper}>
+                            <SearchIcon />
+                          </Box>
+                          <InputBase
+                            className={classes.searchField}
+                            placeholder="Traži..."
+                            value={initialValues.searchText}
+                            sx={{ outline: 'none', border: 'none' }}
+                            onChange={(event) => {
+                              setInitialValues((prevState) => ({
+                                ...prevState,
+                                searchText: event.target.value
+                              }))
+                            }}
+                            onFocus={(event) => {
+                              setPageStates((prevState) => ({
+                                ...prevState,
+                                openDropdown: true
+                              }))
+                            }}
+                            onBlur={() => {
+                              setTimeout(() => {
+                                setPageStates((prevState) => ({
+                                  ...prevState,
+                                  openDropdown: false
+                                }))
+                              }, 200)
+                            }}
+                          />
+                        </Box>
+                        {pageStates.openDropdown && initialValues.suggestions.length !== 0 ? (
+                          <Paper>
+                            <List className={classes.suggestionList}>
+                              {initialValues.suggestions.map((suggestion) => (
+                                <ListItem
+                                  key={suggestion.id}
+                                  button
+                                  onClick={() => {
+                                    handleSuggestionClick(suggestion)
+                                  }}
+                                >
+                                  {suggestion.picture ? (
+                                    <Avatar src={suggestion.picture}></Avatar>
+                                  ) : (
+                                    <Avatar src="/images/defaultUserImage.jpg"/>
+                                  )}
+                                  <ListItemText primary={suggestion.username} sx={{ ml: 1 }}/>
+                                </ListItem>
+                              ))}
+                            </List>
+                          </Paper>
+                        ) : null}
+                      </Box>
+                      <Box className={classes.teamMembersWrapperModal}>
+                        {initialValues.selectedFriends.map((friend) => (
+                          <Box className={classes.teamMember} key={friend.id}>
+                            <Box className={classes.teamMemberPhotoUsername}>
+                              {friend.picture ? (
+                                <Avatar src={friend.picture}></Avatar>
+                              ) : (
+                                <Avatar src="/images/defaultUserImage.jpg"/>
+                              )}
+                              <Typography sx={{ ml: 1}}>{friend.username}</Typography>
+                            </Box>
+                            <HighlightOffIcon
+                              sx={{ color: '#43bbbf' }}
+                              onClick={() => {
+                                handleRemoveFriend(friend)
+                              }}
+                            />
+                          </Box>
+                        ))}
+                      </Box>
                     </Box>
                   </Box>
+                  <Box className={classes.modalFooter}>
+                    <Button onClick={handleModalClose}>
+                      Zatvori
+                    </Button>
+                    <Button
+                      className={classes.customButton}
+                      onClick={() => {
+                        setInitialValues((prevState) => ({
+                          ...prevState,
+                          areMembersInvited: true
+                        }))
+                        handleInviteUsers()
+                      }}
+                    >
+                      Pozovi
+                    </Button>
+                  </Box>
+                </Box>
               </Modal>
-              <Typography component="h1" variant="h5" className={classes.reservationFormHeadline}>
+              <Typography
+                component="h1"
+                variant="h5"
+                className={classes.reservationFormHeadline}
+              >
                 Sakupi raju
               </Typography>
-              <Button onClick={handleModalOpen} className={classes.inviteButton}>
+              <Button
+                onClick={handleModalOpen}
+                className={classes.inviteButton}
+                sx={{ fontSize: `${pageStates.windowWidth < 960 ? 'smaller' : ''}`}}
+              >
                 Pozovi prijatelje u tim
               </Button>
-              {areMembersInvited ? (
-                <Box className={classes.teamMembersWrapper} sx={{ overflow: 'auto' }}>
-                  {selectedFriends.map((friend) => (
+              {initialValues.areMembersInvited ? (
+                <Box className={classes.teamMembersWrapper}>
+                  {initialValues.selectedFriends.map((friend) => (
                     <Box className={classes.teamMember} key={friend.id}>
-                      <Box sx={{ display: 'flex', alignItems: 'center'}}>
+                      <Box className={classes.teamMemberPhotoUsername}>
                         {friend.picture ? (
                           <Avatar src={friend.picture}></Avatar>
                         ) : (
@@ -764,19 +1002,18 @@ const SportHallPage = () => {
                         )}
                         <Typography sx={{ ml: 1}}>{friend.username}</Typography>
                       </Box>
-
                       <HighlightOffIcon
                         sx={{ color: '#43bbbf' }}
                         onClick={() => {
                           handleRemoveFriend(friend)
-                        }}/>
+                        }}
+                      />
                     </Box>
                   ))}
                 </Box>
               ) : (
                 <Box className={classes.teamMembersWrapper}></Box>
               )}
-
               <Button
                 className={classes.customButton}
                 type="button"
@@ -784,86 +1021,76 @@ const SportHallPage = () => {
                 variant="contained"
                 onClick={handleReservation}
               >
-                Rezervisi
+                Rezerviši
               </Button>
             </Box>
           </Box>
         </>
-      ) : (<></>)}
+      ) : null}
       <Box className={classes.formWrapper}>
-        <Box>
-          <Box className={classes.calendar}>
-            <Box className={classes.calendarHeader}>
-              <h1>Raspored slobodnih termina</h1>
-            </Box>
-            <Box className={classes.calendarWrapper}>
-              <Box className={classes.calendarWeekdays}>
-                {daysOfWeek.map((day, index) => (
-                  <Box key={index}>
-                    <Box>{getWeekday(index)}</Box>
-                    <Box sx={{ color: 'slategrey', fontSize: 'small', fontWeight: '600'}}>{getDate(index).replace(/\//g, ".")}</Box>
+        <Box
+          className={classes.schedulerWrapper}
+          sx={{ width: `${pageStates.selectedForm === 'temporary' ? '80vw' : '55vw'}`}}
+        >
+          <Box className={classes.calendarHeader}>
+            <h1>Prikaz zakazanih termina</h1>
+          </Box>
+          <Box className={classes.scheduler}>
+            <Box className={classes.timesColumn}>
+              <Box sx={{ height: '40px' }}></Box>
+              {Array.from({ length: 18 }).map((_, index) => {
+                const hour = (index + 7) % 24
+                return (
+                  <Box key={index} className={classes.timeSlot}>
+                    {String(hour).padStart(2, '0')}:00
                   </Box>
-                ))}
-              </Box>
-              <Box className={classes.calendarContent}>
-                {timelines.flatMap((time) =>
-                  Array.from({ length: 7 }, (_, index) => {
-                    const isAppointedPart1 = isTimeSlotAppointed(index, time.split(' - ')[0])
-                    const isAppointedPart2 = isTimeSlotAppointed(index, '-' + time.split(' - ')[1])
-
-                    return (
-                      <Box key={`${time}-${index}`}>
-                        <Box
-                          className={classes.partTime}
-                          sx={{
-                            backgroundColor: isAppointedPart1 ? '#ff8a8a !important' : 'white',
-                            color: isAppointedPart1 ? 'white !important' : '',
-                            whiteSpace: 'pre',
-                          }}
-                        >
-                          {' ' + time.split('-')[0]}
-                        </Box>
-                        <Box
-                          className={classes.partTime}
-                          sx={{
-                            backgroundColor: isAppointedPart2 ? '#ff8a8a !important' : 'white',
-                            color: isAppointedPart2 ? 'white !important' : '',
-                            whiteSpace: 'pre',
-                          }}
-                        >
-                          - {time.split('-')[1]}
-                        </Box>
+                )
+              })}
+            </Box>
+            <Box className={classes.schedulerGrid}>
+              {daysOfWeek.slice(0, 7).map((day, index) => (
+                <Box key={day} className={classes.schedulerDayColumn}>
+                  <Box className={classes.calendarWeekdays}>
+                    <Box>
+                      <Box>{getWeekday(index)}</Box>
+                      <Box className={classes.dateDisplayWeekdays}>
+                        {getDate(index).replace(/\//g, ".")}
                       </Box>
-                    )
-                  })
-                )}
-              </Box>
+                    </Box>
+                  </Box>
+                  {initialValues.reservations
+                    .filter((reservation) => reservation.date === getDateForReservation(index))
+                    .map((reservation) => getReservation(reservation))}
+                </Box>
+              ))}
             </Box>
           </Box>
         </Box>
-        {selectedForm === 'reservation' ? (
+        {pageStates.selectedForm === 'reservation' ? (
           <>
             <Box className={classes.reservationForm}>
-              <Typography component="h1" variant="h5" className={classes.reservationFormHeadline}>
-                Rezerviši ovdje
-              </Typography>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}
+              <Typography
+                component="h1"
+                variant="h5"
+                className={classes.reservationFormHeadline}
               >
+                Rezerviši termin
+              </Typography>
+              <Box className={classes.flexRowBetween}>
                 <TextField
                   margin="normal"
                   required
                   id="name"
                   label="Ime"
                   name="name"
-                  value={name}
-                  error={(name === '' || name.length <= 2) && reservationButtonClicked}
+                  value={reservationInfo.name}
+                  error={(reservationInfo.name === '' || reservationInfo.name.length <= 2)
+                    && pageStates.reservationButtonClicked}
                   onChange={(event) => {
-                    setName(event.target.value)
+                    setReservationInfo((prevState) => ({
+                      ...prevState,
+                      name: event.target.value
+                    }))
                   }}
                   sx={{ width: '47%' }}
                 />
@@ -873,10 +1100,13 @@ const SportHallPage = () => {
                   id="surname"
                   label="Prezime"
                   name="surname"
-                  value={surname}
-                  error={surname === '' && reservationButtonClicked}
+                  value={reservationInfo.surname}
+                  error={reservationInfo.surname === '' && pageStates.reservationButtonClicked}
                   onChange={(event) => {
-                    setSurname(event.target.value)
+                    setReservationInfo((prevState) => ({
+                      ...prevState,
+                      surname: event.target.value
+                    }))
                   }}
                   sx={{ width: '47%' }}
                 />
@@ -889,10 +1119,13 @@ const SportHallPage = () => {
                   name="email"
                   autoComplete="off"
                   fullWidth
-                  value={email}
-                  error={!emailRegex.test(email) && reservationButtonClicked}
+                  value={reservationInfo.email}
+                  error={!emailRegex.test(reservationInfo.email) && pageStates.reservationButtonClicked}
                   onChange={(event) => {
-                    setEmail(event.target.value)
+                    setReservationInfo((prevState) => ({
+                      ...prevState,
+                      email: event.target.value
+                    }))
                   }}
                 />
                 <TextField
@@ -902,53 +1135,61 @@ const SportHallPage = () => {
                   label="Kontakt telefon"
                   name="phone"
                   fullWidth
-                  value={phone}
-                  error={!phoneRegex.test(phone) && reservationButtonClicked}
+                  value={reservationInfo.phone}
+                  error={!phoneRegex.test(reservationInfo.phone) && pageStates.reservationButtonClicked}
                   autoComplete="off"
                   onChange={(event) => {
-                    setPhone(event.target.value)
+                    setReservationInfo((prevState) => ({
+                      ...prevState,
+                      phone: event.target.value
+                    }))
                   }}
                 />
               <Box className={classes.dateTimeWrapper}>
-              <input
-                style={{width: '100%'}}
-                type="date"
-                className={classes.forDate}
-                min="2023-01-01"
-                max="2025-12-31"
-                onChange={(event) => {
-                  setDate(event.target.value)
-                }}
-              />
-            </Box>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}
-              >
+                <input
+                  style={{width: '100%'}}
+                  type="date"
+                  className={reservationInfo.date === '' && pageStates.reservationButtonClicked ? classes.forDateError : classes.forDate}
+                  min={getRangeDates(minDate)}
+                  max={getRangeDates(maxDate)}
+                  onChange={(event) => {
+                    setReservationInfo((prevState) => ({
+                      ...prevState,
+                      date: event.target.value
+                    }))
+                  }}
+                />
+              </Box>
+              <Box className={classes.flexRowBetween}>
                 <Box sx={{width:'47%'}} className={classes.dateTimeWrapper}>
                   <label style={{fontFamily: 'sans-serif'}}>Od: </label>
                   <input
-                    value={fromTime}
+                    value={reservationInfo.fromTime}
                     style={{width: '60%'}}
                     type="time"
-                    className={classes.forDate}
+                    className={reservationInfo.fromTime === '' && pageStates.reservationButtonClicked ?
+                      classes.forDateError : classes.forDate}
                     onChange={(event) => {
-                      setFromTime(event.target.value)
+                      setReservationInfo((prevState) => ({
+                        ...prevState,
+                        fromTime: event.target.value
+                      }))
                     }}
                   />
                 </Box>
                 <Box sx={{width:'47%'}} className={classes.dateTimeWrapper}>
                   <label style={{fontFamily: 'sans-serif'}}>Do:</label>
                   <input
-                    value={toTime}
+                    value={reservationInfo.toTime}
                     style={{width: '60%'}}
                     type="time"
-                    className={classes.forDate}
+                    className={reservationInfo.toTime === '' && pageStates.reservationButtonClicked ?
+                      classes.forDateError : classes.forDate}
                     onChange={(event) => {
-                      setToTime(event.target.value)
+                      setReservationInfo((prevState) => ({
+                        ...prevState,
+                        toTime: event.target.value
+                      }))
                     }}
                   />
                 </Box>
@@ -960,33 +1201,35 @@ const SportHallPage = () => {
                 variant="contained"
                 onClick={handleReservation}
               >
-                Rezervisi
+                Rezerviši
               </Button>
             </Box>
           </>
-        ) : selectedForm === 'permanent' ? (
+        ) : pageStates.selectedForm === 'permanent' ? (
           <>
             <Box className={classes.reservationForm}>
-              <Typography component="h1" variant="h5" className={classes.reservationFormHeadline}>
-                Rezerviši ovdje
-              </Typography>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}
+              <Typography
+                component="h1"
+                variant="h5"
+                className={classes.reservationFormHeadline}
               >
+                Rezerviši termin
+              </Typography>
+              <Box className={classes.flexRowBetween}>
                 <TextField
                   margin="normal"
                   required
                   id="name"
                   label="Ime"
                   name="name"
-                  value={name}
-                  error={(name === '' || name.length <= 2) && reservationButtonClicked}
+                  value={reservationInfo.name}
+                  error={(reservationInfo.name === '' || reservationInfo.name.length <= 2) &&
+                    pageStates.reservationButtonClicked}
                   onChange={(event) => {
-                    setName(event.target.value)
+                    setReservationInfo((prevState) => ({
+                      ...prevState,
+                      name: event.target.value
+                    }))
                   }}
                   sx={{ width: '47%' }}
                 />
@@ -996,21 +1239,18 @@ const SportHallPage = () => {
                   id="surname"
                   label="Prezime"
                   name="surname"
-                  value={surname}
-                  error={surname === '' && reservationButtonClicked}
+                  value={reservationInfo.surname}
+                  error={reservationInfo.surname === '' && pageStates.reservationButtonClicked}
                   onChange={(event) => {
-                    setSurname(event.target.value)
+                    setReservationInfo((prevState) => ({
+                      ...prevState,
+                      surname: event.target.value
+                    }))
                   }}
                   sx={{ width: '47%' }}
                 />
               </Box>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}
-              >
+              <Box className={classes.flexRowBetween}>
                 <TextField
                   margin="normal"
                   required
@@ -1019,10 +1259,13 @@ const SportHallPage = () => {
                   name="email"
                   autoComplete="off"
                   fullWidth
-                  value={email}
-                  error={!emailRegex.test(email) && reservationButtonClicked}
+                  value={reservationInfo.email}
+                  error={!emailRegex.test(reservationInfo.email) && pageStates.reservationButtonClicked}
                   onChange={(event) => {
-                    setEmail(event.target.value)
+                    setReservationInfo((prevState) => ({
+                      ...prevState,
+                      email: event.target.value
+                    }))
                   }}
                   sx={{ width: '47%'}}
                 />
@@ -1033,11 +1276,14 @@ const SportHallPage = () => {
                   label="Kontakt telefon"
                   name="phone"
                   fullWidth
-                  value={phone}
-                  error={!phoneRegex.test(phone) && reservationButtonClicked}
+                  value={reservationInfo.phone}
+                  error={!phoneRegex.test(reservationInfo.phone) && pageStates.reservationButtonClicked}
                   autoComplete="off"
                   onChange={(event) => {
-                    setPhone(event.target.value)
+                    setReservationInfo((prevState) => ({
+                      ...prevState,
+                      phone: event.target.value
+                    }))
                   }}
                   sx={{ width: '47%'}}
                 />
@@ -1045,9 +1291,12 @@ const SportHallPage = () => {
               <Autocomplete
                 disablePortal
                 id="combo-box-demo"
-                options={teams}
+                options={initialValues.teamNames}
                 onChange={(event, team) => {
-                  setTeam(team)
+                  setReservationInfo((prevState) => ({
+                    ...prevState,
+                    team: team
+                  }))
                 }}
                 renderInput={(params) => (
                   <TextField
@@ -1056,7 +1305,8 @@ const SportHallPage = () => {
                     required
                     name="team"
                     id="team"
-                    value={team}
+                    value={reservationInfo.team}
+                    error={reservationInfo.team === '' && pageStates.reservationButtonClicked}
                     label="Naziv tima"
                     sx={{ textAlign: 'center'}}
                   />
@@ -1066,42 +1316,48 @@ const SportHallPage = () => {
                 <input
                   style={{width: '100%'}}
                   type="date"
-                  className={classes.forDate}
-                  min="2023-01-01"
-                  max="2025-12-31"
+                  className={reservationInfo.date === '' && pageStates.reservationButtonClicked ?
+                    classes.forDateError : classes.forDate}
+                  min={getRangeDates(minDate)}
+                  max={getRangeDates(maxDate)}
                   onChange={(event) => {
-                    setDate(event.target.value)
+                    setReservationInfo((prevState) => ({
+                      ...prevState,
+                      date: event.target.value
+                    }))
                   }}
                 />
               </Box>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}
-              >
+              <Box className={classes.flexRowBetween}>
                 <Box sx={{width:'47%'}} className={classes.dateTimeWrapper}>
                   <label style={{fontFamily: 'sans-serif'}}>Od: </label>
                   <input
-                    value={fromTime}
+                    value={reservationInfo.fromTime}
                     style={{width: '60%'}}
                     type="time"
-                    className={classes.forDate}
+                    className={reservationInfo.fromTime === '' && pageStates.reservationButtonClicked ?
+                      classes.forDateError : classes.forDate}
                     onChange={(event) => {
-                      setFromTime(event.target.value)
+                      setReservationInfo((prevState) => ({
+                        ...prevState,
+                        fromTime: event.target.value
+                      }))
                     }}
                   />
                 </Box>
                 <Box sx={{width:'47%'}} className={classes.dateTimeWrapper}>
                   <label style={{fontFamily: 'sans-serif'}}>Do:</label>
                   <input
-                    value={toTime}
+                    value={reservationInfo.toTime}
                     style={{width: '60%'}}
                     type="time"
-                    className={classes.forDate}
+                    className={reservationInfo.toTime === '' && pageStates.reservationButtonClicked ?
+                      classes.forDateError : classes.forDate}
                     onChange={(event) => {
-                      setToTime(event.target.value)
+                      setReservationInfo((prevState) => ({
+                        ...prevState,
+                        toTime: event.target.value
+                      }))
                     }}
                   />
                 </Box>
@@ -1113,7 +1369,7 @@ const SportHallPage = () => {
                 variant="contained"
                 onClick={handleReservation}
               >
-                Rezervisi
+                Rezerviši
               </Button>
             </Box>
           </>

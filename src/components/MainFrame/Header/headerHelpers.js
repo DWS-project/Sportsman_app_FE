@@ -22,7 +22,7 @@ export const pages = [
   },
   {
     name: 'Tereni',
-    href: '/sport-halls',
+    href: '/sport-hall',
   },
   {
     name: 'Kontakt',

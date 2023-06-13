@@ -11,6 +11,7 @@ import ListOfSportHalls from './components/SportHalls/ListOfSportHalls'
 import Verification from './components/Verification'
 import { EditProfilePage } from './components/EditProfilePage/index'
 import CreateTeam from './components/CreateTeam'
+import UserProfile from './components/UserProfile'
 
 function App() {
   return (
@@ -18,6 +19,8 @@ function App() {
       <Routes>
         <Route path={'/editprofile'} element={<EditProfilePage />} />
         <Route path={'/createTeam'} element={<CreateTeam />} />
+        <Route path={'/my-profile'} element={<UserProfile />} />
+
         <Route path={'/'} element={<LandingPage />} />
         <Route
           path={'/login'}

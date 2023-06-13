@@ -61,7 +61,6 @@ const LandingPage = () => {
     searchText: '',
     isSearchClicked: false,
     isAccordionExpanded: false,
-    cards: [],
     sortByType: false,
     typeButtonText: 'Sortiraj po tipu',
     sortByPrice: false,
@@ -81,6 +80,7 @@ const LandingPage = () => {
     sort_type: initialValues.typeButtonText,
     sort_price: initialValues.priceButtonText
   })
+  const [cards, setCards] = useState([])
 
 
   useEffect(() => {
@@ -89,13 +89,13 @@ const LandingPage = () => {
     const isUserLogged = userData && !!parsedUserData.id
 
     if(isUserLogged){
-      if (parsedUserData.interests !== '') {
+      if (parsedUserData.interests) {
         setInitialValues((prevState) => ({
           ...prevState,
           sports: JSON.parse(parsedUserData.interests).interests
         }))
       }
-      if (parsedUserData.city !== '') {
+      if (parsedUserData.city) {
         setInitialValues((prevState) => ({
           ...prevState,
           city: parsedUserData.city
@@ -127,11 +127,7 @@ const LandingPage = () => {
   async function fetchCards() {
     try {
       const response = await axios.get(LANDING_PAGE, { params: filter })
-      setInitialValues((prevState) => ({
-        ...prevState,
-        cards: response.data.data
-      }))
-
+      setCards(response.data.data)
     } catch (error) {
       console.error(error)
     }
@@ -495,7 +491,7 @@ const LandingPage = () => {
               justifyContent="space-evenly"
               sx={{ alignItems: 'stretch' }}
             >
-              {initialValues.cards.map((item) => (
+              {cards.map((item) => (
                 <Grid item xs={2} sm={4} md={4} key={item.id}>
                   <Card className={classes.card}>
                     <CardActionArea sx={{ objectFit: 'cover' }} href={`${FRONTEND_URL}/sporthall/${item.id}`}>

@@ -17,8 +17,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={'/editProfile'} element={<EditProfilePage />} />
-        <Route path={'/createTeam'} element={<CreateTeam />} />
+        <Route path={'/edit-profile'} element={<EditProfilePage />} />
+        <Route path={'/create-team'} element={<CreateTeam />} />
         <Route path={'/my-profile'} element={<UserProfile />} />
         <Route path={'/'} element={<LandingPage />} />
         <Route

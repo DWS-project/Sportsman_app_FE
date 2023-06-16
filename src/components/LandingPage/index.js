@@ -116,11 +116,11 @@ const LandingPage = () => {
       sort_type: initialValues.typeButtonText,
       sort_price: initialValues.priceButtonText
     })
-  }, [initialValues])
+  }, [])
 
   useEffect(() => {
     fetchCards()
-  }, [filter])
+  }, [])
 
   const classes = useStyles()
 

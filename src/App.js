@@ -12,12 +12,14 @@ import Verification from './components/Verification'
 import { EditProfilePage } from './components/EditProfilePage/index'
 import CreateTeam from './components/CreateTeam'
 import UserProfile from './components/UserProfile'
+import RecommendPlayer from './components/RecommendPlayer'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path={'/editprofile'} element={<EditProfilePage />} />
+        <Route path={'/recommend'} element={<RecommendPlayer />} />
         <Route path={'/createTeam'} element={<CreateTeam />} />
         <Route path={'/my-profile'} element={<UserProfile />} />
       <Route path={'/editprofile'} element={<EditProfilePage />} />

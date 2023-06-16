@@ -1,16 +1,16 @@
 import { Button, Grid } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
-import React from 'react'
 import axios from 'axios'
+import Cookies from 'js-cookie'
+import React from 'react'
 import { useNavigate } from 'react-router'
 import { LOGOUT } from 'src/constants/endpoints'
+import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser'
 import { HTTPStatusCodes } from 'src/constants/statusCodes'
+import withMainFrame from 'src/hoc/withMainFrame'
 
 import Header from '../../MainFrame/Header'
 import useStyles from '../styles'
-import Cookies from 'js-cookie'
-import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser'
-import withMainFrame from 'src/hoc/withMainFrame'
 
 const Error400Page = () => {
   const classes = useStyles()

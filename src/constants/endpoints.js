@@ -5,13 +5,12 @@ export const REGISTRATION_PLAYER = `${AUTHENTICATION}/register-player`
 export const REGISTRATION_OWNER = `${AUTHENTICATION}/register-owner`
 export const LOGOUT = `${AUTHENTICATION}/logout`
 export const FORGOT_PASSWORD = `${AUTHENTICATION}/forgot-password`
-export const LANDING_PAGE = `${BASE_BACKEND_URL}/filtered-sport-halls/`
-export const GET_SPORT_HALLS = `${BASE_BACKEND_URL}/sport-halls`
+export const CHANGE_PASSWORD = `${AUTHENTICATION}/change-password/`
+export const GET_SPORT_HALLS = `${BASE_BACKEND_URL}/sport-hall`
 export const CONTACT_US = `${BASE_BACKEND_URL}/contact-us`
+
 export const CHANGE_INFO = `${BASE_BACKEND_URL}/player/update`
-export const CHANGE_PASSWORD = `${BASE_BACKEND_URL}/player/change-password`
 export const CHANGE_PHOTO = `${BASE_BACKEND_URL}/player/change-profile-photo`
-export const CHANGE_OWNER_PASSWORD = `${BASE_BACKEND_URL}/owner/change-password`
 export const CHANGE_OWNER_INFO = `${BASE_BACKEND_URL}/owner/update`
 export const GET_SPORT_HALL_USER = `${BASE_BACKEND_URL}/get-sport-hall-user`
 export const GET_SPORT_HALL_RESERVATIONS = `${BASE_BACKEND_URL}/get-sport-hall-reservations`
@@ -22,8 +21,11 @@ export const GET_USERS = `${BASE_BACKEND_URL}/get-users`
 export const INVITE_TEMPORARY_TEAM = `${BASE_BACKEND_URL}/invite-temporary-team`
 export const REMOVE_INVITE_TEMPORARY_TEAM = `${BASE_BACKEND_URL}/remove-invite-temporary-team`
 export const GET_INVITED_USERS = `${BASE_BACKEND_URL}/get-invited-users`
-export const CREATE_TEAM = `${BASE_BACKEND_URL}/createTeam`
-export const GET_TEAMS = `${BASE_BACKEND_URL}/getTeams`
-export const DELETE_TEAM = `${BASE_BACKEND_URL}/deleteTeam`
-export const INVITE_TEAM_MEMBER = `${BASE_BACKEND_URL}/inviteTeamMember`
-export const DELETE_TEAM_MEMBER = `${BASE_BACKEND_URL}/deleteTeamMember`
+export const CREATE_TEAM = `${BASE_BACKEND_URL}/team`
+export const GET_TEAMS = `${BASE_BACKEND_URL}/team/all`
+export const DELETE_TEAM = `${BASE_BACKEND_URL}/team/delete/`
+export const INVITE_TEAM_MEMBER = `${BASE_BACKEND_URL}/team/invite-member/`
+export const DELETE_TEAM_MEMBER = `${BASE_BACKEND_URL}/team/delete-member/`
+
+export const CONFIRM_EMAIL = `${BASE_BACKEND_URL}/authentication/confirm-email/?token=`
+export const RESEND_CONFIRMATION_TOKEN = `${BASE_BACKEND_URL}/authentication/resend-confirmation-email`

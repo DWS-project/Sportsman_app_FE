@@ -25,11 +25,11 @@ import Typography from '@mui/material/Typography'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useEffect, useState } from 'react'
+import { cities } from 'src/constants/appDefaults'
+import { GET_SPORT_HALLS } from 'src/constants/endpoints'
+import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser'
 import withMainFrame from 'src/hoc/withMainFrame'
 
-import { cities, FRONTEND_URL } from "src/constants/appDefaults";
-import { LANDING_PAGE } from 'src/constants/endpoints'
-import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser'
 import useStyles from './styles'
 
 const landingPageCities = [
@@ -37,7 +37,7 @@ const landingPageCities = [
   'Zenica',
   'Mostar',
   'Banja Luka',
-  'Tuzla'
+  'Tuzla',
 ]
 
 const sportNames = [
@@ -46,7 +46,7 @@ const sportNames = [
   'odbojka',
   'rukomet',
   'tenis',
-  'paintball'
+  'paintball',
 ]
 
 const LandingPage = () => {
@@ -66,7 +66,7 @@ const LandingPage = () => {
     sortByPrice: false,
     priceButtonText: 'Sortiraj po cijeni',
     isButtonPriceSortingClicked: false,
-    isButtonTypeSortingClicked: false
+    isButtonTypeSortingClicked: false,
   })
   const [filter, setFilter] = useState({
     sports: initialValues.sports,
@@ -78,27 +78,26 @@ const LandingPage = () => {
     searchText: initialValues.searchText,
     type: initialValues.type,
     sort_type: initialValues.typeButtonText,
-    sort_price: initialValues.priceButtonText
+    sort_price: initialValues.priceButtonText,
   })
   const [cards, setCards] = useState([])
-
 
   useEffect(() => {
     const userData = Cookies.get(COOKIE_AUTHENTICATION_FE)
     const parsedUserData = userData && JSON.parse(userData)
     const isUserLogged = userData && !!parsedUserData.id
 
-    if(isUserLogged){
-      if (parsedUserData.interests) {
+    if (isUserLogged) {
+      if (parsedUserData.interests && parsedUserData.interests !== '') {
         setInitialValues((prevState) => ({
           ...prevState,
-          sports: JSON.parse(parsedUserData.interests).interests
+          sports: JSON.parse(parsedUserData.interests).interests,
         }))
       }
       if (parsedUserData.city) {
         setInitialValues((prevState) => ({
           ...prevState,
-          city: parsedUserData.city
+          city: parsedUserData.city,
         }))
       }
     }
@@ -114,7 +113,7 @@ const LandingPage = () => {
       searchText: initialValues.searchText,
       type: initialValues.type,
       sort_type: initialValues.typeButtonText,
-      sort_price: initialValues.priceButtonText
+      sort_price: initialValues.priceButtonText,
     })
   }, [initialValues])
 
@@ -126,7 +125,7 @@ const LandingPage = () => {
 
   async function fetchCards() {
     try {
-      const response = await axios.get(LANDING_PAGE, { params: filter })
+      const response = await axios.get(GET_SPORT_HALLS, { params: filter })
       setCards(response.data.data)
     } catch (error) {
       console.error(error)
@@ -138,12 +137,12 @@ const LandingPage = () => {
     if (isItemInList) {
       setInitialValues((prevState) => ({
         ...prevState,
-        sports: initialValues.sports.filter((element) => element !== sport)
+        sports: initialValues.sports.filter((element) => element !== sport),
       }))
     } else {
       setInitialValues((prevState) => ({
         ...prevState,
-        sports: [...initialValues.sports, sport]
+        sports: [...initialValues.sports, sport],
       }))
     }
   }
@@ -153,12 +152,12 @@ const LandingPage = () => {
     if (isItemInList) {
       setInitialValues((prevState) => ({
         ...prevState,
-        type: initialValues.type.filter((element) => element !== typeOfFields)
+        type: initialValues.type.filter((element) => element !== typeOfFields),
       }))
     } else {
       setInitialValues((prevState) => ({
         ...prevState,
-        type: [...initialValues.type, typeOfFields]
+        type: [...initialValues.type, typeOfFields],
       }))
     }
   }
@@ -171,12 +170,12 @@ const LandingPage = () => {
     ) {
       setInitialValues((prevState) => ({
         ...prevState,
-        isAccordionExpanded: !expanded
+        isAccordionExpanded: !expanded,
       }))
     } else {
       setInitialValues((prevState) => ({
         ...prevState,
-        isAccordionExpanded: expanded
+        isAccordionExpanded: expanded,
       }))
     }
   }
@@ -186,18 +185,18 @@ const LandingPage = () => {
       setInitialValues((prevState) => ({
         ...prevState,
         sortByType: true,
-        typeButtonText: 'Vanjski'
+        typeButtonText: 'Vanjski',
       }))
     } else if (initialValues.typeButtonText === 'Unutrašnji') {
       setInitialValues((prevState) => ({
         ...prevState,
         sortByType: false,
-        typeButtonText: 'Sortiraj po tipu'
+        typeButtonText: 'Sortiraj po tipu',
       }))
     } else {
       setInitialValues((prevState) => ({
         ...prevState,
-        typeButtonText: 'Unutrašnji'
+        typeButtonText: 'Unutrašnji',
       }))
     }
   }
@@ -207,18 +206,18 @@ const LandingPage = () => {
       setInitialValues((prevState) => ({
         ...prevState,
         sortByPrice: true,
-        priceButtonText: 'Najjeftiniji'
+        priceButtonText: 'Najjeftiniji',
       }))
     } else if (initialValues.priceButtonText === 'Najskuplji') {
       setInitialValues((prevState) => ({
         ...prevState,
         sortByPrice: false,
-        priceButtonText: 'Sortiraj po cijeni'
+        priceButtonText: 'Sortiraj po cijeni',
       }))
     } else {
       setInitialValues((prevState) => ({
         ...prevState,
-        priceButtonText: 'Najskuplji'
+        priceButtonText: 'Najskuplji',
       }))
     }
   }
@@ -246,7 +245,7 @@ const LandingPage = () => {
               onClick={() => {
                 setInitialValues((prevState) => ({
                   ...prevState,
-                  city
+                  city,
                 }))
               }}
             >
@@ -283,19 +282,19 @@ const LandingPage = () => {
                         onFocus={() => {
                           setInitialValues((prevState) => ({
                             ...prevState,
-                            isSearchClicked: true
+                            isSearchClicked: true,
                           }))
                         }}
                         onBlur={() => {
                           setInitialValues((prevState) => ({
                             ...prevState,
-                            isSearchClicked: false
+                            isSearchClicked: false,
                           }))
                         }}
                         onChange={(event) => {
                           setInitialValues((prevState) => ({
                             ...prevState,
-                            searchText: event.target.value
+                            searchText: event.target.value,
                           }))
                         }}
                       />
@@ -305,13 +304,13 @@ const LandingPage = () => {
                         onFocus={() => {
                           setInitialValues((prevState) => ({
                             ...prevState,
-                            isButtonTypeSortingClicked: true
+                            isButtonTypeSortingClicked: true,
                           }))
                         }}
                         onBlur={() => {
                           setInitialValues((prevState) => ({
                             ...prevState,
-                            isButtonTypeSortingClicked: false
+                            isButtonTypeSortingClicked: false,
                           }))
                         }}
                       >
@@ -326,13 +325,13 @@ const LandingPage = () => {
                         onFocus={() => {
                           setInitialValues((prevState) => ({
                             ...prevState,
-                            isButtonPriceSortingClicked: true
+                            isButtonPriceSortingClicked: true,
                           }))
                         }}
                         onBlur={() => {
                           setInitialValues((prevState) => ({
                             ...prevState,
-                            isButtonPriceSortingClicked: false
+                            isButtonPriceSortingClicked: false,
                           }))
                         }}
                       >
@@ -371,7 +370,9 @@ const LandingPage = () => {
                                 onChange={() => includeSport(sport)}
                               />
                             }
-                            label={sport.charAt(0).toUpperCase() + sport.slice(1)}
+                            label={
+                              sport.charAt(0).toUpperCase() + sport.slice(1)
+                            }
                           />
                         ))}
                       </FormGroup>
@@ -415,7 +416,7 @@ const LandingPage = () => {
                           onChange={(event, city) => {
                             setInitialValues((prevState) => ({
                               ...prevState,
-                              city
+                              city,
                             }))
                           }}
                           renderInput={(params) => (
@@ -442,7 +443,7 @@ const LandingPage = () => {
                           onChange={(event) => {
                             setInitialValues((prevState) => ({
                               ...prevState,
-                              price: event.target.value
+                              price: event.target.value,
                             }))
                           }}
                         />
@@ -458,7 +459,7 @@ const LandingPage = () => {
                             onChange={(event) => {
                               setInitialValues((prevState) => ({
                                 ...prevState,
-                                date: event.target.value
+                                date: event.target.value,
                               }))
                             }}
                           />
@@ -468,7 +469,7 @@ const LandingPage = () => {
                             onChange={(event) => {
                               setInitialValues((prevState) => ({
                                 ...prevState,
-                                time: event.target.value
+                                time: event.target.value,
                               }))
                             }}
                           />

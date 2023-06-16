@@ -61,7 +61,6 @@ const LandingPage = () => {
     searchText: '',
     isSearchClicked: false,
     isAccordionExpanded: false,
-    cards: [],
     sortByType: false,
     typeButtonText: 'Sortiraj po tipu',
     sortByPrice: false,
@@ -81,6 +80,7 @@ const LandingPage = () => {
     sort_type: initialValues.typeButtonText,
     sort_price: initialValues.priceButtonText,
   })
+  const [cards, setCards] = useState([])
 
   useEffect(() => {
     const userData = Cookies.get(COOKIE_AUTHENTICATION_FE)
@@ -94,7 +94,7 @@ const LandingPage = () => {
           sports: JSON.parse(parsedUserData.interests).interests,
         }))
       }
-      if (parsedUserData.city !== '') {
+      if (parsedUserData.city) {
         setInitialValues((prevState) => ({
           ...prevState,
           city: parsedUserData.city,
@@ -126,10 +126,7 @@ const LandingPage = () => {
   async function fetchCards() {
     try {
       const response = await axios.get(GET_SPORT_HALLS, { params: filter })
-      setInitialValues((prevState) => ({
-        ...prevState,
-        cards: response.data.data,
-      }))
+      setCards(response.data.data)
     } catch (error) {
       console.error(error)
     }
@@ -495,14 +492,14 @@ const LandingPage = () => {
               justifyContent="space-evenly"
               sx={{ alignItems: 'stretch' }}
             >
-              {initialValues.cards.map((item) => (
+              {cards.map((item) => (
                 <Grid item xs={2} sm={4} md={4} key={item.id}>
                   <Card className={classes.card}>
-                    <CardActionArea sx={{ objectFit: 'cover' }}>
+                    <CardActionArea sx={{ objectFit: 'cover' }} href={`${FRONTEND_URL}/sporthall/${item.id}`}>
                       <CardMedia
                         component="img"
                         height="140"
-                        image={item.pictures}
+                        image={item.pictures ? JSON.parse(item.pictures).pictures[0] : '/images/footballField.png'}
                         alt={item.title}
                       />
                       <CardContent sx={{ flex: '1' }}>

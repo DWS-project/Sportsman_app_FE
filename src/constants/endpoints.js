@@ -27,4 +27,4 @@ export const GET_PLAYER_GAMES = `${BASE_BACKEND_URL}/player/games`
 export const UPDATE_INVITATION_STATUS = `${BASE_BACKEND_URL}/player/update-invitation-status`
 
 export const CONFIRM_EMAIL = `${BASE_BACKEND_URL}/authentication/confirm-email/?token=`
-export const RESEND_CONFIRMATION_TOKEN = `${BASE_BACKEND_URL}/authentication/resend-token`
+export const RESEND_CONFIRMATION_TOKEN = `${BASE_BACKEND_URL}/authentication/resend-confirmation-email`

@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useStyles from './styles';
 import { Avatar, Button, Card, CardActions, CardContent, CardMedia, FormControl, Grid, InputLabel, MenuItem, Modal, Paper, Select, TextField, Typography } from '@mui/material';
-import { Box } from '@mui/system';
+import { Box, getValue } from '@mui/system';
 import Cookies from 'js-cookie';
 import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser';
 import { ArrowBack, ArrowBackIosTwoTone, ArrowForwardIosTwoTone, ChevronLeft, ChevronLeftRounded, ChevronLeftTwoTone, ChevronRight, ChevronRightRounded } from '@mui/icons-material';
+import { BASE_BACKEND_URL } from 'src/constants/endpoints';
+import axios from 'axios';
 
 const recommendPlayer = () => {
 
@@ -15,21 +17,58 @@ const recommendPlayer = () => {
 
     const cookie = Cookies.get(COOKIE_AUTHENTICATION_FE);
     const cookie_data = JSON.parse(cookie);
-    console.log(cookie_data);
     const interests_field = JSON.parse(cookie_data.interests);
     const interests = interests_field.interests;
-    console.log(interests)
-    const handleCityChange = () =>{
-        console.log('oke');
+
+    const [players, setPlayers] = useState([])
+    const [filterParameters, setFilterParameters] = useState({
+        city: cookie_data.city,
+        interests: interests[0],
+        age: cookie_data.age
+    })
+    const [itemNumber, setItemNumber] = useState({
+        startIndex: 0,
+        endIndex: 3
+    })
+
+    async function fetchPlayers(){
+        const response = await axios.get(`${BASE_BACKEND_URL}/player/all`, {
+            params: filterParameters
+        });
+        setPlayers(response.data);
     }
 
-    const handleInterestChange = () =>{
-        console.log('oke');
+    const handleCityChange = (value) =>{
+        setFilterParameters({...filterParameters, city: value})
     }
 
+    const handleInterestChange = (value) =>{
+        setFilterParameters({...filterParameters, interests: value})
+    }
+    const handleAgeChange = (value) =>{
+        setFilterParameters({...filterParameters, age: value})
+    }
+    const handleForwardClick = () => {
+        setItemNumber(prevValue => (
+            {
+            ...prevValue,
+            startIndex: prevValue.startIndex+3,
+            endIndex: prevValue.endIndex+3
+            }
+        ))
+    }
+    const handleBackClick = () => {
+        setItemNumber(prevValue => (
+            {
+            ...prevValue,
+            startIndex: prevValue.startIndex-3,
+            endIndex: prevValue.endIndex-3
+            }
+        ))
+    }
     return (
       <div>
-        <Button onClick={handleOpen}>Open modal</Button>
+        <Button onClick={handleOpen}>PREPORUCI IGRACE</Button>
         <Modal
           open={open}
           onClose={handleClose}
@@ -38,32 +77,26 @@ const recommendPlayer = () => {
         >
           <Box 
           className = {classes.boxStyle}
-          
           >
-            <Paper elevation={3}>
-            <Grid container justifyContent={'space-between'} p={3}>
-            <Grid item>
-            <FormControl>
-            <InputLabel>City</InputLabel>
-                <Select
-                defaultValue= {cookie_data.city}
-                onChange={handleCityChange}
-                label="Sarajevo"
-                >
-                    <MenuItem value={cookie_data.city}>{cookie_data.city}</MenuItem>
-                    <MenuItem value='grad'>Da</MenuItem>
-                    <MenuItem value='ok'>ok</MenuItem>
-
-                </Select>
-            </FormControl>
+            <Paper elevation={3} sx={{bgcolor:"lightcoral"}}>
+            <Grid container alignItems={'center'} direction={'column'}>
+            <Grid container item justifyContent={'space-evenly'} p={3} ml={7}>
+            <Grid item lg={4}>
+            <TextField
+                label="Grad"
+                type="text"
+                value={filterParameters.city}
+                sx={{width:"50%"}}
+                onChange={(event) => handleCityChange(event.target.value)}
+              />
             </Grid>
-            <Grid item>
-            <FormControl>
+            <Grid item lg={4}>
+            <FormControl sx={{width:'55%'}}>
                 <InputLabel>Interest</InputLabel>
                 <Select
-                defaultValue= {interests[0]}
-                label= {interests[0]}
-                onChange={handleInterestChange}
+                value= {filterParameters.interests}
+                label= 'Interest'
+                onChange={(event) => handleInterestChange(event.target.value)}
                 >
                     {interests.map(item => (
                         <MenuItem value={item}>{item}</MenuItem>
@@ -72,103 +105,68 @@ const recommendPlayer = () => {
                 </Select>
             </FormControl>
             </Grid>
-            <Grid item>
+            <Grid item lg={4}>
             <TextField
                 label="Broj godina"
                 type="number"
-                defaultValue={cookie_data.age}
+                value={filterParameters.age}
                 sx={{width:"50%"}}
+                onChange = {(event) => handleAgeChange(event.target.value)} 
               />
             </Grid>
             </Grid>
-            <Button fullWidth sx = {{bgcolor:'blue', color:'white'}}>
-                FIND PLAYERS
+            <Grid item>
+            <Button sx = {{bgcolor:'#43bbbf', color:'aliceblue', width:'500px'}} onClick={fetchPlayers}>
+                NAĐI IGRAČE
             </Button>
-            
-           
-                        
-                <Grid container alignItems={'center'} justifyContent={'space-evenly'} my={3} pb={3} spacing={2}>
+            </Grid>
+                <Grid container item alignItems={'center'} justifyContent={'space-evenly'} my={3} pb={3} spacing={2}>
                 <Grid item>
-                    <Button sx={{color:'blue'}}>
+                    {itemNumber.startIndex !== 0 && 
+                    <Button sx={{color:'blue'}} onClick={handleBackClick}>
                         <ArrowBackIosTwoTone />
-                    </Button>
+                    </Button>}
                 </Grid>
-                 <Grid item>
+                 {players.slice(itemNumber.startIndex, itemNumber.endIndex).map(player => (
+                    <Grid item>
                     <Card>
                     <Box
                     display= {'flex'}
                     flexDirection={'column'}
                     alignItems={'center'}
+                    justifyContent={'center'}
                     padding={'20px'}
                     >
                     <CardMedia>
-                    <Avatar>
-                        H
+                    <Avatar src={player.picture}>
                     </Avatar>
                     </CardMedia>
                     <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                    Lizard
+                        <Box
+                        display={'flex'}
+                        flexDirection={'column'}
+                        alignItems={'center'}>
+                    <Typography gutterBottom>
+                    {player.name} {player.surname}
                     </Typography>
+                    <Typography gutterBottom>
+                     {player.age}
+                    </Typography>
+                    </Box>
                 </CardContent>
                 <CardActions>
                     <Button size="small">Pozovi</Button>
                 </CardActions>
                 </Box>
                 </Card>
-                </Grid>
+                </Grid>))}
                 <Grid item>
-                    <Card>
-                    <Box
-                    display= {'flex'}
-                    flexDirection={'column'}
-                    alignItems={'center'}
-                    padding={'20px'}
-                    >
-                    <CardMedia>
-                    <Avatar>
-                        H
-                    </Avatar>
-                    </CardMedia>
-                    <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                    Lizard
-                    </Typography>
-                </CardContent>
-                <CardActions>
-                    <Button size="small">Pozovi</Button>
-                </CardActions>
-                </Box>
-                </Card>
-                </Grid>
-                <Grid item>
-                    <Card>
-                    <Box
-                    display= {'flex'}
-                    flexDirection={'column'}
-                    alignItems={'center'}
-                    padding={'20px'}>
-                    <CardMedia>
-                    <Avatar>
-                        H
-                    </Avatar>
-                    </CardMedia>
-                    <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                    Lizard
-                    </Typography>
-                </CardContent>
-                <CardActions>
-                    <Button size="small">Pozovi</Button>
-                </CardActions>
-                </Box>
-                </Card>
-                </Grid>
-                <Grid item>
-                <Button sx={{color:'blue'}}>
+                    {itemNumber.endIndex <= players.length &&
+                <Button sx={{color:'blue'}} onClick={handleForwardClick}>
                         <ArrowForwardIosTwoTone />
-                    </Button>
+                    </Button>}
                 </Grid>
+      </Grid>
       </Grid>
       </Paper>
           </Box>

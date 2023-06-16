@@ -19,4 +19,4 @@ export const INVITE_TEAM_MEMBER = `${BASE_BACKEND_URL}/team/invite-member/`
 export const DELETE_TEAM_MEMBER = `${BASE_BACKEND_URL}/team/delete-member/`
 
 export const CONFIRM_EMAIL = `${BASE_BACKEND_URL}/authentication/confirm-email/?token=`
-export const RESEND_CONFIRMATION_TOKEN = `${BASE_BACKEND_URL}/authentication/resend-token`
+export const RESEND_CONFIRMATION_TOKEN = `${BASE_BACKEND_URL}/authentication/resend-confirmation-email`

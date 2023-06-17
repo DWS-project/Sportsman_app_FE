@@ -58,6 +58,19 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: 'white !important',
     minWidth: '200px',
   },
+  spinnerContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100vh',
+  },
+  spinner: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: theme.spacing(2),
+  },
 }))
 
 export default useStyles

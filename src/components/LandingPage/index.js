@@ -80,7 +80,9 @@ const LandingPage = () => {
     sort_type: initialValues.typeButtonText,
     sort_price: initialValues.priceButtonText,
   })
+
   const [cards, setCards] = useState([])
+
 
   useEffect(() => {
     const userData = Cookies.get(COOKIE_AUTHENTICATION_FE)
@@ -88,7 +90,11 @@ const LandingPage = () => {
     const isUserLogged = userData && !!parsedUserData.id
 
     if (isUserLogged) {
+
+      if (parsedUserData.interests) {
+
       if (parsedUserData.interests && parsedUserData.interests !== '') {
+
         setInitialValues((prevState) => ({
           ...prevState,
           sports: JSON.parse(parsedUserData.interests).interests,
@@ -125,8 +131,16 @@ const LandingPage = () => {
 
   async function fetchCards() {
     try {
+
+      const response = await axios.get(LANDING_PAGE, { params: filter })
+      setInitialValues((prevState) => ({
+        ...prevState,
+        cards: response.data.data,
+      }))
+
       const response = await axios.get(GET_SPORT_HALLS, { params: filter })
       setCards(response.data.data)
+
     } catch (error) {
       console.error(error)
     }

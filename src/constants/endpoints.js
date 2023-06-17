@@ -27,5 +27,12 @@ export const DELETE_TEAM = `${BASE_BACKEND_URL}/team/delete/`
 export const INVITE_TEAM_MEMBER = `${BASE_BACKEND_URL}/team/invite-member/`
 export const DELETE_TEAM_MEMBER = `${BASE_BACKEND_URL}/team/delete-member/`
 
+export const GET_PLAYER = `${BASE_BACKEND_URL}/player/all`
+export const DELETE_PLAYER_FRIEND = `${BASE_BACKEND_URL}/player/delete-friend`
+export const GET_PLAYER_INVITATION = `${BASE_BACKEND_URL}/player/invitation`
+export const GET_PLAYER_FRIENDS = `${BASE_BACKEND_URL}/player/friends`
+export const GET_PLAYER_GAMES = `${BASE_BACKEND_URL}/player/games`
+export const UPDATE_INVITATION_STATUS = `${BASE_BACKEND_URL}/player/update-invitation-status`
+
 export const CONFIRM_EMAIL = `${BASE_BACKEND_URL}/authentication/confirm-email/?token=`
 export const RESEND_CONFIRMATION_TOKEN = `${BASE_BACKEND_URL}/authentication/resend-confirmation-email`

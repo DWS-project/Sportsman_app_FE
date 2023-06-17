@@ -25,11 +25,11 @@ import Typography from '@mui/material/Typography'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useEffect, useState } from 'react'
+import { cities } from 'src/constants/appDefaults'
+import { GET_SPORT_HALLS } from 'src/constants/endpoints'
+import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser'
 import withMainFrame from 'src/hoc/withMainFrame'
 
-import { cities } from 'src/constants/appDefaults'
-import { LANDING_PAGE } from 'src/constants/endpoints'
-import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser'
 import useStyles from './styles'
 
 const landingPageCities = [
@@ -61,7 +61,6 @@ const LandingPage = () => {
     searchText: '',
     isSearchClicked: false,
     isAccordionExpanded: false,
-    cards: [],
     sortByType: false,
     typeButtonText: 'Sortiraj po tipu',
     sortByPrice: false,
@@ -82,19 +81,26 @@ const LandingPage = () => {
     sort_price: initialValues.priceButtonText,
   })
 
+  const [cards, setCards] = useState([])
+
+
   useEffect(() => {
     const userData = Cookies.get(COOKIE_AUTHENTICATION_FE)
     const parsedUserData = userData && JSON.parse(userData)
     const isUserLogged = userData && !!parsedUserData.id
 
     if (isUserLogged) {
+
       if (parsedUserData.interests) {
+
+      if (parsedUserData.interests && parsedUserData.interests !== '') {
+
         setInitialValues((prevState) => ({
           ...prevState,
           sports: JSON.parse(parsedUserData.interests).interests,
         }))
       }
-      if (parsedUserData.city !== '') {
+      if (parsedUserData.city) {
         setInitialValues((prevState) => ({
           ...prevState,
           city: parsedUserData.city,
@@ -115,21 +121,26 @@ const LandingPage = () => {
       sort_type: initialValues.typeButtonText,
       sort_price: initialValues.priceButtonText,
     })
-  }, [initialValues])
+  }, [])
 
   useEffect(() => {
     fetchCards()
-  }, [filter])
+  }, [])
 
   const classes = useStyles()
 
   async function fetchCards() {
     try {
+
       const response = await axios.get(LANDING_PAGE, { params: filter })
       setInitialValues((prevState) => ({
         ...prevState,
         cards: response.data.data,
       }))
+
+      const response = await axios.get(GET_SPORT_HALLS, { params: filter })
+      setCards(response.data.data)
+
     } catch (error) {
       console.error(error)
     }
@@ -495,14 +506,14 @@ const LandingPage = () => {
               justifyContent="space-evenly"
               sx={{ alignItems: 'stretch' }}
             >
-              {initialValues.cards.map((item) => (
+              {cards.map((item) => (
                 <Grid item xs={2} sm={4} md={4} key={item.id}>
                   <Card className={classes.card}>
-                    <CardActionArea sx={{ objectFit: 'cover' }}>
+                    <CardActionArea sx={{ objectFit: 'cover' }} href={`${FRONTEND_URL}/sporthall/${item.id}`}>
                       <CardMedia
                         component="img"
                         height="140"
-                        image={item.pictures}
+                        image={item.pictures ? JSON.parse(item.pictures).pictures[0] : '/images/footballField.png'}
                         alt={item.title}
                       />
                       <CardContent sx={{ flex: '1' }}>

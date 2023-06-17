@@ -3,7 +3,7 @@ import { Box, bgcolor } from '@mui/system'
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react'
-import { BASE_BACKEND_URL } from 'src/constants/endpoints';
+import { BASE_BACKEND_URL, DELETE_PLAYER_FRIEND, GET_PLAYER_FRIENDS, GET_PLAYER_GAMES, GET_PLAYER_INVITATION, SORT_PLAYER_FRIENDS, SORT_PLAYER_HISTORY, SORT_PLAYER_INVITATION, UPDATE_INVITATION_STATUS } from 'src/constants/endpoints';
 import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser';
 import withMainFrame from 'src/hoc/withMainFrame';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -35,7 +35,7 @@ const UserProfile = () => {
         invitationOrder: 'asc',
         invitationOrderBy: 'sender__username',
         historyOrder: 'asc',
-        historyOrderBy: 'hall_name',
+        historyOrderBy: 'sport_hall__title',
         friendsOrder: 'asc',
         friendsOrderBy: 'user2__username'
     })
@@ -94,7 +94,7 @@ const UserProfile = () => {
             'order': order,
             'status': status,
         }
-        const response = await axios.get(`${BASE_BACKEND_URL}/player/sort-invitations/${id}`, {
+        const response = await axios.get(`${GET_PLAYER_INVITATION}/${id}`, {
             params: data
         })
         switch(response.data[0].status){
@@ -130,7 +130,7 @@ const UserProfile = () => {
             'column': column,
             'order': order,
         }
-        const response = await axios.get(`${BASE_BACKEND_URL}/player/sort-history/${id}`, {
+        const response = await axios.get(`${GET_PLAYER_GAMES}/${id}`, {
             params: data
         })
         setgamesPlayed(response.data);
@@ -147,7 +147,7 @@ const UserProfile = () => {
             'column': column,
             'order': order,
         }
-        const response = await axios.get(`${BASE_BACKEND_URL}/player/sort-friends/${id}`, {
+        const response = await axios.get(`${GET_PLAYER_FRIENDS}/${id}`, {
             params: data
         })
         setFriends(response.data);
@@ -155,7 +155,8 @@ const UserProfile = () => {
 
     useEffect(() => {
         async function fetchData(){
-            const invitations = await axios.get(`${BASE_BACKEND_URL}/player/invitations/${id}`)
+
+            const invitations = await axios.get(`${GET_PLAYER_INVITATION}/${id}`);
             const acceptedInvitations = invitations.data.filter(data => data.status === 1);
             const deniedInvitations = invitations.data.filter(data => data.status === 2);
             const onHoldInvitations = invitations.data.filter(data => data.status === 0);
@@ -167,18 +168,18 @@ const UserProfile = () => {
                 onHoldInvites: onHoldInvitations
             })
 
-            const friends = await axios.get(`${BASE_BACKEND_URL}/player/friends/${id}`);
+            const friends = await axios.get(`${GET_PLAYER_FRIENDS}/${id}`);
             setFriends(friends.data);
 
-            const gamesPlayed = axios.get(`${BASE_BACKEND_URL}/player/games/${id}`);
-            setgamesPlayed(gamesPlayed.data);
+            const gamesPlayed = axios.get(`${GET_PLAYER_GAMES}/${id}`);
+            setgamesPlayed(gamesPlayed.data); 
         }
         fetchData();
       }, []);
 
     const handleFriendDelete = async (friend_id) => {
         const updated_friends = friends.filter((friends) => friends.id !== friend_id);
-        await axios.delete(`${BASE_BACKEND_URL}/player/delete-friend/${friend_id}`)
+        await axios.delete(`${DELETE_PLAYER_FRIEND}/${friend_id}`)
         setFriends(updated_friends);
     }
 
@@ -211,10 +212,10 @@ const UserProfile = () => {
         const data = {
             'status': 1,
         }
-        await axios.put(`${BASE_BACKEND_URL}/player/update-invitation-status/${rowId}`, data);
-        const acceptedRow = onHoldInvites.find(row => row.id === rowId);
+        await axios.put(`${UPDATE_INVITATION_STATUS}/${rowId}`, data);
+        const acceptedRow = invites.onHoldInvites.find(row => row.id === rowId);
         acceptedRow.status = 1;
-        const updatedInvites = onHoldInvites.filter(row => row.id !== rowId);
+        const updatedInvites = invites.onHoldInvites.filter(row => row.id !== rowId);
         setInvites(prevInvites => ({
             ...prevInvites,
             onHoldInvites: updatedInvites,
@@ -226,10 +227,10 @@ const UserProfile = () => {
         const data = {
             'status': 2,
         }
-        await axios.put(`${BASE_BACKEND_URL}/player/update-invitation-status/${rowId}`, data);
-        const deniedRow = onHoldInvites.find(row => row.id === rowId);
+        await axios.put(`${UPDATE_INVITATION_STATUS}/${rowId}`, data);
+        const deniedRow = invites.onHoldInvites.find(row => row.id === rowId);
         deniedRow.status = 2;
-        const updatedInvites = onHoldInvites.filter(row => row.id !== rowId);
+        const updatedInvites = invites.onHoldInvites.filter(row => row.id !== rowId);
         setInvites(prevInvites => ({
             ...prevInvites,
             onHoldInvites: updatedInvites,
@@ -297,9 +298,9 @@ const UserProfile = () => {
             </TableCell>
             <TableCell sx={{fontWeight:'bold'}} align="right">
                 <TableSortLabel
-                active={orders.invitationOrderBy === 'type'}
+                active={orders.invitationOrderBy === 'invitation_type__name'}
                 direction= {orders.invitationOrder}
-                onClick={() => handleInvitationsSort(orders.invitationOrder, 'type')}>
+                onClick={() => handleInvitationsSort(orders.invitationOrder, 'invitation_type__name')}>
                     Tip tima: 
                 </TableSortLabel>
              </TableCell>
@@ -383,9 +384,9 @@ const UserProfile = () => {
           <TableRow>
             <TableCell sx={{fontWeight:'bold'}}>
                 <TableSortLabel
-                active={orders.historyOrderBy === 'hall_name'}
+                active={orders.historyOrderBy === 'sport_hall__title'}
                 direction= {orders.historyOrder}
-                onClick={() => handleHistorySort(orders.historyOrder, 'hall_name')}>
+                onClick={() => handleHistorySort(orders.historyOrder, 'sport_hall__title')}>
                     Ime sale:
                 </TableSortLabel>
             </TableCell>

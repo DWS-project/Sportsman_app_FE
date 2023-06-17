@@ -32,7 +32,7 @@ export const pages = [
 export const settingsForPlayer = [
   {
     name: 'Moj profil',
-    href: '/',
+    href: '/my-profile',
   },
   {
     name: 'Rezervisani termini',
@@ -44,7 +44,7 @@ export const settingsForPlayer = [
   },
   {
     name: 'Postavke',
-    href: '/editprofile',
+    href: '/edit-profile',
   },
   {
     name: 'Odjavi se',

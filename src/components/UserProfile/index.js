@@ -35,7 +35,7 @@ const UserProfile = () => {
         invitationOrder: 'asc',
         invitationOrderBy: 'sender__username',
         historyOrder: 'asc',
-        historyOrderBy: 'hall_name',
+        historyOrderBy: 'sport_hall__title',
         friendsOrder: 'asc',
         friendsOrderBy: 'user2__username'
     })
@@ -155,8 +155,9 @@ const UserProfile = () => {
 
     useEffect(() => {
         async function fetchData(){
-            console.log(`${GET_PLAYER_INVITATION}/${id}`);
+
             const invitations = await axios.get(`${GET_PLAYER_INVITATION}/${id}`);
+            console.log(invitations.data);
             const acceptedInvitations = invitations.data.filter(data => data.status === 1);
             const deniedInvitations = invitations.data.filter(data => data.status === 2);
             const onHoldInvitations = invitations.data.filter(data => data.status === 0);
@@ -172,7 +173,7 @@ const UserProfile = () => {
             setFriends(friends.data);
 
             const gamesPlayed = axios.get(`${GET_PLAYER_GAMES}/${id}`);
-            setgamesPlayed(gamesPlayed.data);
+            setgamesPlayed(gamesPlayed.data); 
         }
         fetchData();
       }, []);
@@ -213,9 +214,9 @@ const UserProfile = () => {
             'status': 1,
         }
         await axios.put(`${UPDATE_INVITATION_STATUS}/${rowId}`, data);
-        const acceptedRow = onHoldInvites.find(row => row.id === rowId);
+        const acceptedRow = invites.onHoldInvites.find(row => row.id === rowId);
         acceptedRow.status = 1;
-        const updatedInvites = onHoldInvites.filter(row => row.id !== rowId);
+        const updatedInvites = invites.onHoldInvites.filter(row => row.id !== rowId);
         setInvites(prevInvites => ({
             ...prevInvites,
             onHoldInvites: updatedInvites,
@@ -228,9 +229,9 @@ const UserProfile = () => {
             'status': 2,
         }
         await axios.put(`${UPDATE_INVITATION_STATUS}/${rowId}`, data);
-        const deniedRow = onHoldInvites.find(row => row.id === rowId);
+        const deniedRow = invites.onHoldInvites.find(row => row.id === rowId);
         deniedRow.status = 2;
-        const updatedInvites = onHoldInvites.filter(row => row.id !== rowId);
+        const updatedInvites = invites.onHoldInvites.filter(row => row.id !== rowId);
         setInvites(prevInvites => ({
             ...prevInvites,
             onHoldInvites: updatedInvites,
@@ -298,9 +299,9 @@ const UserProfile = () => {
             </TableCell>
             <TableCell sx={{fontWeight:'bold'}} align="right">
                 <TableSortLabel
-                active={orders.invitationOrderBy === 'type'}
+                active={orders.invitationOrderBy === 'invitation_type__name'}
                 direction= {orders.invitationOrder}
-                onClick={() => handleInvitationsSort(orders.invitationOrder, 'type')}>
+                onClick={() => handleInvitationsSort(orders.invitationOrder, 'invitation_type__name')}>
                     Tip tima: 
                 </TableSortLabel>
              </TableCell>
@@ -384,9 +385,9 @@ const UserProfile = () => {
           <TableRow>
             <TableCell sx={{fontWeight:'bold'}}>
                 <TableSortLabel
-                active={orders.historyOrderBy === 'hall_name'}
+                active={orders.historyOrderBy === 'sport_hall__title'}
                 direction= {orders.historyOrder}
-                onClick={() => handleHistorySort(orders.historyOrder, 'hall_name')}>
+                onClick={() => handleHistorySort(orders.historyOrder, 'sport_hall__title')}>
                     Ime sale:
                 </TableSortLabel>
             </TableCell>

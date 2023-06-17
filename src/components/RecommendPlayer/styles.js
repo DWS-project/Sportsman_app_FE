@@ -10,10 +10,10 @@ const useStyles = makeStyles(() =>
         transform: 'translate(-50%, -50%)',
         width:800,
         maxWidth: 800,
-        bgcolor: 'lightgreen',
+        bgcolor: 'background.paper',
         p: 4,
         outline: 0,
-      },
+      }
   })
 )
 

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import useStyles from './styles';
 import { Avatar, Button, Card, CardActions, CardContent, CardMedia, FormControl, Grid, InputLabel, MenuItem, Modal, Paper, Select, TextField, Typography } from '@mui/material';
-import { Box, getValue } from '@mui/system';
+import { Box } from '@mui/system';
 import Cookies from 'js-cookie';
 import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser';
-import { ArrowBack, ArrowBackIosTwoTone, ArrowForwardIosTwoTone, ChevronLeft, ChevronLeftRounded, ChevronLeftTwoTone, ChevronRight, ChevronRightRounded } from '@mui/icons-material';
-import { BASE_BACKEND_URL } from 'src/constants/endpoints';
+import { ArrowBackIosTwoTone, ArrowForwardIosTwoTone } from '@mui/icons-material';
+import { BASE_BACKEND_URL, GET_PLAYER } from 'src/constants/endpoints';
 import axios from 'axios';
 
 const recommendPlayer = () => {
@@ -32,7 +32,7 @@ const recommendPlayer = () => {
     })
 
     async function fetchPlayers(){
-        const response = await axios.get(`${BASE_BACKEND_URL}/player/all`, {
+        const response = await axios.get(`${GET_PLAYER}`, {
             params: filterParameters
         });
         setPlayers(response.data);
@@ -68,7 +68,7 @@ const recommendPlayer = () => {
     }
     return (
       <div>
-        <Button onClick={handleOpen}>PREPORUCI IGRACE</Button>
+        <Button onClick={handleOpen} sx={{bgcolor:'#43bbbf', color:'aliceblue'}}>PREPORUCI IGRACE</Button>
         <Modal
           open={open}
           onClose={handleClose}
@@ -78,97 +78,104 @@ const recommendPlayer = () => {
           <Box 
           className = {classes.boxStyle}
           >
-            <Paper elevation={3} sx={{bgcolor:"lightcoral"}}>
-            <Grid container alignItems={'center'} direction={'column'}>
-            <Grid container item justifyContent={'space-evenly'} p={3} ml={7}>
-            <Grid item lg={4}>
-            <TextField
-                label="Grad"
-                type="text"
-                value={filterParameters.city}
-                sx={{width:"50%"}}
-                onChange={(event) => handleCityChange(event.target.value)}
-              />
-            </Grid>
-            <Grid item lg={4}>
-            <FormControl sx={{width:'55%'}}>
-                <InputLabel>Interest</InputLabel>
-                <Select
-                value= {filterParameters.interests}
-                label= 'Interest'
-                onChange={(event) => handleInterestChange(event.target.value)}
-                >
-                    {interests.map(item => (
-                        <MenuItem value={item}>{item}</MenuItem>
-                    ))}
-
-                </Select>
-            </FormControl>
-            </Grid>
-            <Grid item lg={4}>
-            <TextField
-                label="Broj godina"
-                type="number"
-                value={filterParameters.age}
-                sx={{width:"50%"}}
-                onChange = {(event) => handleAgeChange(event.target.value)} 
-              />
-            </Grid>
-            </Grid>
-            <Grid item>
-            <Button sx = {{bgcolor:'#43bbbf', color:'aliceblue', width:'500px'}} onClick={fetchPlayers}>
-                NAĐI IGRAČE
-            </Button>
-            </Grid>
-                <Grid container item alignItems={'center'} justifyContent={'space-evenly'} my={3} pb={3} spacing={2}>
-                <Grid item>
-                    {itemNumber.startIndex !== 0 && 
-                    <Button sx={{color:'blue'}} onClick={handleBackClick}>
-                        <ArrowBackIosTwoTone />
-                    </Button>}
-                </Grid>
-                 {players.slice(itemNumber.startIndex, itemNumber.endIndex).map(player => (
+            <Paper elevation={3} sx={{bgcolor:"#d3ebed"}}>
+                <Grid container alignItems={'center'} direction={'column'}>
+                    <Grid container item justifyContent={'space-evenly'} p={3} ml={7}>
+                        <Grid item lg={4}>
+                            <TextField
+                            label="Grad"
+                            type="text"
+                            value={filterParameters.city}
+                            sx={{width:"50%"}}
+                            onChange={(event) => handleCityChange(event.target.value)}
+                            />
+                        </Grid>
+                        <Grid item lg={4}>
+                            <FormControl sx={{width:'55%'}}>
+                                <InputLabel>Interest</InputLabel>
+                                <Select
+                                value= {filterParameters.interests}
+                                label= 'Interest'
+                                onChange={(event) => handleInterestChange(event.target.value)}
+                                >
+                                    {interests.map(item => (
+                                        <MenuItem value={item}>{item}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item lg={4}>
+                            <TextField
+                            label="Broj godina"
+                            type="number"
+                            value={filterParameters.age}
+                            sx={{width:"50%"}}
+                            onChange = {(event) => handleAgeChange(event.target.value)} 
+                            />
+                        </Grid>
+                    </Grid>
                     <Grid item>
-                    <Card>
-                    <Box
-                    display= {'flex'}
-                    flexDirection={'column'}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    padding={'20px'}
-                    >
-                    <CardMedia>
-                    <Avatar src={player.picture}>
-                    </Avatar>
-                    </CardMedia>
-                    <CardContent>
-                        <Box
-                        display={'flex'}
-                        flexDirection={'column'}
-                        alignItems={'center'}>
-                    <Typography gutterBottom>
-                    {player.name} {player.surname}
-                    </Typography>
-                    <Typography gutterBottom>
-                     {player.age}
-                    </Typography>
-                    </Box>
-                </CardContent>
-                <CardActions>
-                    <Button size="small">Pozovi</Button>
-                </CardActions>
-                </Box>
-                </Card>
-                </Grid>))}
-                <Grid item>
-                    {itemNumber.endIndex <= players.length &&
-                <Button sx={{color:'blue'}} onClick={handleForwardClick}>
-                        <ArrowForwardIosTwoTone />
-                    </Button>}
+                        <Button sx = {{bgcolor:'#43bbbf', color:'aliceblue', width:'535px', marginRight:'60px'}} onClick={fetchPlayers}>
+                        NAĐI IGRAČE
+                        </Button>
+                    </Grid>
+                    <Grid container item alignItems={'center'} justifyContent={'space-evenly'} my={3} pb={3} spacing={2}>
+                        <Grid item>
+                            {itemNumber.startIndex !== 0 && 
+                            <Button sx={{color:'blue'}} onClick={handleBackClick}>
+                                <ArrowBackIosTwoTone />
+                            </Button>}
+                        </Grid>
+                        {players.slice(itemNumber.startIndex, itemNumber.endIndex).map(player => (
+                        <Grid item>
+                            <Card>
+                                <Box
+                                display= {'flex'}
+                                flexDirection={'column'}
+                                alignItems={'center'}
+                                justifyContent={'center'}
+                                padding={'20px'}
+                                >
+                            <CardMedia>
+                                <Avatar src={player.picture}/>
+                            </CardMedia>
+                            <CardContent>
+                                <Box
+                                display={'flex'}
+                                flexDirection={'column'}
+                                alignItems={'center'}>
+                                    <Typography gutterBottom>
+                                    {player.name} {player.surname}
+                                    </Typography>
+                                    <Typography gutterBottom>
+                                    {player.age}
+                                    </Typography>
+                                </Box>
+                            </CardContent>
+                            <CardActions>
+                                <Button size="small" sx={{bgcolor:'#43bbbf', color:'aliceblue'}}>
+                                    Pozovi
+                                </Button>
+                            </CardActions>
+                                </Box>
+                            </Card>
+                        </Grid>))}
+                        <Grid item>
+                            {itemNumber.endIndex < players.length &&
+                            <Button sx={{color:'blue'}} onClick={handleForwardClick}>
+                                <ArrowForwardIosTwoTone />
+                            </Button>}
+                        </Grid>
+                    </Grid>
+                    {players.length > 0 && 
+                    <Grid item p={3}>
+                        <Button size="small" sx={{bgcolor:'#43bbbf', color:'aliceblue', width:'535px', marginRight:'60px'}}>
+                            Pozovi sve
+                        </Button>
+                    </Grid>
+                    }
                 </Grid>
-      </Grid>
-      </Grid>
-      </Paper>
+            </Paper>
           </Box>
         </Modal>
       </div>

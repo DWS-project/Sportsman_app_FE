@@ -12,14 +12,12 @@ import LandingPage from './components/LandingPage'
 import ListOfSportHalls from './components/SportHalls/ListOfSportHalls'
 import UserProfile from './components/UserProfile'
 import Verification from './components/Verification'
-import RecommendPlayer from './components/RecommendPlayer'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path={'/editprofile'} element={<EditProfilePage />} />
-        <Route path={'/recommend'} element={<RecommendPlayer />} />
         <Route path={'/createTeam'} element={<CreateTeam />} />
         <Route path={'/my-profile'} element={<UserProfile />} />
         <Route path={'/'} element={<LandingPage />} />

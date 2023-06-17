@@ -12,15 +12,17 @@ import Verification from './components/Verification'
 import { EditProfilePage } from './components/EditProfilePage/index'
 import CreateTeam from './components/CreateTeam'
 import UserProfile from './components/UserProfile'
+import OwnerProfile from './components/OwnerProfile'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path={'/owner-profile'} element={<OwnerProfile />}></Route>
         <Route path={'/editprofile'} element={<EditProfilePage />} />
         <Route path={'/createTeam'} element={<CreateTeam />} />
         <Route path={'/my-profile'} element={<UserProfile />} />
-      <Route path={'/editprofile'} element={<EditProfilePage />} />
+        <Route path={'/editprofile'} element={<EditProfilePage />} />
         <Route path={'/'} element={<LandingPage />} />
         <Route
           path={'/login'}

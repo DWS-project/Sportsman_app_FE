@@ -19,3 +19,7 @@ export const GET_TEAMS = `${BASE_BACKEND_URL}/getTeams`
 export const DELETE_TEAM = `${BASE_BACKEND_URL}/deleteTeam`
 export const INVITE_TEAM_MEMBER = `${BASE_BACKEND_URL}/inviteTeamMember`
 export const DELETE_TEAM_MEMBER = `${BASE_BACKEND_URL}/deleteTeamMember`
+export const GET_MY_SPORT_HALLS = `${BASE_BACKEND_URL}/get-my-sport-halls`
+export const ADD_SPORT_HALL = `${BASE_BACKEND_URL}/add-new-sport-hall`
+export const DELETE_MY_SPORT_HALL = `${BASE_BACKEND_URL}/delete-my-sport-hall`
+export const UPDATE_MY_SPORT_HALL = `${BASE_BACKEND_URL}/update-my-sport-hall`

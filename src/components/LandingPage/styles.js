@@ -87,8 +87,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       padding: '5px 0px',
     },
-    color: '#646464',
+    color: '#353535',
     fontSize: '1rem',
+    fontFamily: 'sans-serif',
     border: '1px solid #43bbbf',
     outline: 'none',
     borderRadius: '5px',

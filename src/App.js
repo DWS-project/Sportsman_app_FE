@@ -10,6 +10,7 @@ import Error401Page from './components/ErrorPages/Error401Page'
 import Error404Page from './components/ErrorPages/Error404Page'
 import LandingPage from './components/LandingPage'
 import ListOfSportHalls from './components/SportHalls/ListOfSportHalls'
+import SportHallPage from './components/SportHalls/SportHallPage/index'
 import UserProfile from './components/UserProfile'
 import Verification from './components/Verification'
 
@@ -21,6 +22,7 @@ function App() {
         <Route path={'/createTeam'} element={<CreateTeam />} />
         <Route path={'/my-profile'} element={<UserProfile />} />
         <Route path={'/'} element={<LandingPage />} />
+        <Route path="/sporthall/:id" element={<SportHallPage />} />
         <Route
           path={'/login'}
           element={<AuthenticationFrame route={'login'} />}

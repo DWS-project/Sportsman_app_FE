@@ -17,19 +17,13 @@ import OwnerProfile from './components/OwnerProfile'
 
 import Verification from './components/Verification'
 
-
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-
         <Route path={'/owner-profile'} element={<OwnerProfile />}></Route>
-        <Route path={'/editprofile'} element={<EditProfilePage />} />
-        <Route path={'/createTeam'} element={<CreateTeam />} />
-        <Route path={'/my-profile'} element={<UserProfile />} />
-        <Route path={'/editprofile'} element={<EditProfilePage />} />
-
         <Route path={'/edit-profile'} element={<EditProfilePage />} />
+
         <Route path={'/create-team'} element={<CreateTeam />} />
         <Route path={'/my-profile'} element={<UserProfile />} />
 

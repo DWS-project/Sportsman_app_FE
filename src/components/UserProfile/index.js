@@ -94,7 +94,7 @@ const UserProfile = () => {
             'order': order,
             'status': status,
         }
-        const response = await axios.get(`${SORT_PLAYER_INVITATION}/${id}`, {
+        const response = await axios.get(`${GET_PLAYER_INVITATION}/${id}`, {
             params: data
         })
         switch(response.data[0].status){
@@ -130,7 +130,7 @@ const UserProfile = () => {
             'column': column,
             'order': order,
         }
-        const response = await axios.get(`${SORT_PLAYER_HISTORY}/${id}`, {
+        const response = await axios.get(`${GET_PLAYER_GAMES}/${id}`, {
             params: data
         })
         setgamesPlayed(response.data);
@@ -147,7 +147,7 @@ const UserProfile = () => {
             'column': column,
             'order': order,
         }
-        const response = await axios.get(`${SORT_PLAYER_FRIENDS}/${id}`, {
+        const response = await axios.get(`${GET_PLAYER_FRIENDS}/${id}`, {
             params: data
         })
         setFriends(response.data);
@@ -157,7 +157,6 @@ const UserProfile = () => {
         async function fetchData(){
 
             const invitations = await axios.get(`${GET_PLAYER_INVITATION}/${id}`);
-            console.log(invitations.data);
             const acceptedInvitations = invitations.data.filter(data => data.status === 1);
             const deniedInvitations = invitations.data.filter(data => data.status === 2);
             const onHoldInvitations = invitations.data.filter(data => data.status === 0);

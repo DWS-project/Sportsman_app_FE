@@ -493,6 +493,27 @@ const SportHallPage = () => {
       console.error(error)
     }
   }
+  async function handleInviteUser(friend) {
+    try {
+        const data = {
+          senderId: initialValues.user.id,
+          recipientId: friend.id,
+          sportHallId: initialValues.sportHall.id,
+          sportHallTitle: initialValues.sportHall.title,
+        }
+        const response = await axios.post(INVITE_TEMPORARY_TEAM, data)
+        if (response.data.status) {
+          const newInvitation = response.data.data
+          setInitialValues((prevState) => ({
+            ...prevState,
+            invitations: [...prevState.invitations, newInvitation],
+          }))
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
 
   const handleRemoveFriend = (person) => {
     const invitation = initialValues.invitations.find(
@@ -1208,7 +1229,7 @@ const SportHallPage = () => {
                 Nedostaje Vam igrač?
               </Typography>
               <Typography component="p"></Typography>
-              <RecommendPlayer handleInvitation={handleSuggestionClick}/>
+              <RecommendPlayer handleInvitation={handleSuggestionClick} handleInvite={handleInviteUser}/>
             </Box>
           </Box>
         </>

@@ -25,7 +25,7 @@ import Typography from '@mui/material/Typography'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useEffect, useState } from 'react'
-import { cities } from 'src/constants/appDefaults'
+import { cities, FRONTEND_URL } from "src/constants/appDefaults";
 import { GET_SPORT_HALLS } from 'src/constants/endpoints'
 import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser'
 import withMainFrame from 'src/hoc/withMainFrame'
@@ -80,9 +80,7 @@ const LandingPage = () => {
     sort_type: initialValues.typeButtonText,
     sort_price: initialValues.priceButtonText,
   })
-
   const [cards, setCards] = useState([])
-
 
   useEffect(() => {
     const userData = Cookies.get(COOKIE_AUTHENTICATION_FE)
@@ -90,11 +88,7 @@ const LandingPage = () => {
     const isUserLogged = userData && !!parsedUserData.id
 
     if (isUserLogged) {
-
-      if (parsedUserData.interests) {
-
       if (parsedUserData.interests && parsedUserData.interests !== '') {
-
         setInitialValues((prevState) => ({
           ...prevState,
           sports: JSON.parse(parsedUserData.interests).interests,
@@ -122,12 +116,11 @@ const LandingPage = () => {
       sort_type: initialValues.typeButtonText,
       sort_price: initialValues.priceButtonText,
     })
-  }, [])
+  }, [initialValues])
 
   useEffect(() => {
     fetchCards()
-  }, [])
-
+  }, [filter])
   const classes = useStyles()
 
   async function fetchCards() {

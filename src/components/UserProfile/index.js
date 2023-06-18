@@ -1,9 +1,24 @@
-import { Button, Divider, Grid, IconButton, Paper, Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material'
-import { Box, bgcolor } from '@mui/system'
-import axios from 'axios';
-import Cookies from 'js-cookie';
+import CheckIcon from '@mui/icons-material/Check'
+import ClearIcon from '@mui/icons-material/Clear'
+import DeleteIcon from '@mui/icons-material/Delete'
+import {
+  Button,
+  Divider,
+  Grid,
+  IconButton,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TableSortLabel,
+} from '@mui/material'
+import { bgcolor, Box } from '@mui/system'
+import axios from 'axios'
+import Cookies from 'js-cookie'
 import React, { useEffect, useState } from 'react'
-import { ADD_TEAM_MEMBER, BASE_BACKEND_URL, DELETE_PLAYER_FRIEND, GET_PLAYER_FRIENDS, GET_PLAYER_GAMES, GET_PLAYER_INVITATION, SORT_PLAYER_FRIENDS, SORT_PLAYER_HISTORY, SORT_PLAYER_INVITATION, UPDATE_INVITATION_STATUS } from 'src/constants/endpoints';
+import { ADD_TEAM_MEMBER, DELETE_PLAYER_FRIEND, GET_PLAYER_FRIENDS, GET_PLAYER_GAMES, GET_PLAYER_INVITATION, UPDATE_INVITATION_STATUS } from 'src/constants/endpoints';
 import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser';
 import withMainFrame from 'src/hoc/withMainFrame';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -11,238 +26,244 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
 
 const UserProfile = () => {
+  const [friends, setFriends] = useState('')
+  const [gamesPlayed, setgamesPlayed] = useState([])
+  const [showSection, setShowSection] = useState({
+    activeButton: 1,
+    showInvitations: true,
+    showInvitationHistory: false,
+    showFriends: false,
+  })
+  const [invites, setInvites] = useState({
+    allInvites: [],
+    onHoldInvites: [],
+    acceptedInvites: [],
+    deniedInvites: [],
+  })
+  const [showInvites, setShowInvites] = useState({
+    accepted: false,
+    denied: false,
+    onHold: true,
+  })
+  const [orders, setOrders] = useState({
+    invitationOrder: 'asc',
+    invitationOrderBy: 'sender__username',
+    historyOrder: 'asc',
+    historyOrderBy: 'sport_hall__title',
+    friendsOrder: 'asc',
+    friendsOrderBy: 'user2__username',
+  })
 
-    const [friends, setFriends] = useState('');
-    const [gamesPlayed, setgamesPlayed] = useState([]);
-    const [showSection, setShowSection] = useState({
-        activeButton: 1,
-        showInvitations: true,
-        showInvitationHistory: false,
-        showFriends: false,
+  const cookie = Cookies.get(COOKIE_AUTHENTICATION_FE)
+  const cookie_data = JSON.parse(cookie)
+  const id = cookie_data.id
+
+  const handleClick = (key) => {
+    switch (key) {
+      case 1:
+        setShowSection({
+          activeButton: 1,
+          showInvitations: true,
+          showInvitationHistory: false,
+          showFriends: false,
+        })
+        break
+      case 2:
+        setShowSection({
+          activeButton: 2,
+          showInvitations: false,
+          showInvitationHistory: true,
+          showFriends: false,
+        })
+        break
+      case 3:
+        setShowSection({
+          activeButton: 3,
+          showInvitations: false,
+          showInvitationHistory: false,
+          showFriends: true,
+        })
+        break
+    }
+  }
+  const handleInvitationsSort = async (order, column) => {
+    const isAsc = orders.invitationOrderBy === column && order === 'asc'
+    setOrders({
+      ...orders,
+      invitationOrder: isAsc ? 'desc' : 'asc',
+      invitationOrderBy: column,
     })
-    const [invites, setInvites] = useState({
-        allInvites: [],
-        onHoldInvites: [],
-        acceptedInvites: [],
-        deniedInvites: []
+    let status = 0
+    if (showInvites.onHold) {
+      status = 0
+    } else if (showInvites.accepted) {
+      status = 1
+    } else {
+      status = 2
+    }
+    const data = {
+      column: column,
+      order: order,
+      status: status,
+    }
+    const response = await axios.get(`${GET_PLAYER_INVITATION}/${id}`, {
+      params: data,
     })
-    const [showInvites, setShowInvites] = useState({
-        accepted: false,
-        denied: false,
-        onHold: true
+    switch (response.data[0].status) {
+      case 0:
+        setInvites({
+          ...invites,
+          onHoldInvites: response.data,
+        })
+        break
+      case 1:
+        setInvites({
+          ...invites,
+          acceptedInvites: response.data,
+        })
+        break
+      case 2:
+        setInvites({
+          ...invites,
+          deniedInvites: response.data,
+        })
+        break
+    }
+  }
+
+  const handleHistorySort = async (order, column) => {
+    const isAsc = orders.historyOrderBy === column && order === 'asc'
+    setOrders({
+      ...orders,
+      historyOrder: isAsc ? 'desc' : 'asc',
+      historyOrderBy: column,
     })
-    const [orders, setOrders] = useState({
-        invitationOrder: 'asc',
-        invitationOrderBy: 'sender__username',
-        historyOrder: 'asc',
-        historyOrderBy: 'sport_hall__title',
-        friendsOrder: 'asc',
-        friendsOrderBy: 'user2__username'
+    const data = {
+      column: column,
+      order: order,
+    }
+    const response = await axios.get(`${GET_PLAYER_GAMES}/${id}`, {
+      params: data,
     })
+    setgamesPlayed(response.data)
+  }
 
-    const cookie = Cookies.get(COOKIE_AUTHENTICATION_FE);
-    const cookie_data = JSON.parse(cookie);
-    const id = cookie_data.id;
-
-    const handleClick = (key) => {
-        switch(key){
-            case 1:
-                setShowSection({
-                    activeButton: 1,
-                    showInvitations: true,
-                    showInvitationHistory: false,
-                    showFriends: false,
-                })
-                break;
-            case 2: 
-                setShowSection({
-                    activeButton: 2,
-                    showInvitations: false,
-                    showInvitationHistory: true,
-                    showFriends: false,
-                })
-                break;
-            case 3:
-                setShowSection({
-                    activeButton: 3,
-                    showInvitations: false,
-                    showInvitationHistory: false,
-                    showFriends: true,
-                })
-                break;
-        }
+  const handleFriendsSort = async (order, column) => {
+    const isAsc = orders.friendsOrderBy === column && order === 'asc'
+    setOrders({
+      ...orders,
+      friendsOrder: isAsc ? 'desc' : 'asc',
+      friendsOrderBy: column,
+    })
+    const data = {
+      column: column,
+      order: order,
     }
-    const handleInvitationsSort = async (order, column) =>{
-        const isAsc = orders.invitationOrderBy === column && order === 'asc'
-        setOrders({
-            ...orders,
-            invitationOrder: (isAsc ? 'desc': 'asc'),
-            invitationOrderBy: column
+    const response = await axios.get(`${GET_PLAYER_FRIENDS}/${id}`, {
+      params: data,
+    })
+    setFriends(response.data)
+  }
+
+  useEffect(() => {
+    async function fetchData() {
+      const invitations = await axios.get(`${GET_PLAYER_INVITATION}/${id}`)
+      const acceptedInvitations = invitations.data.filter(
+        (data) => data.status === 1
+      )
+      const deniedInvitations = invitations.data.filter(
+        (data) => data.status === 2
+      )
+      const onHoldInvitations = invitations.data.filter(
+        (data) => data.status === 0
+      )
+
+      setInvites({
+        ...invites,
+        acceptedInvites: acceptedInvitations,
+        deniedInvites: deniedInvitations,
+        onHoldInvites: onHoldInvitations,
+      })
+
+      const friends = await axios.get(`${GET_PLAYER_FRIENDS}/${id}`)
+      setFriends(friends.data)
+
+      const gamesPlayed = axios.get(`${GET_PLAYER_GAMES}/${id}`)
+      setgamesPlayed(gamesPlayed.data)
+    }
+    fetchData()
+  }, [])
+
+  const handleFriendDelete = async (friend_id) => {
+    const updated_friends = friends.filter(
+      (friends) => friends.id !== friend_id
+    )
+    await axios.delete(`${DELETE_PLAYER_FRIEND}/${friend_id}`)
+    setFriends(updated_friends)
+  }
+
+  const handleShowingInvites = (invites) => {
+    switch (invites) {
+      case 0:
+        setShowInvites({
+          accepted: false,
+          denied: false,
+          onHold: true,
         })
-        let status = 0;
-        if(showInvites.onHold){
-            status = 0;
-        }
-        else if(showInvites.accepted){
-            status = 1;
-        }
-        else {
-            status = 2;
-        }
-        const data = {
-            'column': column,
-            'order': order,
-            'status': status,
-        }
-        const response = await axios.get(`${GET_PLAYER_INVITATION}/${id}`, {
-            params: data
+        break
+      case 1:
+        setShowInvites({
+          accepted: true,
+          denied: false,
+          onHold: false,
         })
-        switch(response.data[0].status){
-            case 0:
-                setInvites({
-                    ...invites,
-                    onHoldInvites: response.data
-                })
-                break;
-            case 1:
-                setInvites({
-                    ...invites,
-                    acceptedInvites: response.data
-                })
-                break;
-            case 2:
-                setInvites({
-                    ...invites,
-                    deniedInvites: response.data
-                })  
-                break;           
-        }
-    }
-
-    const handleHistorySort = async (order, column) =>{
-        const isAsc = orders.historyOrderBy === column && order === 'asc'
-        setOrders({
-            ...orders,
-            historyOrder: (isAsc ? 'desc': 'asc'),
-            historyOrderBy: column
+        break
+      case 2:
+        setShowInvites({
+          accepted: false,
+          denied: true,
+          onHold: false,
         })
-        const data = {
-            'column': column,
-            'order': order,
-        }
-        const response = await axios.get(`${GET_PLAYER_GAMES}/${id}`, {
-            params: data
-        })
-        setgamesPlayed(response.data);
     }
+  }
 
-    const handleFriendsSort = async (order, column) =>{
-        const isAsc = orders.friendsOrderBy === column && order === 'asc'
-        setOrders({
-            ...orders,
-            friendsOrder: (isAsc ? 'desc': 'asc'),
-            friendsOrderBy: column
-        })
-        const data = {
-            'column': column,
-            'order': order,
-        }
-        const response = await axios.get(`${GET_PLAYER_FRIENDS}/${id}`, {
-            params: data
-        })
-        setFriends(response.data);
+  const handleAccept = async (rowId, details) => {
+    const data = {
+        'status': 1,
     }
-
-    useEffect(() => {
-        async function fetchData(){
-
-            const invitations = await axios.get(`${GET_PLAYER_INVITATION}/${id}`);
-            const acceptedInvitations = invitations.data.filter(data => data.status === 1);
-            const deniedInvitations = invitations.data.filter(data => data.status === 2);
-            const onHoldInvitations = invitations.data.filter(data => data.status === 0);
-
-            setInvites({
-                ...invites,
-                acceptedInvites: acceptedInvitations,
-                deniedInvites: deniedInvitations,
-                onHoldInvites: onHoldInvitations
-            })
-
-            const friends = await axios.get(`${GET_PLAYER_FRIENDS}/${id}`);
-            setFriends(friends.data);
-
-            const gamesPlayed = axios.get(`${GET_PLAYER_GAMES}/${id}`);
-            setgamesPlayed(gamesPlayed.data); 
-        }
-        fetchData();
-      }, []);
-
-    const handleFriendDelete = async (friend_id) => {
-        const updated_friends = friends.filter((friends) => friends.id !== friend_id);
-        await axios.delete(`${DELETE_PLAYER_FRIEND}/${friend_id}`)
-        setFriends(updated_friends);
+    await axios.put(`${UPDATE_INVITATION_STATUS}/${rowId}`, data);
+    const acceptedRow = invites.onHoldInvites.find(row => row.id === rowId);
+    acceptedRow.status = 1;
+    const updatedInvites = invites.onHoldInvites.filter(row => row.id !== rowId);
+    setInvites(prevInvites => ({
+        ...prevInvites,
+        onHoldInvites: updatedInvites,
+        acceptedInvites: [...prevInvites.acceptedInvites, acceptedRow]
+    })); 
+    const params = {
+        'team_id': JSON.parse(details).team_id,
+        'user_id': cookie_data.id
     }
+    console.log(params)
+    await axios.post(`${ADD_TEAM_MEMBER}`, params);
+}
 
-    const handleShowingInvites = (invites) => {
-        switch(invites){
-            case 0:
-                setShowInvites({
-                    accepted: false,
-                    denied: false,
-                    onHold: true
-                })
-                break;
-            case 1:
-                setShowInvites({
-                    accepted: true,
-                    denied: false,
-                    onHold: false
-                })
-                break;
-            case 2:
-                setShowInvites({
-                    accepted: false,
-                    denied: true,
-                    onHold: false
-                })
-        }
+  const handleDeny = async (rowId) => {
+    const data = {
+      status: 2,
     }
-
-    const handleAccept = async (rowId, details) => {
-        const data = {
-            'status': 1,
-        }
-        await axios.put(`${UPDATE_INVITATION_STATUS}/${rowId}`, data);
-        const acceptedRow = invites.onHoldInvites.find(row => row.id === rowId);
-        acceptedRow.status = 1;
-        const updatedInvites = invites.onHoldInvites.filter(row => row.id !== rowId);
-        setInvites(prevInvites => ({
-            ...prevInvites,
-            onHoldInvites: updatedInvites,
-            acceptedInvites: [...prevInvites.acceptedInvites, acceptedRow]
-        })); 
-        const params = {
-            'team_id': JSON.parse(details).team_id,
-            'user_id': cookie_data.id
-        }
-        console.log(params)
-        await axios.post(`${ADD_TEAM_MEMBER}`, params);
-    }
-
-    const handleDeny = async (rowId) => {
-        const data = {
-            'status': 2,
-        }
-        await axios.put(`${UPDATE_INVITATION_STATUS}/${rowId}`, data);
-        const deniedRow = invites.onHoldInvites.find(row => row.id === rowId);
-        deniedRow.status = 2;
-        const updatedInvites = invites.onHoldInvites.filter(row => row.id !== rowId);
-        setInvites(prevInvites => ({
-            ...prevInvites,
-            onHoldInvites: updatedInvites,
-            deniedInvites: [...prevInvites.deniedInvites, deniedRow]
-        })); 
-    }
+    await axios.put(`${UPDATE_INVITATION_STATUS}/${rowId}`, data)
+    const deniedRow = invites.onHoldInvites.find((row) => row.id === rowId)
+    deniedRow.status = 2
+    const updatedInvites = invites.onHoldInvites.filter(
+      (row) => row.id !== rowId
+    )
+    setInvites((prevInvites) => ({
+      ...prevInvites,
+      onHoldInvites: updatedInvites,
+      deniedInvites: [...prevInvites.deniedInvites, deniedRow],
+    }))
+  }
   return withMainFrame(
     <Grid container direction={'column'} mt={7} p={3} justifyContent={'center'} alignItems={'center'}>
         <Paper elevation={4} sx={{width:'80%', maxHeight:'400px', height:'400px', overflow:'scroll'}}
@@ -281,15 +302,33 @@ const UserProfile = () => {
             {showSection.showInvitations && 
             <div>
             <Grid item>
-            <Box
-            display={'flex'}
-            justifyContent={'space-evenly'}
-            bgcolor='lightblue'
-            >
-            <Button variant='text' sx={{color:'blue'}} onClick={() => handleShowingInvites(0)}>Na čekanju</Button>
-            <Button variant='text' sx={{color:'darkgreen'}} onClick={() => handleShowingInvites(1)}>Prihvaceni</Button>
-            <Button variant='text' sx={{color:'red'}} onClick={() => handleShowingInvites(2)}>Odbijeni</Button>
-            </Box>
+              <Box
+                display={'flex'}
+                justifyContent={'space-evenly'}
+                bgcolor="lightblue"
+              >
+                <Button
+                  variant="text"
+                  sx={{ color: 'blue' }}
+                  onClick={() => handleShowingInvites(0)}
+                >
+                  Na čekanju
+                </Button>
+                <Button
+                  variant="text"
+                  sx={{ color: 'darkgreen' }}
+                  onClick={() => handleShowingInvites(1)}
+                >
+                  Prihvaceni
+                </Button>
+                <Button
+                  variant="text"
+                  sx={{ color: 'red' }}
+                  onClick={() => handleShowingInvites(2)}
+                >
+                  Odbijeni
+                </Button>
+              </Box>
             </Grid>
         <Grid item>
         <Table>

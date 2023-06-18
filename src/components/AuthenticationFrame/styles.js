@@ -1,6 +1,5 @@
 import { createStyles, makeStyles } from '@material-ui/core'
 
-
 const useStyles = makeStyles(() =>
   createStyles({
     leftContainer: {
@@ -27,7 +26,7 @@ const useStyles = makeStyles(() =>
       },
     },
     wrapper: {
-      overflow: "hidden",
+      overflow: 'hidden',
       width: '100%',
       height: '50%',
     },
@@ -70,12 +69,12 @@ const useStyles = makeStyles(() =>
       flexDirection: 'column',
     },
     heroHeadline: {
-      fontSize: 'h6.fontSize'
+      fontSize: 'h6.fontSize',
     },
     registerButton1: {
       backgroundColor: '#43bbbf !important',
       '&:hover': {
-        boxShadow:'0 0 0 0 #43bbbf,inset 6em 3.5em 0 0 #17a6ab',
+        boxShadow: '0 0 0 0 #43bbbf,inset 6em 3.5em 0 0 #17a6ab',
         color: 'white !important',
       },
       width: '50%',
@@ -85,7 +84,7 @@ const useStyles = makeStyles(() =>
     customButton: {
       backgroundColor: '#43bbbf !important',
       '&:hover': {
-        boxShadow:'0 0 0 0 #43bbbf,inset 6em 3.5em 0 0 #17a6ab !important',
+        boxShadow: '0 0 0 0 #43bbbf,inset 6em 3.5em 0 0 #17a6ab !important',
       },
     },
     registerHeadline: {
@@ -98,7 +97,7 @@ const useStyles = makeStyles(() =>
       marginRight: '0.5rem',
       fontWeight: '900',
       marginTop: 'auto',
-      color: 'darkslategrey'
+      color: 'darkslategrey',
     },
     heroText2: {
       height: '40%',
@@ -115,7 +114,7 @@ const useStyles = makeStyles(() =>
       marginRight: '0.5rem',
       fontWeight: '900',
       marginTop: 'auto',
-      color: 'darkslategrey'
+      color: 'darkslategrey',
     },
   })
 )

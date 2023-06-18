@@ -5,7 +5,7 @@ export const REGISTRATION_PLAYER = `${AUTHENTICATION}/register-player`
 export const REGISTRATION_OWNER = `${AUTHENTICATION}/register-owner`
 export const LOGOUT = `${AUTHENTICATION}/logout`
 export const FORGOT_PASSWORD = `${AUTHENTICATION}/forgot-password`
-export const CHANGE_PASSWORD = `${AUTHENTICATION}/change-password/`
+export const CHANGE_PASSWORD = `${AUTHENTICATION}/change-password`
 export const GET_SPORT_HALLS = `${BASE_BACKEND_URL}/sport-hall`
 export const CONTACT_US = `${BASE_BACKEND_URL}/contact-us`
 
@@ -16,7 +16,6 @@ export const GET_MY_SPORT_HALLS = `${BASE_BACKEND_URL}/get-my-sport-halls`
 export const ADD_SPORT_HALL = `${BASE_BACKEND_URL}/add-new-sport-hall`
 export const DELETE_MY_SPORT_HALL = `${BASE_BACKEND_URL}/delete-my-sport-hall`
 export const UPDATE_MY_SPORT_HALL = `${BASE_BACKEND_URL}/update-my-sport-hall`
-
 export const GET_SPORT_HALL_USER = `${BASE_BACKEND_URL}/get-sport-hall-user`
 export const GET_SPORT_HALL_RESERVATIONS = `${BASE_BACKEND_URL}/get-sport-hall-reservations`
 export const GET_FRIENDS = `${BASE_BACKEND_URL}/get-friends`
@@ -26,11 +25,13 @@ export const GET_USERS = `${BASE_BACKEND_URL}/get-users`
 export const INVITE_TEMPORARY_TEAM = `${BASE_BACKEND_URL}/invite-temporary-team`
 export const REMOVE_INVITE_TEMPORARY_TEAM = `${BASE_BACKEND_URL}/remove-invite-temporary-team`
 export const GET_INVITED_USERS = `${BASE_BACKEND_URL}/get-invited-users`
-export const CREATE_TEAM = `${BASE_BACKEND_URL}/team`
-export const GET_TEAMS = `${BASE_BACKEND_URL}/team/all`
-export const DELETE_TEAM = `${BASE_BACKEND_URL}/team/delete/`
-export const INVITE_TEAM_MEMBER = `${BASE_BACKEND_URL}/team/invite-member/`
-export const DELETE_TEAM_MEMBER = `${BASE_BACKEND_URL}/team/delete-member/`
+export const BASE_TEAM_URL = `${BASE_BACKEND_URL}/team`
+export const CREATE_TEAM = `${BASE_TEAM_URL}`
+export const GET_TEAMS = `${BASE_TEAM_URL}/all`
+export const DELETE_TEAM = `${BASE_TEAM_URL}/delete`
+export const INVITE_TEAM_MEMBER = `${BASE_TEAM_URL}/invite-member`
+export const DELETE_TEAM_MEMBER = `${BASE_TEAM_URL}/delete-member`
+export const ADD_TEAM_MEMBER = `${BASE_TEAM_URL}/add-member`
 
 export const GET_PLAYER = `${BASE_BACKEND_URL}/player/all`
 export const DELETE_PLAYER_FRIEND = `${BASE_BACKEND_URL}/player/delete-friend`
@@ -41,4 +42,3 @@ export const UPDATE_INVITATION_STATUS = `${BASE_BACKEND_URL}/player/update-invit
 
 export const CONFIRM_EMAIL = `${BASE_BACKEND_URL}/authentication/confirm-email/?token=`
 export const RESEND_CONFIRMATION_TOKEN = `${BASE_BACKEND_URL}/authentication/resend-confirmation-email`
-

@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       width: '100%',
     },
-    marginBottom: '20px'
+    marginBottom: '20px',
   },
   buttonLandingPage: {
     color: '#43bbbf !important',
@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
     color: 'white !important',
     margin: '0',
     '& >div': {
-      margin: '0 !important'
+      margin: '0 !important',
     },
   },
   searchIconWrapper: {
@@ -94,7 +94,7 @@ const useStyles = makeStyles((theme) => ({
     outline: 'none',
     borderRadius: '5px',
     '&:focus': {
-      border: '2px solid #43bbbf'
+      border: '2px solid #43bbbf',
     },
   },
   forChecks: {
@@ -137,7 +137,7 @@ const useStyles = makeStyles((theme) => ({
   sortingButtons: {
     backgroundColor: '#43bbbf !important',
     '&:hover': {
-      boxShadow:'0 0 0 0 #43bbbf,inset 6em 3.5em 0 0 #17a6ab !important',
+      boxShadow: '0 0 0 0 #43bbbf,inset 6em 3.5em 0 0 #17a6ab !important',
     },
     color: 'white !important',
     whiteSpace: 'nowrap',
@@ -147,12 +147,12 @@ const useStyles = makeStyles((theme) => ({
     },
     [theme.breakpoints.down('xs')]: {
       fontSize: '0.5rem !important',
-      width: 'auto'
+      width: 'auto',
     },
   },
   filterText: {
     flexGrow: '1 !important',
-    display: "block",
+    display: 'block',
     [theme.breakpoints.down('sm')]: {
       display: 'none',
     },
@@ -164,7 +164,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   filtersWrapper: {
-    display:'flex',
+    display: 'flex',
     justifyContent: 'space-around',
     marginTop: '8px',
   },
@@ -178,7 +178,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     [theme.breakpoints.down('xs')]: {
       flexDirection: 'column',
-      padding: '5px 0px'
+      padding: '5px 0px',
     },
     justifyContent: 'space-between',
     marginTop: '8px',
@@ -194,7 +194,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       width: '90%',
     },
-  }
+  },
 }))
 
 export default useStyles

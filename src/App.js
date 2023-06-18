@@ -9,13 +9,12 @@ import Error400Page from './components/ErrorPages/Error400Page'
 import Error401Page from './components/ErrorPages/Error401Page'
 import Error404Page from './components/ErrorPages/Error404Page'
 import LandingPage from './components/LandingPage'
+import OwnerProfile from './components/OwnerProfile'
 import ListOfSportHalls from './components/SportHalls/ListOfSportHalls'
 import SportHallPage from './components/SportHalls/SportHallPage/index'
 import UserProfile from './components/UserProfile'
-
-import OwnerProfile from './components/OwnerProfile'
-
 import Verification from './components/Verification'
+import withSockets from './hoc/withSockets'
 
 function App() {
   return (
@@ -50,4 +49,6 @@ function App() {
   )
 }
 
-export default App
+const AppWithSockets = withSockets(App)
+
+export default AppWithSockets

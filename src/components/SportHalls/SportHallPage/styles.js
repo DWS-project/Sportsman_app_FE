@@ -1,4 +1,4 @@
-import { makeStyles } from "@material-ui/core";
+import { makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   leftArrowImage: {
@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme) => ({
     color: 'whitesmoke',
     height: '3rem !important',
     width: '3rem !important',
-    zIndex: '1'
+    zIndex: '1',
   },
   rightArrowImage: {
     position: 'absolute',
@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     color: 'whitesmoke',
     height: '3rem !important',
     width: '3rem !important',
-    zIndex: '1'
+    zIndex: '1',
   },
   headlineWrapper: {
     position: 'absolute',
@@ -25,9 +25,9 @@ const useStyles = makeStyles((theme) => ({
     width: '40%',
     [theme.breakpoints.down('sm')]: {
       width: '90%',
-      top: '62vh'
+      top: '62vh',
     },
-    fontFamily: 'sans-serif'
+    fontFamily: 'sans-serif',
   },
   headline: {
     fontFamily: 'sans-serif',
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '8px',
     color: '#43bbbf',
     [theme.breakpoints.down('xs')]: {
-      fontSize: '2rem'
+      fontSize: '2rem',
     },
   },
   subtextHeadline: {
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '1rem',
     color: '#4d4d4d',
     [theme.breakpoints.down('xs')]: {
-      fontSize: '0.7rem'
+      fontSize: '0.7rem',
     },
   },
   formWrapper: {
@@ -52,11 +52,11 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
-      alignItems: 'center !important'
+      alignItems: 'center !important',
     },
     justifyContent: 'space-evenly',
     paddingTop: '4rem',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   reservationForm: {
     backgroundColor: 'white',
@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: '0 1px 6px 0 #20212447',
     maxWidth: '25vw',
     [theme.breakpoints.down('sm')]: {
-      maxWidth: '90vw'
+      maxWidth: '90vw',
     },
   },
   reservationFormTemporary: {
@@ -78,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '50vw',
     [theme.breakpoints.down('sm')]: {
       maxWidth: '60vw',
-      width: '60vw'
+      width: '60vw',
     },
   },
   reservationFormHeadline: {
@@ -89,16 +89,16 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'bold !important',
     fontFamily: 'sans-serif !important',
     [theme.breakpoints.down('xs')]: {
-      fontSize: '1.5rem !important'
+      fontSize: '1.5rem !important',
     },
   },
   customButton: {
     backgroundColor: '#43bbbf !important',
     '&:hover': {
-      boxShadow:'0 0 0 0 #43bbbf,inset 6em 3.5em 0 0 #17a6ab !important',
+      boxShadow: '0 0 0 0 #43bbbf,inset 6em 3.5em 0 0 #17a6ab !important',
     },
     color: 'white',
-    marginTop: '20px'
+    marginTop: '20px',
   },
   calendar: {
     marginRight: 'auto',
@@ -106,7 +106,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'sans-serif',
     display: 'flex',
     margin: '20px',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   calendarWeekdays: {
     '& >div': {
@@ -120,17 +120,17 @@ const useStyles = makeStyles((theme) => ({
       color: '#43bbbf',
       border: '0.5px solid rgba(25, 118, 210, 0.04)',
       [theme.breakpoints.down('xs')]: {
-        fontSize: 'x-small'
+        fontSize: 'x-small',
       },
     },
     position: 'relative',
     width: '100%',
     overflow: 'hidden',
-    zIndex: '10'
+    zIndex: '10',
   },
   calendarHeader: {
     width: '100%',
-    float: "left",
+    float: 'left',
     display: 'flex',
     justifyContent: 'center',
     textAlign: 'center',
@@ -139,16 +139,16 @@ const useStyles = makeStyles((theme) => ({
     '& >h1': {
       fontSize: '1.5rem',
       [theme.breakpoints.down('xs')]: {
-        fontSize: '1rem'
+        fontSize: '1rem',
       },
       color: 'white',
-      fontFamily: 'sans-serif'
-    }
+      fontFamily: 'sans-serif',
+    },
   },
   calendarWrapper: {
     padding: '10px 10px 10px 10px',
     backgroundColor: 'white',
-    borderRadius: '0 0 20px 25px'
+    borderRadius: '0 0 20px 25px',
   },
   forDate: {
     padding: '15px 5px',
@@ -162,16 +162,15 @@ const useStyles = makeStyles((theme) => ({
     '&:focus': {
       outline: '2px solid #007bff',
       '&:hover': {
-        outline: '2px solid #007bff'
-      }
-
+        outline: '2px solid #007bff',
+      },
     },
     '&:active': {
-      outline: '2px solid #007bff'
+      outline: '2px solid #007bff',
     },
     '&:hover': {
-      outline: '1px solid black'
-    }
+      outline: '1px solid black',
+    },
   },
   forDateError: {
     padding: '15px 5px',
@@ -188,20 +187,19 @@ const useStyles = makeStyles((theme) => ({
     '&:focus': {
       outline: '2px solid #d32f2f',
       '&:hover': {
-        outline: '2px solid #d32f2f'
-      }
-
+        outline: '2px solid #d32f2f',
+      },
     },
     '&:active': {
-      outline: '2px solid #d32f2f'
-    }
+      outline: '2px solid #d32f2f',
+    },
   },
   dateTimeWrapper: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginTop: '16px',
-    marginBottom: '8px'
+    marginBottom: '8px',
   },
   inviteButton: {
     width: '100%',
@@ -210,8 +208,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#43bbbf',
     height: '3rem',
     '&:hover': {
-      backgroundColor: '#3eacb0'
-    }
+      backgroundColor: '#3eacb0',
+    },
   },
   friendsHeadline: {
     width: '100%',
@@ -228,17 +226,17 @@ const useStyles = makeStyles((theme) => ({
     border: '1px solid #bababa',
     height: '50%',
     marginTop: '5px',
-    overflow: 'auto'
+    overflow: 'auto',
   },
   teamMembersWrapperModal: {
     border: '1px solid #bababa',
     height: '100%',
     marginTop: '5px',
-    overflow: 'auto'
+    overflow: 'auto',
   },
   teamMemberPhotoUsername: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   teamMember: {
     padding: '10px',
@@ -246,7 +244,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   modal: {
     position: 'absolute',
@@ -257,7 +255,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '25px',
     backgroundColor: 'white',
     width: '65vw',
-    height: '50vh'
+    height: '50vh',
   },
   searchIconWrapper: {
     padding: '0px 16px',
@@ -293,13 +291,13 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
   },
   containerForTabs: {
-  left: '0',
-  top: '0',
-  right: '0',
-  bottom: '0',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center'
+    left: '0',
+    top: '0',
+    right: '0',
+    bottom: '0',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   tabs: {
     display: 'flex',
@@ -309,10 +307,10 @@ const useStyles = makeStyles((theme) => ({
     padding: '0.5rem',
     borderRadius: '99px',
     '& *': {
-        zIndex: '2',
+      zIndex: '2',
     },
     fontFamily: 'sans-serif',
-    color: '#43bbbf'
+    color: '#43bbbf',
   },
   tab: {
     display: 'flex',
@@ -322,12 +320,12 @@ const useStyles = makeStyles((theme) => ({
     width: '200px',
     [theme.breakpoints.down('sm')]: {
       width: '160px',
-      fontSize: '1.1rem'
+      fontSize: '1.1rem',
     },
     [theme.breakpoints.down('xs')]: {
       width: '100px',
       fontSize: '0.7rem',
-      height: '40px'
+      height: '40px',
     },
     fontSize: '1.25rem',
     fontWeight: '500',
@@ -341,52 +339,52 @@ const useStyles = makeStyles((theme) => ({
     height: '54px',
     width: '200px',
     [theme.breakpoints.down('sm')]: {
-      width: '160px'
+      width: '160px',
     },
     [theme.breakpoints.down('xs')]: {
       width: '100px',
-      height: '40px'
+      height: '40px',
     },
     backgroundColor: '#43bbbf',
     zIndex: '1',
     borderRadius: '99px',
-    transition: '0.25s ease-out'
+    transition: '0.25s ease-out',
   },
   priceBox: {
     display: 'flex',
     justifyContent: 'end',
-    fontSize: '4rem',
+    fontSize: '3rem',
     [theme.breakpoints.down('md')]: {
-      fontSize: '3.5rem'
+      fontSize: '2.5rem',
     },
     [theme.breakpoints.down('xs')]: {
-      fontSize: '1.6rem'
+      fontSize: '1.6rem',
     },
     fontWeight: 'bold',
     color: '#43bbbf',
     fontFamily: 'sans-serif',
-    marginRight: '1rem'
+    marginRight: '1rem',
   },
   firstPartOfPageWrapper: {
     display: 'flex',
     flexDirection: 'row',
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column-reverse',
-      marginBottom: '3rem'
+      marginBottom: '3rem',
     },
     marginTop: '30px',
-    marginBottom: '7rem'
+    marginBottom: '7rem',
   },
   headlineAndDetailsWrapper: {
     width: '50%',
     [theme.breakpoints.down('sm')]: {
       width: '100%',
-      height: '50vh'
+      height: '50vh',
     },
     height: '60vh',
     display: 'flex',
     justifyContent: 'end',
-    alignItems: 'end'
+    alignItems: 'end',
   },
   mobileStepper: {
     padding: '0 !important',
@@ -398,7 +396,7 @@ const useStyles = makeStyles((theme) => ({
     zIndex: '1',
     [theme.breakpoints.down('sm')]: {
       backgroundColor: 'transparent !important',
-      left: '50%'
+      left: '50%',
     },
     backgroundColor: 'transparent',
     '& .MuiMobileStepper-dot': {
@@ -407,50 +405,50 @@ const useStyles = makeStyles((theme) => ({
     },
     '& .MuiMobileStepper-dotActive': {
       backgroundColor: '#43bbbf',
-    }
+    },
   },
   imageStyle: {
     display: 'block',
     overflow: 'hidden',
     width: '100%',
-    height: '60vh'
+    height: '60vh',
   },
   flexRowBetween: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   friendsWrapper: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    height: '90%'
+    height: '90%',
   },
   availableFriendWrapper: {
     width: '45%',
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   searchMembersPartModal: {
     width: '45%',
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   searchWrapper: {
     height: '3rem',
     color: 'white',
-    backgroundColor: '#43bbbf'
+    backgroundColor: '#43bbbf',
   },
   suggestionList: {
     backgroundColor: 'white',
-    zIndex: '10'
+    zIndex: '10',
   },
   dateDisplayWeekdays: {
     color: 'slategrey',
     fontSize: 'small',
     fontWeight: '600',
     [theme.breakpoints.down('xs')]: {
-      fontSize: 'smaller'
+      fontSize: 'smaller',
     },
   },
   scheduler: {
@@ -460,7 +458,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '10px',
     paddingTop: '0',
     [theme.breakpoints.down('xs')]: {
-      overflow: 'auto'
+      overflow: 'auto',
     },
   },
   timesColumn: {
@@ -480,7 +478,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '14px',
     color: '#333',
     [theme.breakpoints.down('xs')]: {
-      fontSize: '10px'
+      fontSize: '10px',
     },
   },
   schedulerGrid: {
@@ -512,14 +510,14 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '4px',
     fontSize: 'small',
     [theme.breakpoints.down('md')]: {
-      fontSize: '11px'
+      fontSize: '11px',
     },
     [theme.breakpoints.down('xs')]: {
-      fontSize: '7px'
+      fontSize: '7px',
     },
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   schedulerWrapper: {
     backgroundColor: 'white',
@@ -527,7 +525,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '25px',
     width: '55vw',
     [theme.breakpoints.down('sm')]: {
-      width: '90vw !important'
+      width: '90vw !important',
     },
   },
   disabledTab: {
@@ -544,10 +542,10 @@ const useStyles = makeStyles((theme) => ({
     transition: 'color 0.15s ease-in',
   },
   tooltip: {
-      backgroundColor: theme.palette.common.white,
-      color: 'rgba(0, 0, 0, 0.87)',
-      fontSize: 11,
-      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', // Example box shadow
+    backgroundColor: theme.palette.common.white,
+    color: 'rgba(0, 0, 0, 0.87)',
+    fontSize: 11,
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', // Example box shadow
   },
   snackbar: {
     '& .MuiSnackbar-root': {
@@ -555,24 +553,34 @@ const useStyles = makeStyles((theme) => ({
       right: '20px',
       left: 'auto',
       bottom: '20px',
-      zIndex: '11'
-    }
+      zIndex: '11',
+    },
   },
   customSnackbar: {
     '& .MuiAlert-root': {
       backgroundColor: '#28969a !important',
-      color: 'white !important'
+      color: 'white !important',
     },
     '& .MuiAlert-icon': {
-      color: 'cyan !important'
-    }
+      color: 'cyan !important',
+    },
   },
   wrapperForImages: {
     width: '50%',
     [theme.breakpoints.down('sm')]: {
-      width: '100%'
+      width: '100%',
     },
-  }
+  },
+  pendingStatus: {
+    backgroundColor: '#fdd077 !important',
+    color: '#505050 !important',
+    fontFamily: 'sans-serif !important',
+  },
+  acceptedStatus: {
+    backgroundColor: '#5EB9BF !important',
+    color: 'white !important',
+    fontFamily: 'sans-serif !important',
+  },
 }))
 
 export default useStyles

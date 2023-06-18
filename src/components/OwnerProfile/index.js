@@ -100,6 +100,7 @@ const OwnerProfile = () => {
           id: cookie_data.id,
         },
       })
+
       if (status === HTTPStatusCodes.OK) {
         if (deletedSportHallId) {
           setSportHalls(
@@ -113,6 +114,8 @@ const OwnerProfile = () => {
     }
     getMySportHalls()
   }, [deletedSportHallId, editedSportHallId])
+
+  console.log(sporthalls)
 
   const [formValues, setFormValues] = useState({
     imeTerena: '',
@@ -340,10 +343,11 @@ const OwnerProfile = () => {
                       className={classes.text}
                       fontSize="22px"
                     >
-                      {sporthall.sports
-                        .split(',')
-                        .map((sport) => sport.trim())
-                        .join(', ')}
+                      {sporthall.sports &&
+                        sporthall.sports
+
+                          .map((sport) => sport.trim())
+                          .join(', ')}
                     </Typography>
 
                     <Typography

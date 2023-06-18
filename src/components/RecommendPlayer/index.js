@@ -190,7 +190,11 @@ const RecommendPlayer = (props) => {
                             <Button
                               size="small"
                               className={classes.customButton}
-                              onClick={props.handleInvitation}
+                              onClick={() => {
+                                props.handleInvitation(player)
+                                props.handleInvite(player)
+                                setOpen(false)
+                              }}
                             >
                               Pozovi
                             </Button>

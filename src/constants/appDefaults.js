@@ -4,25 +4,25 @@ const StepperStepsForUser = ['Postavke profila', 'Interesovanja']
 
 const cities = ['Sarajevo', 'Zenica', 'Tuzla', 'Mostar']
 
-const StepperActiveColor = '#43bbbf';
+const StepperActiveColor = '#43bbbf'
 
-const StepperCompletedColor = '#39CCC5';
+const StepperCompletedColor = '#39CCC5'
 
 const imagesDataForOwner = [
   {
     img: '/images/smallSoccerField.jpg',
     title: 'Vanjski',
-    name: 'vanjski'
+    name: 'vanjski',
   },
   {
     img: '/images/sportHall.jpg',
     title: 'Unutrašnji',
-    name: 'unustrasnji'
+    name: 'unustrasnji',
   },
   {
     img: '/images/combination.png',
     title: 'Oba tipa',
-    name: 'obaTipa'
+    name: 'obaTipa',
   },
 ]
 
@@ -30,32 +30,32 @@ const imagesDataForUser = [
   {
     img: '/images/football.jpg',
     title: 'Fudbal',
-    name: 'fudbal'
+    name: 'fudbal',
   },
   {
     img: '/images/basketball.jpg',
     title: 'Košarka',
-    name: 'kosarka'
+    name: 'kosarka',
   },
   {
     img: '/images/handball.jpg',
     title: 'Rukomet',
-    name: 'rukomet'
+    name: 'rukomet',
   },
   {
     img: '/images/volleyball.jpg',
     title: 'Odbojka',
-    name: 'odbojka'
+    name: 'odbojka',
   },
   {
     img: '/images/tennis.jpg',
     title: 'Tenis',
-    name: 'tenis'
+    name: 'tenis',
   },
   {
     img: '/images/paintball.png',
     title: 'Paintball',
-    name: 'paintball'
+    name: 'paintball',
   },
 ]
 
@@ -75,5 +75,5 @@ export {
   imagesDataForUser,
   FRONTEND_URL,
   emailRegex,
-  phoneRegex
+  phoneRegex,
 }

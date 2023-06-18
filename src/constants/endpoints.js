@@ -16,7 +16,6 @@ export const GET_MY_SPORT_HALLS = `${BASE_BACKEND_URL}/get-my-sport-halls`
 export const ADD_SPORT_HALL = `${BASE_BACKEND_URL}/add-new-sport-hall`
 export const DELETE_MY_SPORT_HALL = `${BASE_BACKEND_URL}/delete-my-sport-hall`
 export const UPDATE_MY_SPORT_HALL = `${BASE_BACKEND_URL}/update-my-sport-hall`
-
 export const GET_SPORT_HALL_USER = `${BASE_BACKEND_URL}/get-sport-hall-user`
 export const GET_SPORT_HALL_RESERVATIONS = `${BASE_BACKEND_URL}/get-sport-hall-reservations`
 export const GET_FRIENDS = `${BASE_BACKEND_URL}/get-friends`

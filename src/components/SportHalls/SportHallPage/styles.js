@@ -355,9 +355,9 @@ const useStyles = makeStyles((theme) => ({
   priceBox: {
     display: 'flex',
     justifyContent: 'end',
-    fontSize: '4rem',
+    fontSize: '3rem',
     [theme.breakpoints.down('md')]: {
-      fontSize: '3.5rem'
+      fontSize: '2.5rem'
     },
     [theme.breakpoints.down('xs')]: {
       fontSize: '1.6rem'
@@ -572,6 +572,16 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       width: '100%'
     },
+  },
+  pendingStatus: {
+    backgroundColor: '#fdd077 !important',
+    color: '#505050 !important',
+    fontFamily: 'sans-serif !important',
+  },
+  acceptedStatus: {
+    backgroundColor: '#5EB9BF !important',
+    color: 'white !important',
+    fontFamily: 'sans-serif !important',
   }
 }))
 

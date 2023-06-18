@@ -7,6 +7,7 @@ export const SocketSubject = {
   Team: 'TEAM',
   Player: 'PLAYER',
   Owner: 'OWNER',
+  NewPlayerRegistered: 'NEW_PLAYER_REGISTERED',
 }
 
 const SocketContext = createContext({
@@ -26,6 +27,9 @@ const SocketProvider = ({ children }) => {
             case SocketSubject.Owner:
             case SocketSubject.Team:
             case SocketSubject.Player:
+            case SocketSubject.NewPlayerRegistered:
+              console.log('props', props)
+
               setNewNotification(props)
               break
             default:

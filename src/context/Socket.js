@@ -4,9 +4,9 @@ import socketClient from 'src/lib/socket'
 import socket from 'src/lib/socket'
 
 export const SocketSubject = {
-  Team: 'TEAM',
-  Player: 'PLAYER',
-  Owner: 'OWNER',
+  NewSportHallRegisted: 'NEW_SPORT_HALL_REGISTERED',
+  NewPlayerRegistered: 'NEW_PLAYER_REGISTERED',
+  NewTeamRegistered: 'NEW_TEAM_REGISTERED',
 }
 
 const SocketContext = createContext({
@@ -18,14 +18,14 @@ const SocketProvider = ({ children }) => {
   const [newNotification, setNewNotification] = useState()
 
   useEffect(() => {
-    async function socketClientInitialization() {
+    async function initSocketClient() {
       socketClient.init()
-      socketSubjects.map((subject) => {
+      socketSubjects.forEach((subject) => {
         socket.socket.on(subject, (props) => {
           switch (subject) {
-            case SocketSubject.Owner:
-            case SocketSubject.Team:
-            case SocketSubject.Player:
+            case SocketSubject.NewSportHallRegisted:
+            case SocketSubject.NewPlayerRegistered:
+            case SocketSubject.NewTeamRegistered:
               setNewNotification(props)
               break
             default:
@@ -34,7 +34,7 @@ const SocketProvider = ({ children }) => {
         })
       })
     }
-    socketClientInitialization()
+    initSocketClient()
 
     return () => socketClient.clean()
   }, [])

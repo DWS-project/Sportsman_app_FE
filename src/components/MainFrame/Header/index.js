@@ -156,7 +156,7 @@ const Header = () => {
               </Button>
             ))}
           </Box>
-          <NotificationsDrodpdown />
+          {isUserLogged && <NotificationsDrodpdown />}
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open user menu">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

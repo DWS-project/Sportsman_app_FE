@@ -18,7 +18,7 @@ export const pages = [
   },
   {
     name: 'Objekti',
-    href: '/',
+    href: '/sport-halls',
   },
   {
     name: 'Tereni',

@@ -1,12 +1,15 @@
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import { IconButton, Menu, MenuItem } from '@mui/material'
 import Badge from '@mui/material/Badge'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { SocketContext } from 'src/context/Socket'
 
 import useStyles from './styles'
 
 const NotificationsDropdown = () => {
   const classes = useStyles()
+  const { newNotification } = useContext(SocketContext)
+
   const [notificationsAnchorEl, setNotificationsAnchorEl] = useState(null)
 
   const handleOpenNotifications = (event) => {

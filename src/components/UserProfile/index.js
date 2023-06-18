@@ -106,6 +106,7 @@ const UserProfile = () => {
     const response = await axios.get(`${GET_PLAYER_INVITATION}/${id}`, {
       params: data,
     })
+    console.log(response);
     switch (response.data[0].status) {
       case 0:
         setInvites({

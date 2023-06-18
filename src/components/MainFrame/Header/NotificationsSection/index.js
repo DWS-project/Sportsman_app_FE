@@ -17,8 +17,6 @@ const NotificationsDropdown = () => {
     setNotificationsAnchorEl(null)
   }
 
-  const imageSrc = '/images/defaultUserImage.jpg'
-
   return (
     <div>
       <Badge

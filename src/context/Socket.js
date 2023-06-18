@@ -3,6 +3,12 @@ import { socketSubjects } from 'src/constants/socketSubjects'
 import socketClient from 'src/lib/socket'
 import socket from 'src/lib/socket'
 
+export const SocketSubject = {
+  Team: 'TEAM',
+  Player: 'PLAYER',
+  Owner: 'OWNER',
+}
+
 const SocketContext = createContext({
   newNotification: {},
   setNewNotification: () => {},
@@ -17,9 +23,10 @@ const SocketProvider = ({ children }) => {
       socketSubjects.map((subject) => {
         socket.socket.on(subject, (props) => {
           switch (subject) {
-            case 'cao':
-              break
-            default:
+            case SocketSubject.Owner:
+            case SocketSubject.Team:
+            case SocketSubject.Player:
+              setNewNotification(props)
               break
           }
         })

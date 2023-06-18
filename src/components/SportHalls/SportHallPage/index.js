@@ -3,14 +3,16 @@ import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material"
 import AddCircleIcon from '@mui/icons-material/AddCircle'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import SearchIcon from "@mui/icons-material/Search"
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import {
-  Alert,
+  Alert, Chip,
   InputBase, List,
   ListItem,
   ListItemText,
   MobileStepper,
   Modal, Snackbar, Tab, Tabs
-} from "@mui/material"
+} from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete"
 import Avatar from "@mui/material/Avatar"
 import Box from "@mui/material/Box"
@@ -992,7 +994,12 @@ const SportHallPage = () => {
               </Button>
               {initialValues.areMembersInvited ? (
                 <Box className={classes.teamMembersWrapper}>
-                  {initialValues.selectedFriends.map((friend) => (
+                  {initialValues.selectedFriends.map((friend) => {
+                    const invitation = initialValues.invitations.find(
+                      (invitation) => invitation.recipient === friend.id
+                    )
+
+                    return (
                     <Box className={classes.teamMember} key={friend.id}>
                       <Box className={classes.teamMemberPhotoUsername}>
                         {friend.picture ? (
@@ -1000,7 +1007,29 @@ const SportHallPage = () => {
                         ) : (
                           <Avatar src="/images/defaultUserImage.jpg"/>
                         )}
-                        <Typography sx={{ ml: 1}}>{friend.username}</Typography>
+                        <Typography
+                          sx={pageStates.windowWidth < 1050 ? {marginLeft: '0'} : {marginLeft: '8px'}}
+                        >
+                          {friend.username}
+                        </Typography>
+
+                        {invitation && invitation.status === 0 ? (
+                            <Chip
+                              icon={<AccessTimeIcon sx={{ color: 'white !important' }} />}
+                              label="Na čekanju"
+                              className={classes.pendingStatus}
+                              sx={pageStates.windowWidth < 1050 ? {marginLeft: '0'} : {marginLeft: '0.5rem'}}
+                              size="small"
+                            />
+                        ) : invitation && invitation.status === 1 ? (
+                            <Chip
+                              icon={<CheckCircleOutlineIcon sx={{ color: 'white !important' }} />}
+                              label="Prihvaćen"
+                              className={classes.acceptedStatus}
+                              sx={pageStates.windowWidth < 1050 ? {marginLeft: '0'} : {marginLeft: '0.5rem'}}
+                              size="small"
+                            />
+                        ): null}
                       </Box>
                       <HighlightOffIcon
                         sx={{ color: '#43bbbf' }}
@@ -1009,7 +1038,7 @@ const SportHallPage = () => {
                         }}
                       />
                     </Box>
-                  ))}
+                  )})}
                 </Box>
               ) : (
                 <Box className={classes.teamMembersWrapper}></Box>
@@ -1023,6 +1052,26 @@ const SportHallPage = () => {
               >
                 Rezerviši
               </Button>
+            </Box>
+            <Box
+              className={classes.reservationFormTemporary}
+              sx={{
+                height: `${pageStates.windowWidth < 960 ? '60vh' : null}`,
+                width: `${pageStates.windowWidth > 960 ? '25vw' : '60vw'}`
+              }}
+            >
+              <Typography
+                component="h1"
+                variant="h5"
+                className={classes.reservationFormHeadline}
+              >
+                Nedostaje Vam igrač?
+              </Typography>
+              <Typography
+                component="p"
+              >
+
+              </Typography>
             </Box>
           </Box>
         </>

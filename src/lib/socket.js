@@ -11,10 +11,6 @@ class SocketClient {
     this.socket.connect()
   }
 
-  joinRooms(data) {
-    this.socket.emit('join-rooms', data)
-  }
-
   clean() {
     if (this.socket) {
       this.socket.disconnect()

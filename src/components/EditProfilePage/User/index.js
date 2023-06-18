@@ -92,7 +92,7 @@ export const EditUserPage = ({ id }) => {
     formData.append('photo', file)
     await axios.put(`${CHANGE_PHOTO}/${id}`, formData)
     alert('Profilna slika uspjesno promijenjena')
-    window.location.reload();
+    window.location.reload()
   }
 
   const handleClick = (key) => {

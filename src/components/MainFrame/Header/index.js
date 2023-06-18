@@ -1,6 +1,8 @@
 import MenuIcon from '@mui/icons-material/Menu'
+import NotificationsIcon from '@mui/icons-material/Notifications'
 import AppBar from '@mui/material/AppBar'
 import Avatar from '@mui/material/Avatar'
+import Badge from '@mui/material/Badge'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
@@ -149,7 +151,19 @@ const Header = () => {
               </Button>
             ))}
           </Box>
-
+          {isUserLogged && (
+            <Box sx={{ flexGrow: 0 }}>
+              <Badge
+                badgeContent={9}
+                color="warning"
+                className={classes.notificationIcon}
+              >
+                <IconButton sx={{ p: 0 }}>
+                  <NotificationsIcon />
+                </IconButton>
+              </Badge>
+            </Box>
+          )}
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open user menu">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

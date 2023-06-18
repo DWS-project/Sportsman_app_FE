@@ -28,6 +28,8 @@ const SocketProvider = ({ children }) => {
             case SocketSubject.Player:
               setNewNotification(props)
               break
+            default:
+              break
           }
         })
       })

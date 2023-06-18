@@ -8,11 +8,11 @@ import SnackBar, { SnackBarType } from 'src/components/Shared/Snackbar'
 import { HTTPStatusCodes } from 'src/constants/statusCodes'
 import withMainFrame from 'src/hoc/withMainFrame'
 
-import { SOMETHING_WENT_WRONG } from '../../constants/errorMessages'
 import {
   CONFIRM_EMAIL,
   RESEND_CONFIRMATION_TOKEN,
 } from '../../constants/endpoints'
+import { SOMETHING_WENT_WRONG } from '../../constants/errorMessages'
 import useStyles from '../Verification/styles'
 
 const EmailConfirmation = () => {
@@ -49,19 +49,19 @@ const EmailConfirmation = () => {
           message: '',
           severity: SnackBarType.Success,
         })
-        setDisplayText(response.data?.message)
+        setDisplayText(response.data.message)
       } else {
         setSnackBarProps({
           message: response.status,
           severity: SnackBarType.Error,
         })
-        setVerificationMessage(response.data?.message)
+        setVerificationMessage(response.data.message)
         setDisplayText(
           'Klikom na dugme “Pošalji ponovo” dobiti ćete e-mail sa novim linkom za verifikaciju.'
         )
       }
     } catch (error) {
-      setVerificationMessage(error.response?.data.message)
+      setVerificationMessage(error.response.data.message)
       setDisplayText(SOMETHING_WENT_WRONG)
       setSnackBarProps({
         message: '',
@@ -92,8 +92,8 @@ const EmailConfirmation = () => {
             setInitialValues({ email: response.data.email })
           }
         } catch (error) {
-          setInitialValues({ email: error.response?.data.email })
-          setVerificationMessage(error.response?.data.message)
+          setInitialValues({ email: error.response.data.email })
+          setVerificationMessage(error.response.data.message)
           setDisplayText(
             'Klikom na dugme “Pošalji ponovo” dobiti ćete e-mail sa novim linkom za verifikaciju.'
           )

@@ -1,8 +1,6 @@
 import MenuIcon from '@mui/icons-material/Menu'
-import NotificationsIcon from '@mui/icons-material/Notifications'
 import AppBar from '@mui/material/AppBar'
 import Avatar from '@mui/material/Avatar'
-import Badge from '@mui/material/Badge'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
@@ -18,6 +16,7 @@ import { useNavigate } from 'react-router-dom'
 import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser'
 
 import { pages, settingsForGuestUser, settingsForPlayer } from './headerHelpers'
+import NotificationsDrodpdown from './NotificationsSection'
 import useStyles from './styles'
 
 const Header = () => {
@@ -151,19 +150,7 @@ const Header = () => {
               </Button>
             ))}
           </Box>
-          {isUserLogged && (
-            <Box sx={{ flexGrow: 0 }}>
-              <Badge
-                badgeContent={9}
-                color="warning"
-                className={classes.notificationIcon}
-              >
-                <IconButton sx={{ p: 0 }}>
-                  <NotificationsIcon />
-                </IconButton>
-              </Badge>
-            </Box>
-          )}
+          <NotificationsDrodpdown />
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open user menu">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

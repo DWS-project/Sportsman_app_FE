@@ -12,7 +12,7 @@ const SocketProvider = ({ children }) => {
   const [newNotification, setNewNotification] = useState()
 
   useEffect(() => {
-    async function socketInitialization() {
+    async function socketClientInitialization() {
       socketClient.init()
       socketSubjects.map((subject) => {
         socket.socket.on(subject, (props) => {
@@ -25,7 +25,7 @@ const SocketProvider = ({ children }) => {
         })
       })
     }
-    socketInitialization()
+    socketClientInitialization()
 
     return () => socketClient.clean()
   }, [])

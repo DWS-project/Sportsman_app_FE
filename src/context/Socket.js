@@ -14,16 +14,6 @@ const SocketProvider = ({ children }) => {
   useEffect(() => {
     async function socketInitialization() {
       socketClient.init()
-      //   if (authenticationCookie) {
-      //     const { data: followedCompanies, status: statusFollowedCompanies } =
-      //       await userService.getFollowedCompanies()
-      //     if (statusFollowedCompanies !== HTTPStatusCodes.OK) return
-      //     const data = {
-      //       cookie: authenticationCookie,
-      //       rooms: followedCompanies,
-      //     }
-      //     socketClient.joinRooms(data)
-      //   }
       socketSubjects.map((subject) => {
         socket.socket.on(subject, (props) => {
           switch (subject) {

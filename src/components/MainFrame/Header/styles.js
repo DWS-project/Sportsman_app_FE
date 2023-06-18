@@ -76,6 +76,8 @@ const useStyles = makeStyles((theme) => ({
   item: {
     textDecoration: 'none',
     color: 'black',
+    textAlign: 'left !important',
+    width: '100%'
   },
   notificationIcon: {
     marginRight: '20px',

@@ -98,7 +98,7 @@ const EmailConfirmation = () => {
             'Klikom na dugme “Pošalji ponovo” dobiti ćete e-mail sa novim linkom za verifikaciju.'
           )
           setSnackBarProps({
-            message: '',
+            message: SOMETHING_WENT_WRONG,
             severity: SnackBarType.Error,
           })
         } finally {

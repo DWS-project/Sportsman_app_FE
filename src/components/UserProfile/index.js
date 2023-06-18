@@ -21,9 +21,6 @@ import React, { useEffect, useState } from 'react'
 import { ADD_TEAM_MEMBER, DELETE_PLAYER_FRIEND, GET_PLAYER_FRIENDS, GET_PLAYER_GAMES, GET_PLAYER_INVITATION, UPDATE_INVITATION_STATUS } from 'src/constants/endpoints';
 import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser';
 import withMainFrame from 'src/hoc/withMainFrame';
-import ClearIcon from '@mui/icons-material/Clear';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CheckIcon from '@mui/icons-material/Check';
 
 const UserProfile = () => {
   const [friends, setFriends] = useState('')

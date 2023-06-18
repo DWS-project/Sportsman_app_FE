@@ -3,7 +3,7 @@ import { Box, bgcolor } from '@mui/system'
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react'
-import { BASE_BACKEND_URL, DELETE_PLAYER_FRIEND, GET_PLAYER_FRIENDS, GET_PLAYER_GAMES, GET_PLAYER_INVITATION, SORT_PLAYER_FRIENDS, SORT_PLAYER_HISTORY, SORT_PLAYER_INVITATION, UPDATE_INVITATION_STATUS } from 'src/constants/endpoints';
+import { ADD_TEAM_MEMBER, BASE_BACKEND_URL, DELETE_PLAYER_FRIEND, GET_PLAYER_FRIENDS, GET_PLAYER_GAMES, GET_PLAYER_INVITATION, SORT_PLAYER_FRIENDS, SORT_PLAYER_HISTORY, SORT_PLAYER_INVITATION, UPDATE_INVITATION_STATUS } from 'src/constants/endpoints';
 import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser';
 import withMainFrame from 'src/hoc/withMainFrame';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -208,7 +208,7 @@ const UserProfile = () => {
         }
     }
 
-    const handleAccept = async (rowId) => {
+    const handleAccept = async (rowId, details) => {
         const data = {
             'status': 1,
         }
@@ -221,6 +221,12 @@ const UserProfile = () => {
             onHoldInvites: updatedInvites,
             acceptedInvites: [...prevInvites.acceptedInvites, acceptedRow]
         })); 
+        const params = {
+            'team_id': JSON.parse(details).team_id,
+            'user_id': cookie_data.id
+        }
+        console.log(params)
+        await axios.post(`${ADD_TEAM_MEMBER}`, params);
     }
 
     const handleDeny = async (rowId) => {
@@ -239,7 +245,8 @@ const UserProfile = () => {
     }
   return withMainFrame(
     <Grid container direction={'column'} mt={7} p={3} justifyContent={'center'} alignItems={'center'}>
-        <Paper elevation={4} sx={{width:'80%', height:'400px'}}>
+        <Paper elevation={4} sx={{width:'80%', maxHeight:'400px', height:'400px', overflow:'scroll'}}
+        >
             <Grid item>
             <Box
             display={'flex'}
@@ -337,7 +344,7 @@ const UserProfile = () => {
               <TableCell align="right">{JSON.parse(row.details).team_name}</TableCell>}
               <TableCell align="right">{new Date(row.time_sent).toDateString()}</TableCell>
               
-              <TableCell align="right"><IconButton onClick={() => handleAccept(row.id)}>
+              <TableCell align="right"><IconButton onClick={() => handleAccept(row.id, row.details)}>
                                         <CheckIcon/></IconButton></TableCell>
               <TableCell align="right"><IconButton onClick={() => handleDeny(row.id)}>
                                         <ClearIcon/></IconButton></TableCell>

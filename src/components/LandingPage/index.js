@@ -107,6 +107,7 @@ const LandingPage = () => {
         }))
       }
     }
+    }
   }, [])
 
   useEffect(() => {
@@ -131,16 +132,8 @@ const LandingPage = () => {
 
   async function fetchCards() {
     try {
-
-      const response = await axios.get(LANDING_PAGE, { params: filter })
-      setInitialValues((prevState) => ({
-        ...prevState,
-        cards: response.data.data,
-      }))
-
       const response = await axios.get(GET_SPORT_HALLS, { params: filter })
       setCards(response.data.data)
-
     } catch (error) {
       console.error(error)
     }

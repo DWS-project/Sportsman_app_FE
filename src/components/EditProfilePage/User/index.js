@@ -75,13 +75,13 @@ export const EditUserPage = ({ id }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    await axios.put(`${CHANGE_INFO}/${id}`, user)
+    await axios.put(`${CHANGE_INFO}/${id}`, user, {withCredentials: true})
     alert('Uspješno ste ažurirali podatke')
   }
 
   const handlePasswordSubmit = async (e) => {
     e.preventDefault()
-    await axios.put(`${CHANGE_PASSWORD}${id}`, password)
+    await axios.put(`${CHANGE_PASSWORD}${id}`, password, {withCredentials: true})
     alert('Uspješno ste promijenili šifru')
   }
 
@@ -90,7 +90,7 @@ export const EditUserPage = ({ id }) => {
     const file = e.target.photo.files[0]
     const formData = new FormData()
     formData.append('photo', file)
-    await axios.put(`${CHANGE_PHOTO}/${id}`, formData)
+    await axios.put(`${CHANGE_PHOTO}/${id}`, formData, {withCredentials: true})
     alert('Profilna slika uspjesno promijenjena')
     window.location.reload();
   }

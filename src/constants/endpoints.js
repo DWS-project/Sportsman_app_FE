@@ -28,9 +28,10 @@ export const REMOVE_INVITE_TEMPORARY_TEAM = `${BASE_BACKEND_URL}/remove-invite-t
 export const GET_INVITED_USERS = `${BASE_BACKEND_URL}/get-invited-users`
 export const CREATE_TEAM = `${BASE_BACKEND_URL}/team`
 export const GET_TEAMS = `${BASE_BACKEND_URL}/team/all`
-export const DELETE_TEAM = `${BASE_BACKEND_URL}/team/delete/`
-export const INVITE_TEAM_MEMBER = `${BASE_BACKEND_URL}/team/invite-member/`
-export const DELETE_TEAM_MEMBER = `${BASE_BACKEND_URL}/team/delete-member/`
+export const DELETE_TEAM = `${BASE_BACKEND_URL}/team/delete`
+export const INVITE_TEAM_MEMBER = `${BASE_BACKEND_URL}/team/invite-member`
+export const DELETE_TEAM_MEMBER = `${BASE_BACKEND_URL}/team/delete-member`
+export const ADD_TEAM_MEMBER = `${BASE_BACKEND_URL}/team/add-member`
 
 export const GET_PLAYER = `${BASE_BACKEND_URL}/player/all`
 export const DELETE_PLAYER_FRIEND = `${BASE_BACKEND_URL}/player/delete-friend`

@@ -8,6 +8,7 @@ export const EditProfilePage = () => {
   const cookie = Cookies.get(COOKIE_AUTHENTICATION_FE)
   const cookie_data = JSON.parse(cookie)
   const id = cookie_data.id
+  console.log(cookie)
 
   return withMainFrame(<EditUserPage id={id} />)
 }

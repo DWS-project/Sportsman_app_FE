@@ -25,6 +25,7 @@ import {
   CREATE_TEAM,
   DELETE_TEAM,
   DELETE_TEAM_MEMBER,
+  GET_PLAYER,
   GET_TEAMS,
   INVITE_TEAM_MEMBER,
 } from 'src/constants/endpoints'
@@ -90,7 +91,7 @@ const CreateTeam = () => {
       id: id,
     }
 
-    const res = await axios.get(`${GET_TEAMS}/`, {
+    const res = await axios.get(`${GET_TEAMS}`, {
       params: {
         id: dataToSend.id,
       },
@@ -125,7 +126,7 @@ const CreateTeam = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`${DELETE_TEAM}/`, {
+          .delete(`${DELETE_TEAM}`, {
             params: {
               id: id,
             },
@@ -150,7 +151,7 @@ const CreateTeam = () => {
   }, [memberName])
 
   const addTeamMember = async () => {
-    const res = await axios.get(`${BASE_BACKEND_URL}/players`)
+    const res = await axios.get(`${GET_PLAYER}`)
     const users = res.data
     const usernames = users.map((user) => user.username)
 
@@ -199,7 +200,7 @@ const CreateTeam = () => {
       team_id: teamId,
     }
     if (memberName.trim() !== '') {
-      axios.post(`${INVITE_TEAM_MEMBER}/`, dataToSend)
+      axios.post(`${INVITE_TEAM_MEMBER}`, dataToSend)
     }
   }
   const deleteMember = (event) => {
@@ -217,7 +218,7 @@ const CreateTeam = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`${DELETE_TEAM_MEMBER}/`, {
+          .delete(`${DELETE_TEAM_MEMBER}`, {
             params: {
               email: email,
               teamId: teamId,

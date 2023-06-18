@@ -1,6 +1,10 @@
 import io from 'socket.io-client'
 
-export const SocketSubject = {}
+export const SocketSubject = {
+  Team: 'TEAM',
+  Player: 'PLAYER',
+  Owner: 'OWNER',
+}
 
 class SocketClient {
   constructor() {

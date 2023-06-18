@@ -1,33 +1,23 @@
 import NotificationsIcon from '@mui/icons-material/Notifications'
-import { IconButton } from '@mui/material'
+import { IconButton, Menu, MenuItem } from '@mui/material'
 import Badge from '@mui/material/Badge'
-import Popover from '@mui/material/Popover'
 import { useState } from 'react'
 
 import useStyles from './styles'
 
 const NotificationsDropdown = () => {
   const classes = useStyles()
-  const [openNotifications, setOpenNotifications] = useState(false)
   const [notificationsAnchorEl, setNotificationsAnchorEl] = useState(null)
 
   const handleOpenNotifications = (event) => {
     setNotificationsAnchorEl(event.currentTarget)
-    setOpenNotifications(true)
   }
 
   const handleCloseNotifications = () => {
-    setOpenNotifications(false)
+    setNotificationsAnchorEl(null)
   }
 
-  // Customize the styling and add notifications content inside the Popover
-  const notificationsContent = (
-    <div>
-      {/* Add your notifications content here */}
-      <p>Notification 1</p>
-      <p>Notification 2</p>
-    </div>
-  )
+  const imageSrc = '/images/defaultUserImage.jpg'
 
   return (
     <div>
@@ -46,10 +36,10 @@ const NotificationsDropdown = () => {
           <NotificationsIcon />
         </IconButton>
       </Badge>
-      <Popover
+      <Menu
         id="notifications-menu"
-        open={openNotifications}
         anchorEl={notificationsAnchorEl}
+        open={Boolean(notificationsAnchorEl)}
         onClose={handleCloseNotifications}
         anchorOrigin={{
           vertical: 'bottom',
@@ -59,9 +49,33 @@ const NotificationsDropdown = () => {
           vertical: 'top',
           horizontal: 'right',
         }}
+        className={classes.notificationsMenu}
       >
-        {notificationsContent}
-      </Popover>
+        <MenuItem onClick={handleCloseNotifications}>
+          <img
+            src="/images/notificationPlayerImage.svg"
+            alt="Image 1"
+            style={{ width: '30px', marginRight: '10px' }}
+          />
+          Player notifikacija
+        </MenuItem>
+        <MenuItem onClick={handleCloseNotifications}>
+          <img
+            src="/images/notificationOwnerImage.svg"
+            alt="Image 2"
+            style={{ width: '30px', marginRight: '10px' }}
+          />
+          Owner notifikacija
+        </MenuItem>
+        <MenuItem onClick={handleCloseNotifications}>
+          <img
+            src="/images/notificationTeamImage.svg"
+            alt="Image 3"
+            style={{ width: '30px', marginRight: '10px' }}
+          />
+          Team notifikacija
+        </MenuItem>
+      </Menu>
     </div>
   )
 }

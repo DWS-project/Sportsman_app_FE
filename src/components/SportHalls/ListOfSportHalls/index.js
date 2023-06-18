@@ -24,7 +24,7 @@ const ListOfSportHalls = () => {
   useEffect(() => {
     async function getAllSportHalls() {
       const { data, status } = await axios.get(GET_SPORT_HALLS)
-      if (status === HTTPStatusCodes.OK) setSportHalls(data.reverse())
+      if (status === HTTPStatusCodes.OK) setSportHalls(data.data.reverse())
     }
     getAllSportHalls()
   }, [])
@@ -36,7 +36,7 @@ const ListOfSportHalls = () => {
           <Card
             sx={{ maxWidth: 345 }}
             className={classes.cardWrapper}
-            onClick={() => navigate(`/sport-hall/${sporthall.id}`)}
+            onClick={() => navigate(`/sporthall/${sporthall.id}`)}
           >
             <Box position="relative">
               <CardHeader
@@ -55,9 +55,9 @@ const ListOfSportHalls = () => {
                 component="img"
                 height="194"
                 image={
-                  sporthall.pictures ? sporthall.pictures : '/images/logo.svg'
+                  sporthall.pictures ? JSON.parse(sporthall.pictures).pictures[0] : '/images/logo.svg'
                 }
-                alt="Paella dish"
+                alt={sporthall.title}
               />
               <CardContent>
                 <Typography

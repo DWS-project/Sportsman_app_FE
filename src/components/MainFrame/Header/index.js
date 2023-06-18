@@ -15,7 +15,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser'
 
-import { pages, settingsForGuestUser, settingsForPlayer } from './headerHelpers'
+import { pages, settingsForGuestUser, settingsForOwner, settingsForPlayer } from "./headerHelpers";
 import NotificationsDrodpdown from './NotificationsSection'
 import useStyles from './styles'
 
@@ -23,20 +23,26 @@ const Header = () => {
   const classes = useStyles()
   const navigate = useNavigate()
   const [openSideMenu, setOpenSideMenu] = useState(false)
+  const [anchorSideMenu, setAnchorSideMenu] = useState(null)
   const [openUserMenu, setOpenUserMenu] = useState(false)
+  const [anchorUserMenu, setAnchorUserMenu] = useState(null)
 
   const handleOpenSideMenu = (event) => {
-    setOpenSideMenu(event.currentTarget)
+    setAnchorSideMenu(event.currentTarget)
+    setOpenSideMenu(true)
   }
   const handleOpenUserMenu = (event) => {
-    setOpenUserMenu(event.currentTarget)
+    setAnchorUserMenu(event.currentTarget)
+    setOpenUserMenu(true)
   }
 
   const handleCloseSideMenu = () => {
+    setAnchorSideMenu(null)
     setOpenSideMenu(false)
   }
 
   const handleCloseUserMenu = () => {
+    setAnchorUserMenu(null)
     setOpenUserMenu(false)
   }
 
@@ -90,7 +96,7 @@ const Header = () => {
             </IconButton>
             <Menu
               id="menu-appbar"
-              anchorEl={openSideMenu}
+              anchorEl={anchorSideMenu}
               anchorOrigin={{
                 vertical: 'bottom',
                 horizontal: 'left',
@@ -160,7 +166,7 @@ const Header = () => {
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
-              anchorEl={openUserMenu}
+              anchorEl={anchorUserMenu}
               anchorOrigin={{
                 vertical: 'top',
                 horizontal: 'right',
@@ -173,7 +179,7 @@ const Header = () => {
               open={openUserMenu}
               onClose={handleCloseUserMenu}
             >
-              {isUserLogged
+              {isUserLogged && parsedUserData.user_type === 1
                 ? settingsForPlayer.map((item) => (
                     <MenuItem key={item.name} onClick={handleCloseUserMenu}>
                       <Typography
@@ -187,7 +193,19 @@ const Header = () => {
                       </Typography>
                     </MenuItem>
                   ))
-                : settingsForGuestUser.map((item) => (
+                : isUserLogged && parsedUserData.user_type === 2 ? settingsForOwner.map((item) => (
+                  <MenuItem key={item.name} onClick={handleCloseUserMenu}>
+                    <Typography
+                      textAlign="center"
+                      component="a"
+                      href={item.href}
+                      onClick={item.onClick}
+                      className={classes.item}
+                    >
+                      {item.name}
+                    </Typography>
+                  </MenuItem>
+                )) : settingsForGuestUser.map((item) => (
                     <MenuItem key={item.name} onClick={handleCloseUserMenu}>
                       <Typography
                         textAlign="center"

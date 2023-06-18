@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom'
 import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser'
 
 import { pages, settingsForGuestUser, settingsForPlayer } from './headerHelpers'
+import NotificationsDrodpdown from './NotificationsSection'
 import useStyles from './styles'
 
 const Header = () => {
@@ -149,7 +150,7 @@ const Header = () => {
               </Button>
             ))}
           </Box>
-
+          {isUserLogged && <NotificationsDrodpdown />}
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open user menu">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

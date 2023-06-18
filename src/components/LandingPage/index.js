@@ -25,7 +25,7 @@ import Typography from '@mui/material/Typography'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useEffect, useState } from 'react'
-import { cities } from 'src/constants/appDefaults'
+import { cities, FRONTEND_URL } from 'src/constants/appDefaults'
 import { GET_SPORT_HALLS } from 'src/constants/endpoints'
 import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser'
 import withMainFrame from 'src/hoc/withMainFrame'
@@ -115,12 +115,11 @@ const LandingPage = () => {
       sort_type: initialValues.typeButtonText,
       sort_price: initialValues.priceButtonText,
     })
-  }, [])
+  }, [initialValues])
 
   useEffect(() => {
     fetchCards()
-  }, [])
-
+  }, [filter])
   const classes = useStyles()
 
   async function fetchCards() {
@@ -495,11 +494,18 @@ const LandingPage = () => {
               {cards.map((item) => (
                 <Grid item xs={2} sm={4} md={4} key={item.id}>
                   <Card className={classes.card}>
-                    <CardActionArea sx={{ objectFit: 'cover' }} href={`${FRONTEND_URL}/sporthall/${item.id}`}>
+                    <CardActionArea
+                      sx={{ objectFit: 'cover' }}
+                      href={`${FRONTEND_URL}/sporthall/${item.id}`}
+                    >
                       <CardMedia
                         component="img"
                         height="140"
-                        image={item.pictures ? JSON.parse(item.pictures).pictures[0] : '/images/footballField.png'}
+                        image={
+                          item.pictures
+                            ? JSON.parse(item.pictures).pictures[0]
+                            : '/images/footballField.png'
+                        }
                         alt={item.title}
                       />
                       <CardContent sx={{ flex: '1' }}>

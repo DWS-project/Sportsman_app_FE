@@ -9,18 +9,23 @@ import Error400Page from './components/ErrorPages/Error400Page'
 import Error401Page from './components/ErrorPages/Error401Page'
 import Error404Page from './components/ErrorPages/Error404Page'
 import LandingPage from './components/LandingPage'
+import OwnerProfile from './components/OwnerProfile'
 import ListOfSportHalls from './components/SportHalls/ListOfSportHalls'
 import SportHallPage from './components/SportHalls/SportHallPage/index'
 import UserProfile from './components/UserProfile'
 import Verification from './components/Verification'
+import withSockets from './hoc/withSockets'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path={'/owner-profile'} element={<OwnerProfile />}></Route>
         <Route path={'/edit-profile'} element={<EditProfilePage />} />
+
         <Route path={'/create-team'} element={<CreateTeam />} />
         <Route path={'/my-profile'} element={<UserProfile />} />
+
         <Route path={'/'} element={<LandingPage />} />
         <Route path="/sporthall/:id" element={<SportHallPage />} />
         <Route
@@ -44,4 +49,6 @@ function App() {
   )
 }
 
-export default App
+const AppWithSockets = withSockets(App)
+
+export default AppWithSockets

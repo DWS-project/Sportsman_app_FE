@@ -77,6 +77,9 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'none',
     color: 'black',
   },
+  notificationIcon: {
+    marginRight: '20px',
+  },
 }))
 
 export default useStyles

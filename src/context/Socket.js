@@ -28,8 +28,6 @@ const SocketProvider = ({ children }) => {
             case SocketSubject.Team:
             case SocketSubject.Player:
             case SocketSubject.NewPlayerRegistered:
-              console.log('props', props)
-
               setNewNotification(props)
               break
             default:

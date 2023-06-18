@@ -17,7 +17,7 @@ const imagesDataForOwner = [
   {
     img: '/images/sportHall.jpg',
     title: 'Unutrašnji',
-    name: 'unustrasnji',
+    name: 'unutrasnji',
   },
   {
     img: '/images/combination.png',

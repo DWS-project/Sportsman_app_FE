@@ -68,6 +68,7 @@ const LandingPage = () => {
     isButtonPriceSortingClicked: false,
     isButtonTypeSortingClicked: false,
   })
+
   const [filter, setFilter] = useState({
     sports: initialValues.sports,
     city: initialValues.city,

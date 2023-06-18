@@ -22,24 +22,30 @@ const LoginForm = () => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
 
   async function handleSubmit() {
-    const data = {
-      email,
-      password,
-    }
-
-    const { status, data: userData } = await axios.post(LOGIN, data)
-
-    Cookies.set(
-      COOKIE_AUTHENTICATION_FE,
-      JSON.stringify(userData.user ? userData.user : userData.owner),
-      {
-        expires: moment().add(1, 'days').toDate(),
+    try {
+      const data = {
+        email,
+        password,
       }
-    )
 
-    if (status === HTTPStatusCodes.OK) navigate('/')
+      const { status, data: userData } = await axios.post(LOGIN, data)
+
+      Cookies.set(COOKIE_AUTHENTICATION_FE, JSON.stringify(userData.user), {
+        expires: moment().add(1, 'days').toDate(),
+      })
+
+      if (status === HTTPStatusCodes.OK) navigate('/')
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.status === HTTPStatusCodes.BAD_REQUEST
+      ) {
+        setErrorMessage(error.response.data.message)
+      }
+    }
   }
 
   return (
@@ -48,6 +54,11 @@ const LoginForm = () => {
         Prijavi se
       </Typography>
       <Box noValidate sx={{ mt: 1 }}>
+        {errorMessage && (
+          <Typography variant="body2" color="error" align="center">
+            {errorMessage}
+          </Typography>
+        )}
         <TextField
           margin="normal"
           required

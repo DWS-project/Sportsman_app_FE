@@ -35,12 +35,8 @@ export const settingsForPlayer = [
     href: '/my-profile',
   },
   {
-    name: 'Rezervisani termini',
-    href: '/',
-  },
-  {
     name: 'Timovi',
-    href: '/',
+    href: '/create-team',
   },
   {
     name: 'Postavke',
@@ -56,15 +52,11 @@ export const settingsForPlayer = [
 export const settingsForOwner = [
   {
     name: 'Moj profil',
-    href: '/',
-  },
-  {
-    name: 'Tereni',
-    href: '/',
+    href: '/owner-profile',
   },
   {
     name: 'Postavke',
-    href: '/',
+    href: '/edit-profile',
   },
   {
     name: 'Odjavi se',

@@ -28,7 +28,7 @@ import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser'
 
 import useStyles from './styles'
 
-const recommendPlayer = () => {
+const RecommendPlayer = (props) => {
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
@@ -85,7 +85,7 @@ const recommendPlayer = () => {
     <div>
       <Button
         onClick={handleOpen}
-        sx={{ bgcolor: '#43bbbf', color: 'aliceblue' }}
+        className={classes.inviteButton}
       >
         PREPORUCI IGRACE
       </Button>
@@ -136,13 +136,9 @@ const recommendPlayer = () => {
               </Grid>
               <Grid item>
                 <Button
-                  sx={{
-                    bgcolor: '#43bbbf',
-                    color: 'aliceblue',
-                    width: '535px',
-                    marginRight: '60px',
-                  }}
+                  className={classes.inviteButton}
                   onClick={fetchPlayers}
+                  sx={{width: '30vw !important'}}
                 >
                   NAĐI IGRAČE
                 </Button>
@@ -193,7 +189,8 @@ const recommendPlayer = () => {
                           <CardActions>
                             <Button
                               size="small"
-                              sx={{ bgcolor: '#43bbbf', color: 'aliceblue' }}
+                              className={classes.customButton}
+                              onClick={props.handleInvitation}
                             >
                               Pozovi
                             </Button>
@@ -214,12 +211,8 @@ const recommendPlayer = () => {
                 <Grid item p={3}>
                   <Button
                     size="small"
-                    sx={{
-                      bgcolor: '#43bbbf',
-                      color: 'aliceblue',
-                      width: '535px',
-                      marginRight: '60px',
-                    }}
+                    className={classes.inviteButton}
+                    sx={{width: '30vw !important'}}
                   >
                     Pozovi sve
                   </Button>
@@ -233,4 +226,4 @@ const recommendPlayer = () => {
   )
 }
 
-export default recommendPlayer
+export default RecommendPlayer

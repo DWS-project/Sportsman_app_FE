@@ -47,6 +47,7 @@ import { COOKIE_AUTHENTICATION_FE } from 'src/constants/keys/browser'
 import withMainFrame from 'src/hoc/withMainFrame'
 
 import useStyles from './styles'
+import RecommendPlayer from 'src/components/RecommendPlayer'
 
 const daysOfWeek = ['PON', 'UTO', 'SRI', 'CET', 'PET', 'SUB', 'NED']
 
@@ -1114,7 +1115,7 @@ const SportHallPage = () => {
                 <Box className={classes.teamMembersWrapper}>
                   {initialValues.selectedFriends.map((friend) => {
                     const invitation = initialValues.invitations.find(
-                      (invitation) => invitation.recipient === friend.id
+                      (invitation) => invitation.fields.recipient === friend.id
                     )
 
                     return (
@@ -1135,7 +1136,7 @@ const SportHallPage = () => {
                             {friend.username}
                           </Typography>
 
-                          {invitation && invitation.status === 0 ? (
+                          {invitation && invitation.fields.status === 0 ? (
                             <Chip
                               icon={
                                 <AccessTimeIcon
@@ -1151,7 +1152,7 @@ const SportHallPage = () => {
                               }
                               size="small"
                             />
-                          ) : invitation && invitation.status === 1 ? (
+                          ) : invitation && invitation.fields.status === 1 ? (
                             <Chip
                               icon={
                                 <CheckCircleOutlineIcon
@@ -1207,6 +1208,7 @@ const SportHallPage = () => {
                 Nedostaje Vam igrač?
               </Typography>
               <Typography component="p"></Typography>
+              <RecommendPlayer handleInvitation={handleSuggestionClick}/>
             </Box>
           </Box>
         </>

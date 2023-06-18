@@ -13,6 +13,24 @@ const useStyles = makeStyles(() =>
       p: 4,
       outline: 0,
     },
+    inviteButton: {
+      width: '100% !important',
+      color: 'white !important',
+      borderRadius: '0 !important',
+      backgroundColor: '#43bbbf !important',
+      height: '3rem !important',
+      '&:hover': {
+        backgroundColor: '#3eacb0 !important',
+      },
+    },
+    customButton: {
+      backgroundColor: '#43bbbf !important',
+      '&:hover': {
+        boxShadow: '0 0 0 0 #43bbbf,inset 6em 3.5em 0 0 #17a6ab !important',
+      },
+      color: 'white !important',
+      marginTop: '20px !important',
+    },
   })
 )
 
